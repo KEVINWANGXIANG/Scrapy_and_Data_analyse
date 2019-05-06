@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/hello_hwc/article/details/81609183"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="AppDelegate
+
+在iOS开发中，AppDelegate指的是UIApplicationDelegate，用来处理App层面的事件，包括生命周期变化，OpenURL，处理HandOff和Intent等。
+
+每个iOS都有一个入口函数main，其中的一个参数就是AppDelegate：
+
+int main(int argc, char *argv[])
+{
+    @autoreleasep..." />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>聊聊AppDelegate解耦 - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9b39979775.min.css">
+
+    <script type="text/javascript">
+        var username = "Hello_Hwc";
+        var blog_address = "https://blog.csdn.net/hello_hwc";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = false;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/hello_hwc/article/details/81609183"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin3-template";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/hello_hwc">Leo的专栏</a></span>
+			<i>></i>
+			<span>聊聊AppDelegate解耦</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">聊聊AppDelegate解耦</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年08月12日 18:52:46</span>
+						<span class="read-count">阅读数：9246</span>
+												
+																												<div class="tags-box space">
+								<span class="label">所属专栏：</span>
+																<a class="tag-link" href="https://blog.csdn.net/column/details/wenchen-ios-app.html" target="_blank">iOS项目实战</a>
+																<a class="tag-link" href="https://blog.csdn.net/column/details/huangwenchen-ios-sdk.html" target="_blank">iOS开发详解</a>
+																</a>
+							</div>
+																	</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+					版权声明：本文为博主原创文章，如需转载请注明作者和出处					https://blog.csdn.net/Hello_Hwc/article/details/81609183				</div>
+								            <div class="markdown_views">
+                <h2 id="appdelegate">AppDelegate</h2>
+
+<p>在iOS开发中，AppDelegate指的是<a href="https://docs.developer.apple.com/documentation/uikit/uiapplicationdelegate" rel="nofollow">UIApplicationDelegate</a>，用来处理App层面的事件，包括生命周期变化，OpenURL，处理HandOff和Intent等。</p>
+
+<p>每个iOS都有一个入口函数main，其中的一个参数就是AppDelegate：</p>
+
+<pre class="prettyprint"><code class=" hljs d"><span class="hljs-keyword">int</span> main(<span class="hljs-keyword">int</span> argc, <span class="hljs-built_in">char</span> *argv[])
+{
+    <span class="hljs-keyword">@autoreleasepool</span> {
+        <span class="hljs-keyword">return</span> UIApplicationMain(argc, argv, nil, NSStringFromClass([QTAppDelegate <span class="hljs-keyword">class</span>]));
+    }
+}</code></pre>
+
+
+
+<h2 id="痛点">痛点</h2>
+
+<p>由于AppDelegate是一个<strong>单例</strong>，所以通常写代码的方式：</p>
+
+<ol>
+<li>import对应的业务类进来</li>
+<li>实现对应Delegate的方法，然后调用业务类</li>
+</ol>
+
+
+
+<pre class="prettyprint"><code class=" hljs erlang"><span class="hljs-record_name">#import</span> <span class="hljs-string">"TokenService.h"</span>
+....
+<span class="hljs-pp">- <span class="hljs-params">(void)</span>application:<span class="hljs-params">(<span class="hljs-variable">UIApplication</span> *)</span>application didRegisterForRemoteNotificationsWithDeviceToken:<span class="hljs-params">(<span class="hljs-variable">NSData</span> *)</span>deviceToken
+    [TokenService update:deviceToken];
+}
+</span></code></pre>
+
+<p>乍一看这也没什么问题，但是随着时间的推移：</p>
+
+<ul>
+<li><code>didFinishLaunchingWithOptions</code>堆积了越来越多的代码，有些时候这些代码还有先后顺序，比如Crash收集代码就要最早初始化。</li>
+<li>由于不同的模块负责处理不同的功能，比如路由模块处理OpenURL，Siri模块处理Intent….，结果就是这个文件import的类和模块越来越多，文件越来越臃肿。</li>
+</ul>
+
+<p>日积月累：<strong>这个文件耦合越来越严重，越来越难以迭代和维护</strong>。</p>
+
+<h3 id="组件化">组件化</h3>
+
+<p>组件化是一个很热的概念，但并不是每个App都适合组件化，适不适合组件化要写的内容太多，以后有时间了再聊聊这方面。我们先来聊聊组件化需要翻过的几座大山：</p>
+
+<p><strong>App层面的事件如何通知到各个组件</strong>。这些事件包括应用内部的全局事件和系统层面的AppDelegate事件。</p>
+
+<p><strong>组件之间如何相互调用</strong>。通常有几种解决方案：</p>
+
+<ol>
+<li>每个组件暴露抽象的协议或者抽象类出来，由一个中介者去负责创建和协调。 </li>
+<li>通过路由URL来相互调用。</li>
+<li>暴露特定的类和方法出来，通过Target/Action的方式来调用。</li>
+</ol>
+
+<p><strong>组件之间的页面跳转</strong>。解决方案基本都是路由，通过URL来注册和跳转，路由还可以统一处理内跳和外跳。</p>
+
+<p>可见，<strong>如果你想要组件化，那么对AppDelegate解耦是必须解决的问题</strong>。</p>
+
+
+
+<h2 id="qteventbus">QTEventBus</h2>
+
+<p>AppDelegate解耦的核心：<strong>如何让事件通知到每个模块？</strong>。</p>
+
+<p>如果仅仅通知到模块，模块内部还要自己处理分发，如果支持<strong>事件可以直接通知到相关的类</strong>就更好了。</p>
+
+<p>这种一对多的消息通知关系，用总线设计模式可以完美解决，所以本文的解决方案是建立在<a href="https://github.com/LeoMobileDeveloper/QTEventBus" rel="nofollow">QTEventBus</a>上的。</p>
+
+<p>关于如何实现一个总线，参考我的上一篇文章：《<a href="https://blog.csdn.net/Hello_Hwc/article/details/81023561" rel="nofollow">实现一个优雅的iOS消息总线</a>》</p>
+
+<h3 id="使用教程">使用教程</h3>
+
+<p>安装：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ">pod QTEventBus/AppModule</code></pre>
+
+<p><strong>QTAppDelegate替代默认的AppDelegate，修改main.m:</strong></p>
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-keyword">return</span> <span class="hljs-constant">UIApplicationMain</span>(argc, argv, <span class="hljs-keyword">nil</span>, <span class="hljs-constant">NSStringFromClass</span>([<span class="hljs-constant">QTAppDelegate</span> <span class="hljs-class"><span class="hljs-keyword">class</span>]));</span></code></pre>
+
+<blockquote>
+  <p>也可以继承QTAppDelegate实现一些自定义，但是记得要在方法里调用super。</p>
+</blockquote>
+
+<p><strong>宏定义<code>QTAppModuleRegister</code>注册模块</strong></p>
+
+<p>注意对应的类要实现协议<code>QTAppModule</code></p>
+
+<pre class="prettyprint"><code class=" hljs scss"><span class="hljs-comment">// 两个参数分别是类名和优先级</span>
+<span class="hljs-function">QTAppModuleRegister(PayService, QTAppEventPriorityDefault)</span></code></pre>
+
+<p><strong>响应事件</strong></p>
+
+<pre class="prettyprint"><code class=" hljs objectivec"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">PayService</span>()&lt;<span class="hljs-title">QTAppModule</span>&gt;</span>
+<span class="hljs-keyword">@end</span>
+<span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">PayService</span></span>
+
+<span class="hljs-comment">/// 每一次事件来的时候，EventBus调用这个方法来生成实例</span>
++ (<span class="hljs-keyword">id</span>&lt;QTAppModule&gt;)moduleInstance{
+    <span class="hljs-keyword">return</span> [[PayService alloc] init];
+}
+
+<span class="hljs-comment">/// App启动</span>
+- (<span class="hljs-keyword">void</span>)appDidFinishLuanch:(QTAppDidLaunchEvent *)event{
+    <span class="hljs-built_in">NSLog</span>(@<span class="hljs-string">"PayService: appDidFinishLuanch"</span>);
+}
+
+<span class="hljs-keyword">@end</span>
+</code></pre>
+
+<h2 id="原理">原理</h2>
+
+<h3 id="qteventbus-1">QTEventBus</h3>
+
+<p>QTEventBus是总线模式在Objective C中的实现，对AppDelegate的解耦是在它的基础上的扩展。</p>
+
+<h3 id="协议封装">协议封装</h3>
+
+<p>对UIApplication进行协议封装，抽象出协议<a href="https://github.com/LeoMobileDeveloper/QTEventBus/blob/master/Sources/UIApplication/QTAppModule.h" rel="nofollow">QTAppModule</a>。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">@protocol QTAppModule &lt;NSObject&gt;
++ (id&lt;QTAppModule&gt;)moduleInstance;
+
+@optional
+// 对应application:didFinishLaunchingWithOptions:
+- (void)appDidFinishLuanch:(QTAppDidLaunchEvent *)event;
+- (void)appLifeCircleChanged:(QTAppLifeCircleEvent *)event;
+<span class="hljs-keyword">...</span>
+@end</code></pre>
+
+<p>为什么要这么封装呢？原因有几点：</p>
+
+<p><strong><a href="https://github.com/LeoMobileDeveloper/QTEventBus" rel="nofollow">QTEventBus</a>是基于类来注册的</strong>。把方法参数封装成一个类，就可以通过以下的方式注册监听：</p>
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-comment">// 监听生App命周期变化</span>
+[QTSub(self, QTAppLifeCircleEvent) next:^(QTAppLifeCircleEvent *<span class="hljs-keyword">event</span>) {
+     NSLog(<span class="hljs-string">@"%@"</span>,<span class="hljs-keyword">event</span>.type);
+}];</code></pre>
+
+<p><strong>合并多个方法。</strong> 举个例子，在注册远程推送token的时候，AppDelegate有两个方法</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs erlang"><span class="hljs-pp">- <span class="hljs-params">(void)</span>application:<span class="hljs-params">(<span class="hljs-variable">UIApplication</span> *)</span>application didRegisterForRemoteNotificationsWithDeviceToken:<span class="hljs-params">(<span class="hljs-variable">NSData</span> *)</span>deviceToken
+- <span class="hljs-params">(void)</span>application:<span class="hljs-params">(<span class="hljs-variable">UIApplication</span> *)</span>application didFailToRegisterForRemoteNotificationsWithError:<span class="hljs-params">(<span class="hljs-variable">NSError</span> *)</span>error;</span></code></pre>
+
+<p>合并后</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs objectivec"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">QTAppDidRegisterRemoteNotificationEvent</span>: <span class="hljs-title">QTAppEvent</span>&lt;<span class="hljs-title">QTEvent</span>&gt;</span>
+<span class="hljs-keyword">@property</span> (copy  , <span class="hljs-keyword">nonatomic</span>) NSData * deviceToken;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">strong</span>, <span class="hljs-keyword">nonatomic</span>) <span class="hljs-built_in">NSError</span> * error;
+<span class="hljs-keyword">@end</span>
+
+- (<span class="hljs-keyword">void</span>)appDidRegisterRemoteNotification:(QTAppDidRegisterRemoteNotificationEvent *)event;
+</code></pre>
+
+<p><strong>隐藏UIApplicationDelegate细节。</strong>对上隐藏UIApplication细节，便于做App内部扩展。</p>
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-comment">// 所有模块都已经初始化</span>
+- (<span class="hljs-keyword">void</span>)appAllModuleInit:(QTAppAllModuleInitEvent *)<span class="hljs-keyword">event</span>;</code></pre>
+
+<h3 id="注册">注册</h3>
+
+<p>AppDelegate有个特殊的地方，就是在App启动的时候初始化，那么如何告诉总线有哪些类注册了呢？</p>
+
+<p>典型的解决方案有以下几种：</p>
+
+<ul>
+<li>plist静态注册</li>
+<li>load方法动态注册</li>
+<li>基于<code>__attribute__</code>的clang语法，把注册信息写到mach-o文件里。</li>
+</ul>
+
+<p>最后选择了第三种方式，主要考虑如下：</p>
+
+<ul>
+<li>load方法拖慢App启动速度，所以很多团队是禁用load方法的。</li>
+<li>plist静态注册不利于多团队协作</li>
+</ul>
+
+<p>考虑事件的响应是有先后顺序的，所以在注册类的同时还要注册优先级，所以定义了一个结构体</p>
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">struct</span> QTAppModuleInfo{
+    <span class="hljs-keyword">char</span> * className;
+    <span class="hljs-keyword">long</span> priority;
+};</code></pre>
+
+<p>然后用宏定义注册</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-preprocessor">#<span class="hljs-keyword">define</span> QTAppModule(_class_,_priority_)\</span>
+__attribute__((used)) <span class="hljs-keyword">static</span> <span class="hljs-keyword">struct</span> QTAppModuleInfo QTAppModule<span class="hljs-preprocessor">##_class_ \</span>
+__attribute__ ((used, section (<span class="hljs-string">"__DATA,__QTEventBus"</span>))) =\
+{\
+    .className = <span class="hljs-preprocessor">#_class_,\</span>
+    .priority = _priority_,\
+};</code></pre>
+
+<p><code>__attribute__ ((used, section ("__DATA,__QTEventBus")))</code>的作用是告诉编译器这个结构体会用到，麻烦写到<code>__DATA</code>段中的<code>__QTEventBus</code> section里。</p>
+
+<p>然后，在加载二进制文件的时候，读取二进制文件里的注册信息</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs objectivec"><span class="hljs-keyword">const</span> <span class="hljs-keyword">struct</span> mach_header_* header  = (<span class="hljs-keyword">void</span>*)mhp;
+<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> size = <span class="hljs-number">0</span>;
+uintptr_t *data = (uintptr_t *)getsectiondata(header, <span class="hljs-string">"__DATA"</span>, <span class="hljs-string">"__QTEventBus"</span>,&amp;size);
+<span class="hljs-keyword">if</span> (data &amp;&amp; size &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> count = size / <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> QTAppModuleInfo);
+    <span class="hljs-keyword">struct</span> QTAppModuleInfo *items = (<span class="hljs-keyword">struct</span> QTAppModuleInfo*)data;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> index = <span class="hljs-number">0</span>; index &lt; count; index ++) {
+        <span class="hljs-built_in">NSString</span> * classStr = [<span class="hljs-built_in">NSString</span> stringWithUTF8String:items[index]<span class="hljs-variable">.className</span>];
+        <span class="hljs-built_in">NSInteger</span> priority = items[index]<span class="hljs-variable">.priority</span>;
+         ...
+    }
+}
+</code></pre>
+
+<h3 id="appdelegate封装">AppDelegate封装</h3>
+
+<p>由于AppDelegate是一个单例，这里选择实现绝大部分核心方法，分别通知AppModule和EventBus。举例：</p>
+
+<pre class="prettyprint"><code class=" hljs mel">- (void)application:(UIApplication <span class="hljs-variable">*)</span>application didRegisterForRemoteNotificationsWithDeviceToken:(NSData <span class="hljs-variable">*)</span>deviceToken{
+    QTAppDidRegisterRemoteNotificationEvent * <span class="hljs-keyword">event</span> = [[QTAppDidRegisterRemoteNotificationEvent alloc] init];
+    <span class="hljs-keyword">event</span>.deviceToken = deviceToken;
+        [[QTAppModuleManager shared] enumerateModulesUsingBlock:^(__unsafe_unretained Class&lt;QTAppModule&gt; module) {
+        id&lt;QTAppModule&gt; <span class="hljs-keyword">instance</span> = [module moduleInstance];
+        <span class="hljs-keyword">if</span> ([<span class="hljs-keyword">instance</span> respondsToSelector:sel]) {
+            [<span class="hljs-keyword">instance</span> performSelector:sel withObject:<span class="hljs-keyword">event</span>];
+        }
+    }];
+    [[QTEventBus shared] dispatch:<span class="hljs-keyword">event</span>];
+}
+</code></pre>
+
+<p>由于有些方法只在特定版本生效，所以时间的封装要进行版本适配，比如3D touch是从iOS 9开始才有的</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs objectivec"><span class="hljs-comment">// 类定义</span>
+API_AVAILABLE(ios(<span class="hljs-number">9.0</span>))
+<span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">QTAppPerformActionForShortcutItemEvent</span>: <span class="hljs-title">QTAppEvent</span>&lt;<span class="hljs-title">QTEvent</span>&gt;</span>
+
+<span class="hljs-keyword">@end</span>
+
+<span class="hljs-comment">// 协议中的方法</span>
+- (<span class="hljs-keyword">void</span>)appPerformActionForShortcutItem:(QTAppPerformActionForShortcutItemEvent *)event API_AVAILABLE(ios(<span class="hljs-number">9.0</span>));
+</code></pre>
+
+<p>还有一些特定方法是无法封装的，这时候通过让client继承的方式来自己扩展：</p>
+
+<pre class="prettyprint"><code class=" hljs erlang"><span class="hljs-pp">- <span class="hljs-params">(<span class="hljs-variable">BOOL</span>)</span>application:<span class="hljs-params">(<span class="hljs-variable">UIApplication</span> *)</span>application shouldAllowExtensionPointIdentifier:<span class="hljs-params">(<span class="hljs-variable">UIApplicationExtensionPointIdentifier</span>)</span>extensionPointIdentifier;</span></code></pre>
+
+
+
+<h3 id="宏定义">宏定义</h3>
+
+<p>Objective C/C/C++开发中，宏定义是一个利器，可以缩减代码量和对外提供一些细节。比如宏<code>QTAppModule</code>用来对外提供注册的接口：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-preprocessor">#<span class="hljs-keyword">define</span> QTAppModule(_class_,_priority_)\</span>
+__attribute__((used)) <span class="hljs-keyword">static</span> <span class="hljs-keyword">struct</span> QTAppModuleInfo QTAppModule<span class="hljs-preprocessor">##_class_ \</span>
+__attribute__ ((used, section (<span class="hljs-string">"__DATA,__QTEventBus"</span>))) =\
+{\
+    .className = <span class="hljs-preprocessor">#_class_,\</span>
+    .priority = _priority_,\
+};
+</code></pre>
+
+<p>宏<code>__LIFE_CIRCLE_IMPLEMENT</code>用来缩减代码量</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs objectivec"><span class="hljs-preprocessor">#define __LIFE_CIRCLE_IMPLEMENT(_name_) QTAppLifeCircleEvent * event = [[QTAppLifeCircleEvent alloc] init];\</span>
+    event<span class="hljs-variable">.type</span> = QTAppLifeCircleEvent<span class="hljs-variable">._name_</span>;\
+    [<span class="hljs-keyword">self</span> _sendEvent:event sel:<span class="hljs-keyword">@selector</span>(appLifeCircleChanged:)];
+
+- (<span class="hljs-keyword">void</span>)applicationDidBecomeActive:(<span class="hljs-built_in">UIApplication</span> *)application{
+    __LIFE_CIRCLE_IMPLEMENT(didBecomeActive);
+}
+
+- (<span class="hljs-keyword">void</span>)applicationWillResignActive:(<span class="hljs-built_in">UIApplication</span> *)application{
+    __LIFE_CIRCLE_IMPLEMENT(willResignActive);
+}</code></pre>
+
+<h2 id="总结">总结</h2>
+
+<p>本文在QTEventBus的基础上，增加了UIApplication的解耦支持，不管是组件化还是非组件化的项目均可以接入。</p>
+
+<p>代码链接：<a href="https://github.com/LeoMobileDeveloper/QTEventBus" rel="nofollow">QTEventBus</a>。</p>            </div>
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/hello_hwc/article/details/81609183,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/hello_hwc/article/details/81609183,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/hello_hwc/article/details/81609183,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/hello_hwc/article/details/81609183,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+<div class="answer-box">
+  <a id="chatqa"></a>
+  <div class="img-qrcode-box">
+    <img src="http://images.gitbook.cn/fb8abd01-4f7d-11e8-a3a2-5f9ddbefc02a" alt="">
+    <p>扫码向博主提问</p>
+  </div>
+  <button class="btn answer-btn-close">
+      <svg class="icon" aria-hidden="true">
+          <use xlink:href="#csdnc-times"></use>
+      </svg>
+  </button>
+  <div class="content-box  d-flex flex-column justify-content-center">
+    <div class="info-box d-flex">
+      <img src="https://avatar.csdn.net/C/3/C/3_hello_hwc.jpg" alt="" class="avatar-pic">
+      <p class="name d-flex align-items-center usernick">黄文臣</p>
+            <p class="flag d-flex align-items-center">
+          <svg class="icon" aria-hidden="true">
+              <use xlink:href="#csdnc-blogexpert"></use>
+          </svg>
+          博客专家
+      </p>
+          </div>
+    <div class="remark text-truncate">
+      一切iOS相关问题，老司机带路    </div>
+          <ul class="expertise-list d-flex align-content-start flex-wrap">
+            <li class="title">擅长领域：</li>
+                              <li>iOS       </li>
+                              <li>Swift     </li>
+                              <li>软件架构</li>
+                              <li>编译        </li>
+                              <li>设计模式</li>
+                    </ul>
+      </div>
+      <a href="https://mp.csdn.net/ask" class="btn btn-sm btn-link-blue btn-op-answer" target="_blank">去开通我的Chat快问</a>
+  </div>
+
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+                <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/hello_hwc/article/details/81609183#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/HHL110120/article/details/81302973,BlogCommendFromBaidu_0"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/HHL110120/article/details/81302973,BlogCommendFromBaidu_0"}'>
+		<a href="https://blog.csdn.net/HHL110120/article/details/81302973" target="_blank" title="iOS组件化之<em>AppDelegate</em>中的常见处理。">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						iOS组件化之<em>AppDelegate</em>中的常见处理。				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/2/D/3_hhl110120.jpg" alt="HHL110120" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">HHL110120</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-31</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							206</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							  在组件化开发的过程中，在app运行期间，app可能处于前台，后台，以及两个之间的过渡状态。这些状态的呈现处理一般是在AppDelegate中进行处理的，但是进行组件化后，如果业务组件中的处理逻辑放...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/zhuweideng/article/details/79607226,BlogCommendFromBaidu_1"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/zhuweideng/article/details/79607226,BlogCommendFromBaidu_1"}'>
+		<a href="https://blog.csdn.net/zhuweideng/article/details/79607226" target="_blank" title="<em>AppDelegate</em>瘦身指南">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>AppDelegate</em>瘦身指南				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/C/9/7/3_zhuweideng.jpg" alt="zhuweideng" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">zhuweideng</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-19</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							143</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							原文链接：http://kyson.cn/index.php/archives/105/AppDelegate瘦身是一个大家都很熟悉的话题，各家也有各自的解决方案。但方案无外乎两种，一种是从AppDe...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/GGGHub/article/details/52713642,BlogCommendFromBaidu_2"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/GGGHub/article/details/52713642,BlogCommendFromBaidu_2"}'>
+		<a href="https://blog.csdn.net/GGGHub/article/details/52713642" target="_blank" title="iOS项目组件化<em>解耦</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						iOS项目组件化<em>解耦</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/1/C/3_ggghub.jpg" alt="GGGHub" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">GGGHub</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">10-01</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							4774</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							最近给公司的一个iOS项目进行组件化解耦。本身项目早期开发就不是很规范，而且刚刚开始熟悉这个项目对业务方面也不是很熟悉所以并没有对所有的模块进行组件化。而且组件化解耦后还存在一些问题在文章中都会写出来...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/qq_25475307/article/details/47779839,BlogCommendESEnWordWeight_3"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/qq_25475307/article/details/47779839,BlogCommendESEnWordWeight_3"}'>
+		<a href="https://blog.csdn.net/qq_25475307/article/details/47779839" target="_blank" title="iOS开发 --   delegate 设计模式">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						iOS开发 --   delegate 设计模式				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/1/9/3_qq_25475307.jpg" alt="qq_25475307" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_25475307</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-19</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							299</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							当一个类的某些功能需要被别⼈来实现，但是既不明确是些什么 功能，⼜不明确谁来实现这些功能的时候，委托模式就可以派上⽤场。 
+delegate 设计模式目的是为了降低类之间的耦合性delegate 是用...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/kingofark/article/details/2018,BlogCommendESEnWordWeight_4"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/kingofark/article/details/2018,BlogCommendESEnWordWeight_4"}'>
+		<a href="https://blog.csdn.net/kingofark/article/details/2018" target="_blank" title="Guru of the Week 条款18：Iterators（迭代子）">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Guru of the Week 条款18：Iterators（迭代子）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/7/D/3_kingofark.jpg" alt="kingofark" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">kingofark</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-24</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							974</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							GotW #18 Iterators著者：Herb Sutter翻译：K ][ N G of @rk™[声明]：本文内容取自www.gotw.ca网站上的Guru of the Week栏目，其著作权...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/mcgwinds/article/details/51166367,BlogCommendESEnWordWeight_5"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/mcgwinds/article/details/51166367,BlogCommendESEnWordWeight_5"}'>
+		<a href="https://blog.csdn.net/mcgwinds/article/details/51166367" target="_blank" title="图解服务化架构演进">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						图解服务化架构演进				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/B/0/E/3_mcgwinds.jpg" alt="mcgwinds" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">mcgwinds</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-16</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							3225</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							前言
+
+  随着互联网的发展，网站应用的规模不断扩大，常规的垂直应用架构已无法应对，分布式服务架构以及流动计算势在必行，对现阶段传统垂直架构改造的核心就是对应用做服务化改造，服务化改造使用的核心技术架...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u010960265/article/details/79589871,BlogCommendESEnWordWeight_6"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u010960265/article/details/79589871,BlogCommendESEnWordWeight_6"}'>
+		<a href="https://blog.csdn.net/u010960265/article/details/79589871" target="_blank" title="iOS 减少<em>AppDelegate</em>代码方法汇总">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						iOS 减少<em>AppDelegate</em>代码方法汇总				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/B/7/5/3_u010960265.jpg" alt="u010960265" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u010960265</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-17</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							166</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							AppDelegate瘦身是一个大家都很熟悉的话题，各家也有各自的解决方案。但方案无外乎两种，一种是从AppDelegate本身入手，通过各种方式减少AppDelegate的代码行数，另一种是通过架构...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/Hello_Hwc/article/details/52288611,searchFromBaidu_7"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/Hello_Hwc/article/details/52288611,searchFromBaidu_7"}'>
+		<a href="https://blog.csdn.net/Hello_Hwc/article/details/52288611" target="_blank" title="NSProxy与消息转发机制">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						NSProxy与消息转发机制				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/C/3/C/3_hello_hwc.jpg" alt="Hello_Hwc" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">Hello_Hwc</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-23</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2642</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							来自Leo的原创博客，转载请著名出处我的StackOverflow我的Github,欢迎Follow 
+https://github.com/LeoMobileDeveloper前言NSProxy是i...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/Philm_iOS/article/details/81200955,searchFromBaidu_8"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/Philm_iOS/article/details/81200955,searchFromBaidu_8"}'>
+		<a href="https://blog.csdn.net/Philm_iOS/article/details/81200955" target="_blank" title="IOS 切面统计事件<em>解耦</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						IOS 切面统计事件<em>解耦</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/4/F/3_philm_ios.jpg" alt="Philm_iOS" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">Philm_iOS</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-13</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							73</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							IOS 切面统计事件解耦
+
+
+
+统计这个事情可以说是个巨无语的系统，当然不把他独立出来也就不是什么问题了，只是一堆牛皮癣似得代码穿插在项目各个地方，毕竟真正应用到一个app里的统计都跟业务有着很强的绑...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/cuibo1123/article/details/51017376,searchFromBaidu_9"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/cuibo1123/article/details/51017376,searchFromBaidu_9"}'>
+		<a href="https://blog.csdn.net/cuibo1123/article/details/51017376" target="_blank" title="ios业务模块间互相跳转的<em>解耦</em>方案">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						ios业务模块间互相跳转的<em>解耦</em>方案				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/5/D/3_cuibo1123.jpg" alt="cuibo1123" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">cuibo1123</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-30</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							8444</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							一个app通常由许多个模块组成，所有模块之间免不了会相互调用，例如一个读书管理软件，可能会有书架、用户信息、图书详情等等模块，从用户信息－我读的书中，可以打开图书详情。而在图书详情－所在书架，又可以打...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box type_hot_word">
+									<div class="content clearfix oneline">
+				<h5 class="float-left">相关热词</h5>
+				<div class="float-left">
+									<span>
+						<a href="https://blog.csdn.net/zouxiang2188/article/details/38356687" target="_blank">
+						聊聊多态</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/haochen_net/article/details/78159949" target="_blank">
+						聊聊接口</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/Nick_666/article/details/78342442" target="_blank">
+						聊聊网络异常</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/crowhyc/article/details/72729509" target="_blank">
+						《聊聊架构》</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/iter_zc/article/details/39546405" target="_blank">
+						聊聊多线程</a>
+					</span>
+								</div>
+			</div>
+					</div>
+	
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/Hello_Hwc">
+                <img src="https://avatar.csdn.net/C/3/C/3_hello_hwc.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/Hello_Hwc" target="_blank" class="text-truncate" id="uid">黄文臣</a>
+            </p>
+                        <p class="flag">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-blogexpert"></use>
+                </svg>
+                博客专家
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/hello_hwc/article/details/81609183" target="_self">关注</a>
+                            </span>
+                        <span  class="csdn-tracking-statistics tracking-click" data-mod="">
+                <a class="btn btn-sm btn-yellow-hollow" id="btnAsk" href="#chatqa" target="_self">向TA提问</a>
+            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="296">
+                        <dt><a href="https://blog.csdn.net/hello_hwc?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/hello_hwc?t=1"><span class="count">296</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="1091">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">1091</span></dd>
+        </dl>
+        <dl class="text-center" title="1044">
+            <dt>喜欢</dt>
+            <dd><span class="count">1044</span></dd>
+        </dl>
+        <dl class="text-center" title="338">
+            <dt>评论</dt>
+            <dd><span class="count">338</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="7级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-7"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="1463468">
+                146万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="16329">
+                1万+            </dd>
+        </dl>
+        <dl title="893">
+            <dt>排名：</dt>
+            <dd>893</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                <a class="icon-badge" title="专栏达人">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-columns"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item1">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-columns"></use>
+                        </svg>
+                        <p>专栏达人</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    </div>
+                </div>
+            </div> 
+        </a>  
+                                    </div>
+    </div>		    		    <!--自定义模块-->
+<div id="asideCustom42071412" class="aside-box custom-box">
+    <h3 class="aside-title">Github & StackOverflow</h3>
+    <div class="aside-content clearfix">
+        <a href="https://github.com/LeoMobileDeveloper">
+<img src="https://raw.githubusercontent.com/LeoMobileDeveloper/React-Native-Files/master/flair.png" width="208">
+</a>
+</br>
+<a href="https://stackoverflow.com/users/3940672/leo"><img src="https://stackexchange.com/users/flair/4889039.png" width="208" height="58" alt="profile for Leo on Stack Exchange, a network of free, community-driven Q&A sites" title="profile for Leo on Stack Exchange, a network of free, community-driven Q&A sites"></a>    </div>
+</div>
+		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/Hello_Hwc/article/details/81023561" target="_blank">实现一个优雅的iOS事件总线</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/Hello_Hwc/article/details/80946318" target="_blank">深入理解iOS Crash Log</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/Hello_Hwc/article/details/80865787" target="_blank">XCode启动参数和环境变量</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/Hello_Hwc/article/details/80721246" target="_blank">Safari/Chrome调试WebView</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/Hello_Hwc/article/details/80094632" target="_blank">深入理解Toll-Free Bridging</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <div id="asideColumn" class="aside-box flexible-box">
+    <h3 class="aside-title">博主专栏</h3>
+    <div class="aside-content">
+        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/swift-hwc.html">
+                            <img src="https://img-blog.csdn.net/20151123180046083?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/swift-hwc.html">learning swift with hwc</a></p>
+                        <div class="data">阅读量：<span>53270</span><span class="count">18 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/hwclinux.html">
+                            <img src="https://img-blog.csdn.net/20151123180053552?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/hwclinux.html">由浅至深学习Linux</a></p>
+                        <div class="data">阅读量：<span>125756</span><span class="count">14 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/swfitexperience.html">
+                            <img src="https://img-blog.csdn.net/20151123180056270?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/swfitexperience.html">Swift实用技术</a></p>
+                        <div class="data">阅读量：<span>85002</span><span class="count">14 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/swift-gcd.html">
+                            <img src="https://img-blog.csdn.net/20170602162343841?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/swift-gcd.html">Swift下的GCD详解</a></p>
+                        <div class="data">阅读量：<span>59743</span><span class="count">5 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/hwc-xiaozhao.html">
+                            <img src="https://img-blog.csdn.net/20151123180107677?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/hwc-xiaozhao.html">校招面试</a></p>
+                        <div class="data">阅读量：<span>5608</span><span class="count">2 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/huangwenchen-ios-sdk.html">
+                            <img src="https://img-blog.csdn.net/20151123180146099?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/huangwenchen-ios-sdk.html">iOS开发详解</a></p>
+                        <div class="data">阅读量：<span>378110</span><span class="count">72 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/wenchen-ios-app.html">
+                            <img src="https://img-blog.csdn.net/20151123180248614?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/wenchen-ios-app.html">iOS项目实战</a></p>
+                        <div class="data">阅读量：<span>13567</span><span class="count">3 篇</span></div>
+                    </div>
+                </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/3108657">
+                    自己的iOS库                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/5933595">
+                    iOS进阶                    <span class="count float-right">38篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/3089269">
+                    Swift                    <span class="count float-right">23篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/6826664">
+                    React Native                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/3046579">
+                    数据持久化＋CoreData                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2470499">
+                    iOS基础                    <span class="count float-right">29篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2611845">
+                    Swift入门教程（1.0）                    <span class="count float-right">30篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2826893">
+                    CoreAnimation                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2836491">
+                    Foundation                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/3046883">
+                    UIKit                    <span class="count float-right">23篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2885601">
+                    iOS 网络编程                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2885607">
+                    iOS 多线程                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2470501">
+                    C++                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2470497">
+                    Linux                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2840017">
+                    小技巧                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/2608419">
+                    综合                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/6003037">
+                    设计模式                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/6510683">
+                    吐槽                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/hello_hwc/article/category/7741586">
+                    iOS代码调试                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/hello_hwc/article/details/40118129">Linux Sed命令详解+如何替换换行符&amp;quot;\n&amp;quot;(很多面试问道)</a>
+					<p class="read">阅读量：<span>56227</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/hello_hwc/article/details/51612139">React Native开发之IDE（Atom+Nuclide）安装，运行，调试</a>
+					<p class="read">阅读量：<span>55194</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/hello_hwc/article/details/51859330">RxSwift使用教程</a>
+					<p class="read">阅读量：<span>36424</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/hello_hwc/article/details/51775696">React Native开发之动画(Animations)</a>
+					<p class="read">阅读量：<span>31561</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/hello_hwc/article/details/51199384">为React Native开发写的JS和React入门知识</a>
+					<p class="read">阅读量：<span>26416</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		<div id="asideFooter">
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>2</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments low-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+										</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li>
+			<a class="btn-comments chat-ask-button low-height hover-box" title="快问" href="#chatqa">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-chat-qa"></use>
+				</svg>
+				<span class="hover-show text">快问</span>
+				
+			</a>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/hello_hwc/article/details/81023561" title="实现一个优雅的iOS事件总线">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+							</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "聊聊AppDelegate解耦";
+    var ChannelId = 1;
+    var articleId = "81609183";
+    var commentscount = 0;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/hello_hwc/article/details/81609183";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "swift+appdelegate+%E8%A7%A3%E8%80%A6";
+    var needInsertBaidu = false;
+    // 代码段样式
+    var codeStyle = 'atom-one-dark';
+    var highlight = ["\u804a\u804a","appdelegate","\u89e3\u8026"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"聊聊AppDelegate解耦");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9376486353.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=swift+appdelegate+%E8%A7%A3%E8%80%A6"  type="text/javascript"></script>
+</body>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>

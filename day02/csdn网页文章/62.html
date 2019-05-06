@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/singwhatiwanna/article/details/80904132"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="本文由玉刚说写作平台提供写作赞助
+  
+  原作者：AndroFarmer
+  
+  版权声明：本文版权归微信公众号玉刚说所有，未经许可，不得以任何形式转载
+
+
+
+
+前言
+
+MVC、MVP、MVVM是我们工作和面试中都比较重要的一块，但很多时候我们却有点迷惑。比如看了好多篇文章都搞不懂MVC到底是个啥本来想写个MVP写着写着就变成MVC了，到底Databing和MVVM之间有啥见不得人的关系..." />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>MVC、MVP、MVVM，我到底该怎么选？ - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-2eefd34acf.min.css">
+
+    <script type="text/javascript">
+        var username = "singwhatiwanna";
+        var blog_address = "https://blog.csdn.net/singwhatiwanna";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = false;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/singwhatiwanna/article/details/80904132"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin-yellow";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/singwhatiwanna">任玉刚</a></span>
+			<i>></i>
+			<span>MVC、MVP、MVVM，我到底该怎么选？</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">MVC、MVP、MVVM，我到底该怎么选？</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年07月03日 20:42:29</span>
+						<span class="read-count">阅读数：13291</span>
+												
+																															</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+					版权声明：本文为博主原创文章，未经博主允许不得转载。					https://blog.csdn.net/singwhatiwanna/article/details/80904132				</div>
+								            <div class="markdown_views">
+                <blockquote>
+  <p>本文由<code>玉刚说写作平台</code>提供写作赞助</p>
+  
+  <p>原作者：<code>AndroFarmer</code></p>
+  
+  <p>版权声明：本文版权归微信公众号<code>玉刚说</code>所有，未经许可，不得以任何形式转载</p>
+</blockquote>
+
+
+
+<h2 id="前言">前言</h2>
+
+<p>MVC、MVP、MVVM是我们工作和面试中都比较重要的一块，但很多时候我们却有点迷惑。比如看了好多篇文章都搞不懂MVC到底是个啥本来想写个MVP写着写着就变成MVC了，到底Databing和MVVM之间有啥见不得人的关系。本篇文章主要从发展的角度来介绍，如mvp，mvvm的出现都是为了解决前者的哪些问题。如果你有同样的疑问，本篇文章可能会给你带来一点收获。但是架构和设计模式相对来说不是那么容易捉摸透的东西，很多需要经过实践才能体会，另外由于本人水平有限，如果写的不对或者不严谨的地方，请不要打我。</p>
+
+
+
+<h2 id="mvc">MVC</h2>
+
+<p>可能由于MVP、MVVM的兴起，MVC在android中的应用变得越来越少了，但MVC是基础，理解好MVC才能更好的理解MVP,MVVM。因为后两种都是基于MVC发展而来的。</p>
+
+
+
+<h6 id="1mvc眼花缭乱设计图">1、MVC眼花缭乱设计图</h6>
+
+<p>我们从网上搜索mvc相关资料时，如果你多看几篇文章的话可能会发现，好像他们介绍的设计图都不太一样，这里罗列了大部分的设计图 <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b7386ed2e6d2?w=774&amp;h=454&amp;f=png&amp;s=21492" alt="mvc1.png" title=""> <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b738707a6968?w=776&amp;h=446&amp;f=png&amp;s=25269" alt="mvc2.png" title=""> <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b7386e317754?w=770&amp;h=444&amp;f=png&amp;s=21607" alt="mvc3.png" title=""> <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b73891134b78?w=780&amp;h=452&amp;f=png&amp;s=25107" alt="mvc4.png" title=""></p>
+
+
+
+<h6 id="2mvc设计图解释">2、MVC设计图解释</h6>
+
+<p>到底上面列出的设计图哪个才是对的。其实都是对的。为什么这么说呢，这得从mvc的发展说起。 <br>
+MVC框架模式最早由Trygve Reenskaug 于1978年在Smalltalk-80系统上首次提出。经过了这么多年的发展，当然会演变出不同的版本，但核心没变依旧还是三层模型Model-View-Control。</p>
+
+
+
+<h6 id="3mvc三层之间的关系">3、MVC三层之间的关系</h6>
+
+<p>箭头→代表的是一种事件流向，并不一定要持有对方，比如上图中model→view的事件流向，view可以通过注册监听器的形式得到model发来的事件。在设计中model view controller之间如果要通讯，尽量设计成不直接持有，这样方便复用。也符合mvc的设计初衷 <br>
+在android中三者对应的关系如下： <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b73891f5ff8c?w=1118&amp;h=576&amp;f=png&amp;s=38858" alt="" title=""></p>
+
+<p>视图层(View) <br>
+对应于xml布局文件和java代码动态view部分</p>
+
+<p>控制层(Controller) <br>
+MVC中Android的控制层是由Activity来承担的，Activity本来主要是作为初始化页面，展示数据的操作，但是因为XML视图功能太弱，所以Activity既要负责视图的显示又要加入控制逻辑，承担的功能过多。</p>
+
+<p>模型层(Model) <br>
+针对业务模型，建立的数据结构和相关的类，它主要负责网络请求，数据库处理，I/O的操作。</p>
+
+<p>由于android中有个god object的存在activity，再加上android中xml布局的功能性太弱，所以activity承担了绝大部分的工作。所以在android中mvc更像是这种形式： <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b7389d014b6f?w=824&amp;h=146&amp;f=png&amp;s=2568" alt="" title=""> <br>
+因为activity扮演了controller和view的工作，所以controller和view不太好彻底解耦，但是在一定程度上我们还是可以解耦的。 <br>
+Talk is cheap. Show me the code. 扯了这么多，我们来看点代码。</p>
+
+
+
+<h6 id="4mvc-sample">4、MVC sample</h6>
+
+<p>通过代码来看下，mvc在android中的实现 <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b738b4fcaf45?w=376&amp;h=428&amp;f=png&amp;s=36982" alt="" title=""></p>
+
+<p>结构很简单，这里介绍下其中的关键代码</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> BaseModel {
+    <span class="hljs-keyword">void</span> onDestroy();
+}</code></pre>
+
+<p>BaseModel顾名思义就是所有业务逻辑model的父类，这里的onDestroy()方法用于跟activity或者fragment生命周期同步，在destroy做一些销毁操作</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> Callback1&lt;T&gt; {
+    <span class="hljs-keyword">void</span> onCallBack(T t);
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> Callback2&lt;T,P&gt; {
+    <span class="hljs-keyword">void</span> onCallBack(T t,P p);
+}</code></pre>
+
+<p>Callback是根据View或者Controller调用Model时回调的参数个数选择使用</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SampleModel</span>  <span class="hljs-keyword">implements</span> <span class="hljs-title">BaseModel</span>{</span>
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span>  <span class="hljs-title">getUserInfo</span>(String uid,Callback1&lt;UserInfo&gt; callback)
+    {
+
+        UserInfo userInfo= <span class="hljs-keyword">new</span> HttpUtil&lt;UserInfo&gt;().get(uid);
+        callback.onCallBack(userInfo);
+
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onDestroy</span>() {
+
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserInfo</span>
+    {</span>
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;
+        <span class="hljs-keyword">private</span> String name;
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span>() {
+            <span class="hljs-keyword">return</span> age;
+        }
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span>(<span class="hljs-keyword">int</span> age) {
+            <span class="hljs-keyword">this</span>.age = age;
+        }
+
+        <span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span>() {
+            <span class="hljs-keyword">return</span> name;
+        }
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span>(String name) {
+            <span class="hljs-keyword">this</span>.name = name;
+        }
+    }
+}</code></pre>
+
+<p>SampleModel是我们业务逻辑的具体实现</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SampleActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> {</span>
+    <span class="hljs-keyword">private</span> SampleModel sampleModel;
+    Button button;
+    EditText textView;
+    TextView tvAge,tvName;
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span>(Bundle savedInstanceState) {
+        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sample);
+        sampleModel=<span class="hljs-keyword">new</span> SampleModel();
+        button.setOnClickListener(<span class="hljs-keyword">new</span> View.OnClickListener() {
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onClick</span>(View view) {
+                getUserInfo(textView.getText().toString());
+            }
+        });
+
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onDestroy</span>() {
+        <span class="hljs-keyword">super</span>.onDestroy();
+        sampleModel.onDestroy();
+    }
+
+    <span class="hljs-javadoc">/**
+     * 获取用户信息
+     *<span class="hljs-javadoctag"> @param</span> uid
+     */</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getUserInfo</span>(String uid)
+    {
+        sampleModel.getUserInfo(uid, <span class="hljs-keyword">new</span> Callback1&lt;SampleModel.UserInfo&gt;() {
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCallBack</span>(SampleModel.UserInfo userInfo) {
+                setDataToView(userInfo);
+            }
+        });
+    }
+
+    <span class="hljs-javadoc">/**
+     * 设置用户信息到view
+     */</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setDataToView</span>(SampleModel.UserInfo userInfo)
+    {
+        tvAge.setText(userInfo.getAge());
+        tvName.setText(userInfo.getName());
+    }
+
+}
+
+</code></pre>
+
+<p>前面说了Activity充当View和Controller，但是我们依然要区分到底哪一部分是View的操作，哪一部分是Controller的操作。 <br>
+我们分析下事件的流向 <br>
+button点击事件的触发：View→Controller <br>
+获取用户信息事件的触发：Controller→Model <br>
+绑定用户信息到View：Controller→View <br>
+至此MVC就讲完了</p>
+
+
+
+<h6 id="5mvc总结">5、MVC总结</h6>
+
+<p>我们这里根据sample来总结下： <br>
+ - 具有一定的分层，model彻底解耦，controller和view并没有解耦 <br>
+ - 层与层之间的交互尽量使用回调或者去使用消息机制去完成，尽量避免直接持有 <br>
+ - controller和view在android中无法做到彻底分离，但在代码逻辑层面一定要分清 <br>
+ - 业务逻辑被放置在model层，能够更好的复用和修改增加业务</p>
+
+
+
+<h2 id="mvp">MVP</h2>
+
+
+
+<h6 id="1mvp说明">1、MVP说明</h6>
+
+<p>MVP跟MVC很相像，文章开头列出了很多种MVC的设计图，所以根据MVC的发展来看，我们把MVP当成MVC来看也不为过，因为MVP也是三层，唯一的差别是Model和View之间不进行通讯，都是通过Presenter完成。 <br>
+前面介绍MVC的时候提到了算是致命缺点吧，在android中由于activity（god object）的存在，Controller和View很难做到完全解耦。但在MVP中就可以很好的解决这个问题 <br>
+看下MVP的设计图： <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b738c9d09633?w=1182&amp;h=348&amp;f=png&amp;s=23121" alt="mvp.png" title=""> <br>
+一般情况下就这两种</p>
+
+
+
+<h6 id="2mvp-sample">2、MVP Sample</h6>
+
+<p>依然延续MVC的例子，修改下结构通过MVP去实现，看下项目代码结构： <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b738c9564953?w=418&amp;h=614&amp;f=png&amp;s=55277" alt="" title=""> <br>
+callback，http包下内容基本一致，主要看下不同的地方</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> BasePresenter {
+    <span class="hljs-keyword">void</span> onDestroy();
+}</code></pre>
+
+<p>BasePresenter类似于MVC中的BaseModel，主要负责业务逻辑的实现。我们这里没有把业务逻辑放在Model里去实现，当然把主要业务逻辑放在Model中去实现也是可以的。google的MVP实现方案是把业务逻辑放在presenter中，弱化Model，我们这里也是这样做的。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs axapta"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">BaseView</span>&lt;<span class="hljs-title">P</span> <span class="hljs-inheritance"><span class="hljs-keyword">extends</span></span> <span class="hljs-title">BasePresenter</span>&gt; {</span>
+    <span class="hljs-keyword">void</span> setPresenter(P presenter);
+}</code></pre>
+
+<p>BaseView是所有View的父类，将android中的view抽象话出来，只有跟view相关的操作都由baseView的实现类去完成。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs axapta"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SampleContract</span> {</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Presenter</span> <span class="hljs-inheritance"><span class="hljs-keyword">implements</span></span> <span class="hljs-title">BasePresenter</span>
+    {</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span>  getUserInfo(String uid,Callback1&lt;SampleModel.UserInfo&gt; callback)
+        {
+            SampleModel.UserInfo userInfo= <span class="hljs-keyword">new</span> HttpUtil&lt;SampleModel.UserInfo&gt;().get(uid);
+            callback.onCallBack(userInfo);
+        }
+
+        @Override
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> onDestroy() {
+
+        }
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">View</span> <span class="hljs-inheritance"><span class="hljs-keyword">extends</span></span> <span class="hljs-title">BaseView</span>&lt;<span class="hljs-title">Presenter</span>&gt;
+    {</span>
+         <span class="hljs-keyword">void</span> setDataToView(SampleModel.UserInfo userInfo);
+    }
+}</code></pre>
+
+<p>Contract 契约类这是Google MVP与其他实现方式的又一个不同，契约类用于定义同一个界面的view的接口和presenter的具体实现。好处是通过规范的方法命名和注释可以清晰的看到整个页面的逻辑。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SampleActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">SampleContract</span>.<span class="hljs-title">View</span>{</span>
+    <span class="hljs-keyword">private</span>  SampleContract.Presenter mPresenter;
+    Button button;
+    EditText textView;
+    TextView tvAge,tvName;
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span>(Bundle savedInstanceState) {
+        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sample);
+        setPresenter(<span class="hljs-keyword">new</span> SampleContract.Presenter());
+
+        button.setOnClickListener(<span class="hljs-keyword">new</span> View.OnClickListener() {
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onClick</span>(View view) {
+                mPresenter.getUserInfo(textView.getText().toString(), <span class="hljs-keyword">new</span> Callback1&lt;SampleModel.UserInfo&gt;() {
+                    <span class="hljs-annotation">@Override</span>
+                    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCallBack</span>(SampleModel.UserInfo userInfo) {
+                        setDataToView(userInfo);
+                    }
+                });
+            }
+        });
+
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onDestroy</span>() {
+        <span class="hljs-keyword">super</span>.onDestroy();
+        mPresenter.onDestroy();
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setDataToView</span>(SampleModel.UserInfo userInfo) {
+        tvAge.setText(userInfo.getAge());
+        tvName.setText(userInfo.getName());
+    }
+
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setPresenter</span>(SampleContract.Presenter presenter) {
+        mPresenter=presenter;
+    }
+}</code></pre>
+
+<p>这里的SampleActivity实现了SampleContract.View只是作为View存在的。虽然看起来，跟MVC中的实现很相似，但却有本质的区别。mPresenter为Model和View之间交互的桥梁。Presenter跟View相互持有，这里SampleActivity实现了SampleContract.View，mPresenter作为SampleActivity的成员变量，SampleActivity当然持有mPresenter，由于mPresenter是非静态的成员标量，因此默认持有SampleActivity的引用。</p>
+
+
+
+<h6 id="3mvp总结">3、MVP总结</h6>
+
+<p>通过引入接口BaseView，让相应的视图组件如Activity，Fragment去实现BaseView，实现了视图层的独立，通过中间层Preseter实现了Model和View的完全解耦。MVP彻底解决了MVC中View和Controller傻傻分不清楚的问题，但是随着业务逻辑的增加，一个页面可能会非常复杂，UI的改变是非常多，会有非常多的case，这样就会造成View的接口会很庞大。</p>
+
+
+
+<h2 id="mvvm">MVVM</h2>
+
+
+
+<h6 id="1mvvm说明">1、MVVM说明</h6>
+
+<p>MVP中我们说过随着业务逻辑的增加，UI的改变多的情况下，会有非常多的跟UI相关的case，这样就会造成View的接口会很庞大。而MVVM就解决了这个问题，通过双向绑定的机制，实现数据和UI内容，只要想改其中一方，另一方都能够及时更新的一种设计理念，这样就省去了很多在View层中写很多case的情况，只需要改变数据就行。 <br>
+先看下MVVM设计图： <br>
+<img src="https://user-gold-cdn.xitu.io/2018/7/2/1645b738e643cfc6?w=751&amp;h=265&amp;f=png&amp;s=10920" alt="mvvm.png" title=""> <br>
+一般情况下就这两种情况，这看起来跟MVP好像没啥差别，其实区别还是挺大的，在MVP中View和presenter要相互持有，方便调用对方，而在MVP中 View和ViewModel通过Binding进行关联，他们之前的关联处理通过DataBinding完成。</p>
+
+
+
+<h6 id="2mvvm与databinding的关系">2、MVVM与DataBinding的关系</h6>
+
+<p>一句话表述就是，MVVM是一种思想，DataBinding是谷歌推出的方便实现MVVM的工具。在google推出DataBinding之前，因为xml layout功能较弱，想实现MVVM非常困难。而DataBinding的出现可以让我们很方便的实现MVVM。</p>
+
+
+
+<h6 id="3databinding简介">3、DataBinding简介</h6>
+
+<p>DataBinding是实现视图和数据双向绑定的工具，这里简单介绍下基本用法，详细用法可以参照官方:<a href="https://developer.android.com/topic/libraries/data-binding/" rel="nofollow">https://developer.android.com/topic/libraries/data-binding/</a> <br>
+启用DataBinding，只需要在gradle文件中添加如下代码：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash">android {    
+    dataBinding{
+        enabled <span class="hljs-literal">true</span>
+    }
+}</code></pre>
+
+<p>通过DataBindingUtil可以动态生成一个ViewDataBinding的子类，类名以layout文件名大写加Binding组成，如：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">ActivitySampleMvvmBinding binding = DataBindingUtil<span class="hljs-preprocessor">.setContentView</span>(this, R<span class="hljs-preprocessor">.layout</span><span class="hljs-preprocessor">.activity</span>_sample_mvvm)<span class="hljs-comment">;</span></code></pre>
+
+<p>在layout中需要我们配置，每个控件绑定的实体对象，以layout进行包裹，data中配置变量名和类型，通过@{}或@={}的方式进行引用，其中@={}的方式表示双向绑定。目前支持双向绑定的控件如下：</p>
+
+<blockquote>
+  <p>AbsListView android:selectedItemPosition <br>
+  CalendarView android:date <br>
+  CompoundButton android:checked <br>
+  DatePicker android:year, android:month, android:day <br>
+  NumberPicker android:value <br>
+  RadioGroup android:checkedButton <br>
+  RatingBar android:rating <br>
+  SeekBar android:progress <br>
+  TabHost android:currentTab  <br>
+  TextView android:text <br>
+  TimePicker android:hour, android:minute</p>
+</blockquote>
+
+
+
+<pre class="prettyprint"><code class=" hljs xml"><span class="hljs-pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">layout</span> <span class="hljs-attribute">xmlns:android</span>=<span class="hljs-value">"http://schemas.android.com/apk/res/android"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">data</span> &gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">variable
+</span>            <span class="hljs-attribute">name</span>=<span class="hljs-value">"user"</span>
+            <span class="hljs-attribute">type</span>=<span class="hljs-value">"com.androfarmer.mvvm.model.SampleModel.UserInfo"</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">variable</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">data</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">LinearLayout
+</span>    <span class="hljs-attribute">android:layout_width</span>=<span class="hljs-value">"match_parent"</span>
+    <span class="hljs-attribute">android:layout_height</span>=<span class="hljs-value">"match_parent"</span>
+    <span class="hljs-attribute">android:orientation</span>=<span class="hljs-value">"vertical"</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">TextView
+</span>        <span class="hljs-attribute">android:id</span>=<span class="hljs-value">"@+id/tv_name"</span>
+        <span class="hljs-attribute">android:layout_width</span>=<span class="hljs-value">"wrap_content"</span>
+        <span class="hljs-attribute">android:layout_height</span>=<span class="hljs-value">"wrap_content"</span>
+        <span class="hljs-attribute">android:text</span>=<span class="hljs-value">"@={user.name}"</span>
+        /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">TextView
+</span>        <span class="hljs-attribute">android:id</span>=<span class="hljs-value">"@+id/tv_age"</span>
+        <span class="hljs-attribute">android:layout_width</span>=<span class="hljs-value">"wrap_content"</span>
+        <span class="hljs-attribute">android:layout_height</span>=<span class="hljs-value">"wrap_content"</span>
+        <span class="hljs-attribute">android:text</span>=<span class="hljs-value">"@={user.age+``}"</span>
+        /&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-title">LinearLayout</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">layout</span>&gt;</span>
+</code></pre>
+
+<p>以上为具体在xml的用法展示</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserInfo</span>  <span class="hljs-keyword">extends</span> <span class="hljs-title">BaseObservable</span>
+    {</span>
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;
+        <span class="hljs-keyword">private</span> String name;
+
+        <span class="hljs-annotation">@Bindable</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span>() {
+            <span class="hljs-keyword">return</span> age;
+        }
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span>(<span class="hljs-keyword">int</span> age) {
+            <span class="hljs-keyword">this</span>.age = age;
+            notifyPropertyChanged(BR.age);
+        }
+
+        <span class="hljs-annotation">@Bindable</span>
+        <span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span>() {
+            <span class="hljs-keyword">return</span> name;
+        }
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span>(String name) {
+            <span class="hljs-keyword">this</span>.name = name;
+            notifyPropertyChanged(BR.name);
+        }
+    }</code></pre>
+
+<p>为了实现双向绑定还需要对数据实体类做处理，继承BaseObservable，对读写方法做@Bindable和notifyPropertyChanged处理。还可以直接使用官方提供的泛型可观察对象 ObservableField，比如： <br>
+private ObservableField name=new ObservableField&lt;&gt;();</p>
+
+
+
+<h6 id="4mvvm-sample">4、MVVM Sample</h6>
+
+<p>MVVM中跟MVP中一样，将三层划分的很清楚，Activity和xml layout充当View，ViewModel处理业务逻辑以及获取数据，弱化Model。 <br>
+很多代码跟前面类似，这里只列出核心代码，ViewModel层的</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs axapta"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">BaseViewModel</span> {</span>
+    <span class="hljs-keyword">void</span> onDestroy();
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractViewModel</span>&lt;<span class="hljs-title">T</span> <span class="hljs-inheritance"><span class="hljs-keyword">extends</span></span> <span class="hljs-title">ViewDataBinding</span>&gt; <span class="hljs-inheritance"><span class="hljs-keyword">implements</span></span> <span class="hljs-title">BaseViewModel</span> {</span>
+    <span class="hljs-keyword">public</span> T mViewDataBinding;
+    <span class="hljs-keyword">public</span> AbstractViewModel(T viewDataBinding)
+    {
+        <span class="hljs-keyword">this</span>.mViewDataBinding=viewDataBinding;
+    }
+
+    @Override
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> onDestroy() {
+        mViewDataBinding.unbind();
+    }
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SampleViewModel</span> <span class="hljs-inheritance"><span class="hljs-keyword">extends</span></span> <span class="hljs-title">AbstractViewModel</span>&lt;<span class="hljs-title">ActivitySampleMvvmBinding</span>&gt; {</span>
+
+    <span class="hljs-keyword">public</span> SampleViewModel(ActivitySampleMvvmBinding viewDataBinding) {
+        <span class="hljs-keyword">super</span>(viewDataBinding);
+    }
+
+    <span class="hljs-keyword">public</span>  <span class="hljs-keyword">void</span> getUserInfo(String uid, Callback1&lt;SampleModel.UserInfo&gt; callback)
+    {
+        <span class="hljs-comment">//从网络或缓存获取信息</span>
+        SampleModel.UserInfo userInfo=<span class="hljs-keyword">new</span> SampleModel.UserInfo();
+        userInfo.setName(<span class="hljs-string">"tom"</span>);
+        userInfo.setAge(<span class="hljs-number">18</span>);
+        callback.onCallBack(userInfo);
+    }
+}</code></pre>
+
+<p>ViewMode层主要处理业务逻辑和获取数据，mViewDataBinding是通过View层传递过来。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs java"> <span class="hljs-keyword">private</span> SampleViewModel mSampleViewModel;
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span>(Bundle savedInstanceState) {
+        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+        ActivitySampleMvvmBinding binding = DataBindingUtil.setContentView(<span class="hljs-keyword">this</span>, R.layout.activity_sample_mvvm);
+        mSampleViewModel=<span class="hljs-keyword">new</span> SampleViewModel(binding);
+        setDataToView();
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setDataToView</span>()
+    {
+        mSampleViewModel.getUserInfo(<span class="hljs-string">"uid"</span>, <span class="hljs-keyword">new</span> Callback1&lt;SampleModel.UserInfo&gt;() {
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCallBack</span>(SampleModel.UserInfo userInfo) {
+                mSampleViewModel.mViewDataBinding.setUser(userInfo);
+            }
+        });
+    }</code></pre>
+
+<p>xml layout代码在上面介绍databing的用法时已给出，通过上面代码我们就将数据UserInfo跟View进行绑定了。比如我们更新用户信息，可以直接对View上的属性进行修改： <br>
+mSampleViewModel.mViewDataBinding.tvName.setText(“rose”); <br>
+也可以通过修改UserInfo实体类的字段信息： <br>
+mSampleViewModel.mViewDataBinding.setUser(userInfo);</p>
+
+<p>从此告别MVP中View层好多接口的问题，让View变得更简洁，修改任何一方，两者都会保持数据同步。</p>
+
+
+
+<h6 id="5mvvm-总结">5、MVVM 总结</h6>
+
+<p>看起来MVVM很好的解决了MVC和MVP的不足，但是由于数据和视图的双向绑定，导致出现问题时不太好定位来源，有可能数据问题导致，也有可能业务逻辑中对视图属性的修改导致。如果项目中打算用MVVM的话可以考虑使用官方的架构组件ViewModel、LiveData、DataBinding去实现MVVM</p>
+
+
+
+<h2 id="关于mvcmvpmvvm如何选择的探讨">关于MVC,MVP,MVVM如何选择的探讨</h2>
+
+<p>前面在介绍MVC、MVP、MVVM时并没有去详细列出他们的优缺点，主要原因有两个： <br>
+1. 网上这方面总结的还是挺多的 <br>
+2. 其实关于架构，设计，模块化等等，它们的优缺点没有绝对的，主要看实现者如何去做</p>
+
+<p>比如在mvp中我们要实现根据业务逻辑和页面逻辑做很多Present和View的具体实现，如果这些case太多，会导致代码的可读性变差。但是通过引入contract契约类，会让业务逻辑变得清晰许多。因此不管是用哪种设计模式，只要运用得当，都可以达到想要的结果。</p>
+
+<p>如果非要说怎么选的话，以我浅薄的知识建议如下：</p>
+
+<ol>
+<li>如果项目简单，没什么复杂性，未来改动也不大的话，那就不要用设计模式或者架构方法，只需要将每个模块封装好，方便调用即可，不要为了使用设计模式或架构方法而使用。</li>
+<li>对于偏向展示型的app，绝大多数业务逻辑都在后端，app主要功能就是展示数据，交互等，建议使用mvvm。</li>
+<li>对于工具类或者需要写很多业务逻辑app，使用mvp或者mvvm都可。</li>
+<li>如果想通过一个项目去学习架构和设计模式，建议用MVC然后在此基础上慢慢挖掘改进。最后你可能发现，改进的最终结果可能就变成了mvp，mvvm。</li>
+</ol>
+
+<p>PS：代码部分很多只是为了演示具体设计模式原理，部分为伪代码，还有些代码写的不是那么严谨。本篇文章参考如下：</p>
+
+<p><a href="http://www.voidcn.com/article/p-ssodjasa-brk.html" rel="nofollow">http://www.voidcn.com/article/p-ssodjasa-brk.html</a> <br>
+<a href="https://www.jianshu.com/p/4830912f5162" rel="nofollow">https://www.jianshu.com/p/4830912f5162</a> <br>
+<img src="https://user-gold-cdn.xitu.io/2018/6/6/163d3319859594d4?w=258&amp;h=258&amp;f=jpeg&amp;s=26829" alt="" title="欢迎关注我的微信公众号，接收第一手技术干货"> <br>
+欢迎关注我的微信公众号，接收第一手技术干货</p>            </div>
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/singwhatiwanna/article/details/80904132,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/singwhatiwanna/article/details/80904132,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/singwhatiwanna/article/details/80904132,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/singwhatiwanna/article/details/80904132,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+                <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/singwhatiwanna/article/details/80904132#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/Px01Ih8/article/details/79683595,BlogCommendFromBaidu_0"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/Px01Ih8/article/details/79683595,BlogCommendFromBaidu_0"}'>
+		<a href="https://blog.csdn.net/Px01Ih8/article/details/79683595" target="_blank" title="为安卓开发者介绍的移动开发框架 Flutter">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						为安卓开发者介绍的移动开发框架 Flutter				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/7/E/D/3_px01ih8.jpg" alt="Px01Ih8" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">Px01Ih8</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-24</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							517</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							点击上方“程序员大咖”，选择“置顶公众号”关键时刻，第一时间送达！我是 TrueFace 的高级软件工程师 Adel Boussaken。今天我要给大家介绍 Flutter 开发。欢迎加入 Dart ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/lihaoxiang123/article/details/78977181,BlogCommendESEnWordWeight_1"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/lihaoxiang123/article/details/78977181,BlogCommendESEnWordWeight_1"}'>
+		<a href="https://blog.csdn.net/lihaoxiang123/article/details/78977181" target="_blank" title="Android高精战争（<em>MVC</em>、<em>MVP</em>、<em>MVVM</em>）">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Android高精战争（<em>MVC</em>、<em>MVP</em>、<em>MVVM</em>）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/F/4/7/3_lihaoxiang123.jpg" alt="lihaoxiang123" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">lihaoxiang123</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">01-05</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2490</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							和MVC框架模式一样，Model模型处理数据代码不变在Android的App开发中，很多人经常会头疼于App的架构如何设计：
+
+
+我的App需要应用这些设计架构吗？
+
+MVC,MVP等架构讲的是什么？...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/AlbenXie/article/details/72771231,BlogCommendESEnWordWeight_2"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/AlbenXie/article/details/72771231,BlogCommendESEnWordWeight_2"}'>
+		<a href="https://blog.csdn.net/AlbenXie/article/details/72771231" target="_blank" title="<em>MVVM</em>模式--Model，View，ViewModel三者平衡">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>MVVM</em>模式--Model，View，ViewModel三者平衡				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/F/F/4/3_albenxie.jpg" alt="AlbenXie" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">AlbenXie</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">05-26</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							519</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							MVC的概念已经逐渐被大家所熟悉——Model，View，Controllor。但是在最近的开发过程中，特别与WPF相关的开发中，发现MVVM这个模式相当好用，而且还可以很方便的通过UnitTest了...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/jdsjlzx/article/details/51174396,BlogCommendESEnWordWeight_3"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/jdsjlzx/article/details/51174396,BlogCommendESEnWordWeight_3"}'>
+		<a href="https://blog.csdn.net/jdsjlzx/article/details/51174396" target="_blank" title="认清Android框架 <em>MVC</em>，<em>MVP</em>和<em>MVVM</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						认清Android框架 <em>MVC</em>，<em>MVP</em>和<em>MVVM</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/2/9/C/3_jdsjlzx.jpg" alt="jdsjlzx" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">jdsjlzx</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-17</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							3.5万</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							相信大家对MVC，MVP和MVVM都不陌生，作为三个最耳熟能详的Android框架，它们的应用可以是非常广泛的，但是对于一些新手来说，可能对于区分它们三个都有困难，更别说在实际的项目中应用了，有些时候...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/suyimin2010/article/details/81039975,BlogCommendESEnWordWeight_4"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/suyimin2010/article/details/81039975,BlogCommendESEnWordWeight_4"}'>
+		<a href="https://blog.csdn.net/suyimin2010/article/details/81039975" target="_blank" title="Android targetSdkVersion 原理">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Android targetSdkVersion 原理				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/B/6/6/3_suyimin2010.jpg" alt="suyimin2010" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">suyimin2010</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-20</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							34</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							前几天 Google 官方发布文章解析 compileSdkVersion、minSdkVersion 以及 targetSdkVersion 的含义，以及合理设置各个值的意义，原文 Picking ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/wqc_CSDN/article/details/53749848,searchFromBaidu_5"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/wqc_CSDN/article/details/53749848,searchFromBaidu_5"}'>
+		<a href="https://blog.csdn.net/wqc_CSDN/article/details/53749848" target="_blank" title="关于<em>MVC</em>，<em>MVP</em>，<em>MVVM</em>的一点总结和思考">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						关于<em>MVC</em>，<em>MVP</em>，<em>MVVM</em>的一点总结和思考				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/C/C/8/3_wqc_csdn.jpg" alt="wqc_CSDN" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">wqc_CSDN</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-27</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							4088</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							简介软件的架构方式有很多种，从最开始的MVC模式，演化到MVP，然后到现在的MVVM，在不断的演化过程中其核心的思想就是降低各组件之间的耦合度，使得数据的流向更加的清晰明了。但并不是意味着一个比另一个...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/zzqhappy025/article/details/54971267,searchFromBaidu_6"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/zzqhappy025/article/details/54971267,searchFromBaidu_6"}'>
+		<a href="https://blog.csdn.net/zzqhappy025/article/details/54971267" target="_blank" title="浅谈开发中的<em>MVVM</em>模式及与<em>MVP</em>和<em>MVC</em>的区别">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						浅谈开发中的<em>MVVM</em>模式及与<em>MVP</em>和<em>MVC</em>的区别				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/0/2/A/3_zzqhappy025.jpg" alt="zzqhappy025" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">zzqhappy025</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">02-10</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							5361</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							我记得前段时间分享了一篇文章《 浅谈Andorid开发中的MVP模式》，反响不错，为了进一步介绍MVVM模式，还提前分享了实现Android中MVVM模式的一个关键技术的文章《Android 数据绑定...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/AndroFarmer/article/details/80871497,searchFromBaidu_7"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/AndroFarmer/article/details/80871497,searchFromBaidu_7"}'>
+		<a href="https://blog.csdn.net/AndroFarmer/article/details/80871497" target="_blank" title="<em>MVC</em>、<em>MVP</em>、<em>MVVM</em>，我<em>到底</em>该<em>怎么</em>选？">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>MVC</em>、<em>MVP</em>、<em>MVVM</em>，我<em>到底</em>该<em>怎么</em>选？				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/0/8/3_androfarmer.jpg" alt="AndroFarmer" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">AndroFarmer</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-03</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							142</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							前言
+
+MVC、MVP、MVVM是我们工作和面试中都比较重要的一块，但很多时候我们却有点迷惑。比如看了好多篇文章都搞不懂MVC到底是个啥，android中mvc到底该怎样划分，本来想写个MVP写着写着...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_18832439/article/details/51038454,searchFromBaidu_8"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_18832439/article/details/51038454,searchFromBaidu_8"}'>
+		<a href="https://blog.csdn.net/qq_18832439/article/details/51038454" target="_blank" title="前端的<em>MVC</em>和<em>MVP</em>和<em>MVVM</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						前端的<em>MVC</em>和<em>MVP</em>和<em>MVVM</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/D/5/2/3_qq_18832439.jpg" alt="qq_18832439" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_18832439</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-01</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							961</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							MVC（Model-View-Controller）MVP（Model-View-Presenter）
+MVVM（Model-View-ViewModel）
+
+
+
+M-V- X 本质都是一样...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/zhao_jing_bo/article/details/70051119,searchFromBaidu_9"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/zhao_jing_bo/article/details/70051119,searchFromBaidu_9"}'>
+		<a href="https://blog.csdn.net/zhao_jing_bo/article/details/70051119" target="_blank" title="<em>mvc</em> <em>mvp</em> <em>mvvm</em>比较以及区别">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>mvc</em> <em>mvp</em> <em>mvvm</em>比较以及区别				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/2/4/7/3_zhao_jing_bo.jpg" alt="zhao_jing_bo" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">zhao_jing_bo</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-11</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							809</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							MVC, MVP和MVVM都是用来解决界面呈现和逻辑代码分离而出现的模式。
+
+软件中最核心的，最基本的东西是什么? 是的，是数据。我们写的所有代码，都是围绕数据的。
+
+
+围绕着数据的产生、修改等变化，...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box type_hot_word">
+									<div class="content clearfix oneline">
+				<h5 class="float-left">相关热词</h5>
+				<div class="float-left">
+									<span>
+						<a href="https://blog.csdn.net/weixin_36087011/article/details/80810294" target="_blank">
+						mvc与mvvc</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/aA518189/article/details/78858323" target="_blank">
+						mvc管理系统</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/rxjhfmf/article/details/51187744" target="_blank">
+						mvc异常处理</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/hidongxiaojie/article/details/79043979" target="_blank">
+						mvc中</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/u012950413/article/details/75091225" target="_blank">
+						mvc业务层</a>
+					</span>
+								</div>
+			</div>
+					</div>
+	
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/singwhatiwanna">
+                <img src="https://avatar.csdn.net/0/2/C/3_singwhatiwanna.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/singwhatiwanna" target="_blank" class="text-truncate" id="uid">singwhatiwanna</a>
+            </p>
+                        <p class="flag">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-blogexpert"></use>
+                </svg>
+                博客专家
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/singwhatiwanna/article/details/80904132" target="_self">关注</a>
+                            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="94">
+                        <dt><a href="https://blog.csdn.net/singwhatiwanna?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/singwhatiwanna?t=1"><span class="count">94</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="17640">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">1万+</span></dd>
+        </dl>
+        <dl class="text-center" title="3378">
+            <dt>喜欢</dt>
+            <dd><span class="count">3378</span></dd>
+        </dl>
+        <dl class="text-center" title="3210">
+            <dt>评论</dt>
+            <dd><span class="count">3210</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="7级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-7"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="2176493">
+                217万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="17143">
+                1万+            </dd>
+        </dl>
+        <dl title="803">
+            <dt>排名：</dt>
+            <dd>803</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                <a class="icon-badge" title="专栏达人">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-columns"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item1">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-columns"></use>
+                        </svg>
+                        <p>专栏达人</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    </div>
+                </div>
+            </div> 
+        </a>  
+                                        <a class="icon-badge" title="博客之星">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-blogstar-l"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item4">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-blogstar-l"></use>
+                        </svg>
+                        <p>博客之星</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予通过"CSDN博客之星评选"中脱颖而出的十大博客之星称号的用户。
+                    </div>
+                </div>
+            </div>
+        </a>   
+            </div>
+    </div>		    		    <!--自定义模块-->
+<div id="asideCustom35181065" class="aside-box custom-box">
+    <h3 class="aside-title">我的书</h3>
+    <div class="aside-content clearfix">
+        <div>
+<a href="http://item.jd.com/11760209.html" target="_blank"><img src="http://img.blog.csdn.net/20150910213020176" alt="Android art"></a>
+<center>
+<a href="https://www.amazon.cn/dp/B014HV1X3K/ref=pd_bxgy_14_img_2?_encoding=UTF8&psc=1&refRID=W1EDSTMZJZZVH7YQCBP1" target="_blank">Amazon</a>    
+<a href="http://item.jd.com/11760209.html" target="_blank">京东</a>    
+<a href="http://product.dangdang.com/23766472.html" target="_blank">
+当当</a> 
+</center>
+</div>
+
+<div>
+<img src="http://img.my.csdn.net/uploads/201707/23/1500824251_3475.jpg" alt="公众号">
+</div>
+<span>聚焦于『Android开发前沿、AI、职场、生活、妹子图』，欢迎关注我的微信公众号</span>
+<br><br>
+<span><font color="">QQ交流群：635778578</font>
+</span>    </div>
+</div>
+		    <div id="asideColumn" class="aside-box">
+    <h3 class="aside-title">博主专栏</h3>
+    <div class="aside-content">
+        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/android-stage.html">
+                            <img src="https://img-blog.csdn.net/20151123175454833?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/android-stage.html">Android开发小栈</a></p>
+                        <div class="data">阅读量：<span>566116</span><span class="count">17 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/android-source-walk.html">
+                            <img src="https://img-blog.csdn.net/20151123175709661?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/android-source-walk.html">Android源码解读</a></p>
+                        <div class="data">阅读量：<span>272092</span><span class="count">12 篇</span></div>
+                    </div>
+                </li>
+                    </ul>
+    </div>
+    </div>
+		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/singwhatiwanna/article/details/80841705" target="_blank">一个小例子彻底搞懂 MVP</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/singwhatiwanna/article/details/80490124" target="_blank">instant app入门和开发指南</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/singwhatiwanna/article/details/79571364" target="_blank">Flutter 安装和初体验</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/singwhatiwanna/article/details/79418655" target="_blank">论程序员成长的正确姿势</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/singwhatiwanna/article/details/78898113" target="_blank">全面理解Gradle - 定义Task</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1405419">
+                    Android高手进阶                    <span class="count float-right">51篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1860361">
+                    Android疑难解答                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1874821">
+                    Android逆向工程                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1767721">
+                    架构设计                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/2645427">
+                    程序设计的艺术                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1767745">
+                    Linux系统                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1405418">
+                    Windows系统编程                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1412350">
+                    Html5游戏开发                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1405422">
+                    编程入门                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1405423">
+                    图像处理                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/1826689">
+                    综合                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/category/7697171">
+                    写作平台                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2018/07">
+                    2018年7月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2018/06">
+                    2018年6月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2018/05">
+                    2018年5月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2018/03">
+                    2018年3月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2017/12">
+                    2017年12月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2017/07">
+                    2017年7月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2016/03">
+                    2016年3月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2016/01">
+                    2016年1月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/11">
+                    2015年11月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/10">
+                    2015年10月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/09">
+                    2015年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/07">
+                    2015年7月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/06">
+                    2015年6月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/03">
+                    2015年3月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2015/01">
+                    2015年1月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/12">
+                    2014年12月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/10">
+                    2014年10月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/08">
+                    2014年8月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/07">
+                    2014年7月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/05">
+                    2014年5月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/04">
+                    2014年4月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/03">
+                    2014年3月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/02">
+                    2014年2月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2014/01">
+                    2014年1月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/12">
+                    2013年12月                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/11">
+                    2013年11月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/09">
+                    2013年9月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/07">
+                    2013年7月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/06">
+                    2013年6月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/05">
+                    2013年5月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/04">
+                    2013年4月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/singwhatiwanna/article/month/2013/03">
+                    2013年3月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/singwhatiwanna/article/details/49560409">Android学习路线指南</a>
+					<p class="read">阅读量：<span>188177</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/singwhatiwanna/article/details/42343847">Android学习路线：如何成长为高级工程师</a>
+					<p class="read">阅读量：<span>81624</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/singwhatiwanna/article/details/22597587">Android apk动态加载机制的研究</a>
+					<p class="read">阅读量：<span>78575</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/singwhatiwanna/article/details/39937639">APK动态加载框架（DL）解析</a>
+					<p class="read">阅读量：<span>75462</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/singwhatiwanna/article/details/49230997">给Android程序员的一些面试建议</a>
+					<p class="read">阅读量：<span>60746</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/singwhatiwanna/article/details/80904132#comments">MVC、MVP、MVVM，我到底该...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/vop444" class="user-name" target="_blank">vop444</a>：感谢分享                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/singwhatiwanna/article/details/9294285#comments">Activity的启动方式和fla...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/zhugeliangchengxiang" class="user-name" target="_blank">zhugeliangchengxiang</a>：现在就第一章的启动模式有些不懂的，请教下。在艺术探索中说通过Intent的flags启动的优先级大...                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/singwhatiwanna/article/details/48439621#comments">《Android开发艺术探索》图书...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/zhugeliangchengxiang" class="user-name" target="_blank">zhugeliangchengxiang</a>：现在就第一章的启动模式有些不懂的，请教下。在艺术探索中说通过Intent的flags启动的优先级大...                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/singwhatiwanna/article/details/79418655#comments">论程序员成长的正确姿势</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_39099820" class="user-name" target="_blank">qq_39099820</a>：博主，转发了                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/singwhatiwanna/article/details/80904132#comments">MVC、MVP、MVVM，我到底该...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/boling_cavalry" class="user-name" target="_blank">boling_cavalry</a>：感谢专家，对比很深刻                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		<div id="asideFooter">
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>8</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments long-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+						7				</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/singwhatiwanna/article/details/80841705" title="一个小例子彻底搞懂 MVP">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+							</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "MVC、MVP、MVVM，我到底该怎么选？";
+    var ChannelId = 1;
+    var articleId = "80904132";
+    var commentscount = 7;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/singwhatiwanna/article/details/80904132";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "mvvm++mvc+%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9";
+    var needInsertBaidu = false;
+    // 代码段样式
+    var codeStyle = 'atom-one-dark';
+    var highlight = ["mvc","mvp","mvvm","\u5230\u5e95","\u600e\u4e48"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"MVC、MVP、MVVM，我到底该怎么选？");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-9376486353.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=mvvm++mvc+%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9"  type="text/javascript"></script>
+</body>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>

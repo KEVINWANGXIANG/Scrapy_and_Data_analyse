@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/MeituanTech/article/details/81567238"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="Flutter是Google开发的一套全新的跨平台、开源UI框架，支持iOS、Android系统开发，并且是未来新操作系统Fuchsia的默认开发套件。自从2017年5月发布第一个版本以来，目前Flutter已经发布了近60个版本，并且在2018年5月发布了第一个“Ready for Production Apps”的Beta 3版本，6月20日发布了第一个“Release Preview”版本。..." />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>Flutter原理与美团的实践 - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9b39979775.min.css">
+
+    <script type="text/javascript">
+        var username = "MeituanTech";
+        var blog_address = "https://blog.csdn.net/meituantech";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = true;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/MeituanTech/article/details/81567238"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin3-template";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/meituantech">MeituanTech的博客...</a></span>
+			<i>></i>
+			<span>Flutter原理与美团的实践</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">Flutter原理与美团的实践</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年08月10日 17:35:10</span>
+						<span class="read-count">阅读数：10614</span>
+										</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								            <div class="markdown_views">
+                <p>Flutter是Google开发的一套全新的跨平台、开源UI框架，支持iOS、Android系统开发，并且是未来新操作系统Fuchsia的默认开发套件。自从2017年5月发布<a href="https://github.com/flutter/flutter/releases/tag/v0.0.6" rel="nofollow">第一个版本</a>以来，目前Flutter已经发布了近60个版本，并且在2018年5月发布了第一个<a href="https://developers.googleblog.com/2018/05/ready-for-production-apps-flutter-beta-3.html" rel="nofollow">“Ready for Production Apps”</a>的Beta 3版本，6月20日发布了第一个<a href="https://medium.com/flutter-io/flutter-release-preview-1-943a9b6ee65a" rel="nofollow">“Release Preview”</a>版本。</p>
+
+
+
+<h2 id="初识flutter">初识Flutter</h2>
+
+<p>Flutter的目标是使同一套代码同时运行在Android和iOS系统上，并且拥有媲美原生应用的性能，Flutter甚至提供了两套控件来适配Android和iOS（滚动效果、字体和控件图标等等）为了让App在细节处看起来更像原生应用。</p>
+
+<p>在Flutter诞生之前，已经有许多跨平台UI框架的方案，比如基于WebView的Cordova、AppCan等，还有使用HTML+JavaScript渲染成原生控件的React Native、Weex等。</p>
+
+<p>基于WebView的框架优点很明显，它们几乎可以完全继承现代Web开发的所有成果（丰富得多的控件库、满足各种需求的页面框架、完全的动态化、自动化测试工具等等），当然也包括Web开发人员，不需要太多的学习和迁移成本就可以开发一个App。同时WebView框架也有一个致命（在对体验&amp;性能有较高要求的情况下）的缺点，那就是WebView的渲染效率和JavaScript执行性能太差。再加上Android各个系统版本和设备厂商的定制，很难保证所在所有设备上都能提供一致的体验。</p>
+
+<p>为了解决WebView性能差的问题，以React Native为代表的一类框架将最终渲染工作交还给了系统，虽然同样使用类HTML+JS的UI构建逻辑，但是最终会生成对应的自定义原生控件，以充分利用原生控件相对于WebView的较高的绘制效率。与此同时这种策略也将框架本身和App开发者绑在了系统的控件系统上，不仅框架本身需要处理大量平台相关的逻辑，随着系统版本变化和API的变化，开发者可能也需要处理不同平台的差异，甚至有些特性只能在部分平台上实现，这样框架的跨平台特性就会大打折扣。</p>
+
+<p>Flutter则开辟了一种全新的思路，从头到尾重写一套跨平台的UI框架，包括UI控件、渲染逻辑甚至开发语言。渲染引擎依靠跨平台的Skia图形库来实现，依赖系统的只有图形绘制相关的接口，可以在最大程度上保证不同平台、不同设备的体验一致性，逻辑处理使用支持AOT的Dart语言，执行效率也比JavaScript高得多。</p>
+
+<p>Flutter同时支持Windows、Linux和macOS操作系统作为开发环境，并且在Android Studio和VS Code两个IDE上都提供了全功能的支持。Flutter所使用的Dart语言同时支持AOT和JIT运行方式，JIT模式下还有一个备受欢迎的开发利器“热刷新”（Hot Reload），即在Android Studio中编辑Dart代码后，只需要点击保存或者“Hot Reload”按钮，就可以立即更新到正在运行的设备上，不需要重新编译App，甚至不需要重启App，立即就可以看到更新后的样式。</p>
+
+<p>在Flutter中，所有功能都可以通过组合多个Widget来实现，包括对齐方式、按行排列、按列排列、网格排列甚至事件处理等等。Flutter控件主要分为两大类，StatelessWidget和StatefulWidget，StatelessWidget用来展示静态的文本或者图片，如果控件需要根据外部数据或者用户操作来改变的话，就需要使用StatefulWidget。State的概念也是来源于Facebook的流行Web框架<a href="http://facebook.github.io/react/" rel="nofollow">React</a>，React风格的框架中使用控件树和各自的状态来构建界面，当某个控件的状态发生变化时由框架负责对比前后状态差异并且采取最小代价来更新渲染结果。</p>
+
+
+
+<h4 id="hot-reload">Hot Reload</h4>
+
+<p>在Dart代码文件中修改字符串“Hello, World”，添加一个惊叹号，点击保存或者热刷新按钮就可以立即更新到界面上，仅需几百毫秒：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652325356b19388?w=1029&amp;h=840&amp;f=gif&amp;s=80128" alt="" title=""></p>
+
+<p>Flutter通过将新的代码注入到正在运行的DartVM中，来实现Hot Reload这种神奇的效果，在DartVM将程序中的类结构更新完成后，Flutter会立即重建整个控件树，从而更新界面。但是热刷新也有一些限制，并不是所有的代码改动都可以通过热刷新来更新：</p>
+
+<ol>
+<li>编译错误，如果修改后的Dart代码无法通过编译，Flutter会在控制台报错，这时需要修改对应的代码。</li>
+<li>控件类型从<code>StatelessWidget</code>到<code>StatefulWidget</code>的转换，因为Flutter在执行热刷新时会保留程序原来的state，而某个控件从stageless→stateful后会导致Flutter重新创建控件时报错“myWidget is not a subtype of StatelessWidget”，而从stateful→stateless会报错“type ‘myWidget’ is not a subtype of type ‘StatefulWidget’ of ‘newWidget’”。</li>
+<li>全局变量和静态成员变量，这些变量不会在热刷新时更新。</li>
+<li>修改了main函数中创建的根控件节点，Flutter在热刷新后只会根据原来的根节点重新创建控件树，不会修改根节点。</li>
+<li>某个类从普通类型转换成枚举类型，或者类型的泛型参数列表变化，都会使热刷新失败。</li>
+</ol>
+
+<p>热刷新无法实现更新时，执行一次热重启（Hot Restart）就可以全量更新所有代码，同样不需要重启App，区别是restart会将所有Dart代码打包同步到设备上，并且所有状态都会重置。</p>
+
+
+
+<h4 id="flutter插件">Flutter插件</h4>
+
+<p>Flutter使用的Dart语言无法直接调用Android系统提供的Java接口，这时就需要使用插件来实现中转。Flutter官方提供了丰富的原生接口封装：</p>
+
+<ul>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/android_alarm_manager" rel="nofollow">android_alarm_manager</a>，访问Android系统的<code>AlertManager</code>。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/android_intent" rel="nofollow">android_intent</a>，构造Android的Intent对象。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/battery" rel="nofollow">battery</a>，获取和监听系统电量变化。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/connectivity" rel="nofollow">connectivity</a>，获取和监听系统网络连接状态。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/device_info" rel="nofollow">device info</a>，获取设备型号等信息。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/image_picker" rel="nofollow">image_picker</a>，从设备中选取或者拍摄照片。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/package_info" rel="nofollow">package_info</a>，获取App安装包的版本等信息。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/path_provider" rel="nofollow">path_provider</a>，获取常用文件路径。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/quick_actions" rel="nofollow">quick_actions</a>，App图标添加快捷方式，iOS的<a href="https://developer.apple.com/ios/human-interface-guidelines/extensions/home-screen-actions" rel="nofollow">eponymous concept</a>和Android的<a href="https://developer.android.com/guide/topics/ui/shortcuts.html" rel="nofollow">App Shortcuts</a>。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/sensors" rel="nofollow">sensors</a>，访问设备的加速度和陀螺仪传感器。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/shared_preferences" rel="nofollow">shared_preferences</a>，App KV存储功能。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/url_launcher" rel="nofollow">url_launcher</a>，启动URL，包括打电话、发短信和浏览网页等功能。</li>
+<li><a href="https://github.com/flutter/plugins/blob/master/packages/video_player" rel="nofollow">video_player</a>，播放视频文件或者网络流的控件。</li>
+</ul>
+
+<p>在Flutter中，依赖包由<a href="https://pub.Dartlang.org/" rel="nofollow">Pub</a>仓库管理，项目依赖配置在pubspec.yaml文件中声明即可（类似于NPM的版本声明 <a href="https://www.Dartlang.org/tools/pub/versioning" rel="nofollow">Pub Versioning Philosophy</a>），对于未发布在Pub仓库的插件可以使用git仓库地址或文件路径：</p>
+
+
+
+<pre class="prettyprint"><code class="language-python hljs ">dependencies: 
+  url_launcher: <span class="hljs-string">"&gt;=0.1.2 &lt;0.2.0"</span>
+  collection: <span class="hljs-string">"^0.1.2"</span>
+  plugin1: 
+    git: 
+      url: <span class="hljs-string">"git://github.com/flutter/plugin1.git"</span>
+  plugin2: 
+    path: ../plugin2/</code></pre>
+
+<p>以shared_preferences为例，在pubspec中添加代码：</p>
+
+
+
+<pre class="prettyprint"><code class="language-python hljs ">dependencies:
+  flutter:
+    sdk: flutter
+
+  shared_preferences: <span class="hljs-string">"^0.4.1"</span></code></pre>
+
+<p>脱字号“^”开头的版本表示<a href="https://www.Dartlang.org/tools/pub/dependencies#caret-syntax" rel="nofollow">和当前版本接口保持兼容</a>的最新版，<code>^1.2.3</code> 等效于 <code>&gt;=1.2.3 &lt;2.0.0</code> 而 <code>^0.1.2</code> 等效于 <code>&gt;=0.1.2 &lt;0.2.0</code>，添加依赖后点击“Packages get”按钮即可下载插件到本地，在代码中添加import语句就可以使用插件提供的接口：</p>
+
+
+
+<pre class="prettyprint"><code class="language-dart hljs php">import <span class="hljs-string">'package:shared_preferences/shared_preferences.Dart'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_MyAppState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">MyAppCounter</span>&gt; {</span>
+  int _count = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> String COUNTER_KEY = <span class="hljs-string">'counter'</span>;
+
+  _MyAppState() {
+    init();
+  }
+
+  init() async {
+    <span class="hljs-keyword">var</span> pref = await SharedPreferences.getInstance();
+    _count = pref.getInt(COUNTER_KEY) ?? <span class="hljs-number">0</span>;
+    setState(() {});
+  }
+
+  increaseCounter() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt(COUNTER_KEY, ++_count);
+    setState(() {});
+  }
+...</code></pre>
+
+
+
+<h2 id="dart">Dart</h2>
+
+<p><a href="https://www.Dartlang.org/" rel="nofollow">Dart</a>是一种强类型、跨平台的客户端开发语言。具有专门为客户端优化、高生产力、快速高效、可移植（兼容ARM/x86）、易学的OO编程风格和原生支持响应式编程（Stream &amp; Future）等优秀特性。Dart主要由Google负责开发和维护，在<a href="http://gotocon.com/aarhus-2011/presentation/Opening%20Keynote:%20Dart,%20a%20new%20programming%20language%20for%20structured%20web%20programming" rel="nofollow">2011年10启动项目</a>，2017年9月发布第一个2.0-dev版本。</p>
+
+<p>Dart本身提供了三种运行方式：</p>
+
+<ol>
+<li>使用Dart2js编译成JavaScript代码，运行在常规浏览器中（<a href="https://webdev.Dartlang.org/" rel="nofollow">Dart Web</a>）。</li>
+<li>使用DartVM直接在命令行中运行Dart代码（<a href="https://www.Dartlang.org/Dart-vm" rel="nofollow">DartVM</a>）。</li>
+<li>AOT方式编译成机器码，例如Flutter App框架（<a href="https://flutter.io/" rel="nofollow">Flutter</a>）。</li>
+</ol>
+
+<p>Flutter在筛选了20多种语言后，最终选择Dart作为开发语言主要有几个原因：</p>
+
+<ol>
+<li>健全的类型系统，同时支持静态类型检查和运行时类型检查。</li>
+<li>代码体积优化（Tree Shaking），编译时只保留运行时需要调用的代码（不允许反射这样的隐式引用），所以庞大的Widgets库不会造成发布体积过大。</li>
+<li>丰富的底层库，Dart自身提供了非常多的库。</li>
+<li>多生代无锁垃圾回收器，专门为UI框架中常见的大量Widgets对象创建和销毁优化。</li>
+<li>跨平台，iOS和Android共用一套代码。</li>
+<li>JIT &amp; AOT运行模式，支持开发时的快速迭代和正式发布后最大程度发挥硬件性能。</li>
+</ol>
+
+<p>在Dart中，有一些重要的基本概念需要了解：</p>
+
+<ul>
+<li>所有变量的值都是对象，也就是类的实例。甚至数字、函数和<code>null</code>也都是对象，都继承自<a href="https://api.Dartlang.org/dev/Dart-core/Object-class.html" rel="nofollow">Object</a>类。</li>
+<li>虽然Dart是强类型语言，但是显式变量类型声明是可选的，Dart支持类型推断。如果不想使用类型推断，可以用<a href="https://www.Dartlang.org/guides/language/effective-Dart/design#do-annotate-with-object-instead-of-dynamic-to-indicate-any-object-is-allowed" rel="nofollow">dynamic</a>类型。</li>
+<li>Dart支持泛型，<code>List&lt;int&gt;</code>表示包含int类型的列表，<code>List&lt;dynamic&gt;</code>则表示包含任意类型的列表。</li>
+<li>Dart支持顶层（top-level）函数和类成员函数，也支持嵌套函数和本地函数。</li>
+<li>Dart支持顶层变量和类成员变量。</li>
+<li>Dart没有public、protected和private这些关键字，使用下划线“_”开头的变量或者函数，表示只在库内可见。参考<a href="https://www.Dartlang.org/guides/language/language-tour#libraries-and-visibility" rel="nofollow">库和可见性</a>。</li>
+</ul>
+
+<p>DartVM的内存分配策略非常简单，创建对象时只需要在现有堆上移动指针，内存增长始终是线形的，省去了查找可用内存段的过程：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652325acdd5eefb?w=300&amp;h=131&amp;f=png&amp;s=2842" alt="" title=""></p>
+
+<p>Dart中类似线程的概念叫做Isolate，每个Isolate之间是无法共享内存的，所以这种分配策略可以让Dart实现无锁的快速分配。</p>
+
+<p>Dart的垃圾回收也采用了多生代算法，新生代在回收内存时采用了“半空间”算法，触发垃圾回收时Dart会将当前半空间中的“活跃”对象拷贝到备用空间，然后整体释放当前空间的所有内存：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/16523260b687798b?w=800&amp;h=226&amp;f=png&amp;s=23700" alt="" title=""></p>
+
+<p>整个过程中Dart只需要操作少量的“活跃”对象，大量的没有引用的“死亡”对象则被忽略，这种算法也非常适合Flutter框架中大量Widget重建的场景。</p>
+
+
+
+<h2 id="flutter-framework">Flutter Framework</h2>
+
+<p>Flutter的框架部分完全使用Dart语言实现，并且有着清晰的分层架构。分层架构使得我们可以在调用Flutter提供的便捷开发功能（预定义的一套高质量Material控件）之外，还可以直接调用甚至修改每一层实现（因为整个框架都属于“用户空间”的代码），这给我们提供了最大程度的自定义能力。Framework底层是Flutter引擎，引擎主要负责图形绘制（Skia）、文字排版（libtxt）和提供Dart运行时，引擎全部使用C++实现，Framework层使我们可以用Dart语言调用引擎的强大能力。</p>
+
+
+
+<h4 id="分层架构">分层架构</h4>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/16523263ee2383a6?w=1692&amp;h=626&amp;f=png&amp;s=55469" alt="" title=""></p>
+
+<p>Framework的最底层叫做Foundation，其中定义的大都是非常基础的、提供给其他所有层使用的工具类和方法。绘制库（Painting）封装了Flutter Engine提供的绘制接口，主要是为了在绘制控件等固定样式的图形时提供更直观、更方便的接口，比如绘制缩放后的位图、绘制文本、插值生成阴影以及在盒子周围绘制边框等等。Animation是动画相关的类，提供了类似Android系统的ValueAnimator的功能，并且提供了丰富的内置插值器。Gesture提供了手势识别相关的功能，包括触摸事件类定义和多种内置的手势识别器。GestureBinding类是Flutter中处理手势的抽象服务类，继承自BindingBase类。Binding系列的类在Flutter中充当着类似于Android中的SystemService系列（ActivityManager、PackageManager）功能，每个Binding类都提供一个服务的单例对象，App最顶层的Binding会包含所有相关的Bingding抽象类。如果使用Flutter提供的控件进行开发，则需要使用WidgetsFlutterBinding，如果不使用Flutter提供的任何控件，而直接调用Render层，则需要使用RenderingFlutterBinding。</p>
+
+<p>Flutter本身支持Android和iOS两个平台，除了性能和开发语言上的“native”化之外，它还提供了两套设计语言的控件实现Material &amp; Cupertino，可以帮助App更好地在不同平台上提供原生的用户体验。</p>
+
+
+
+<h4 id="渲染库rendering">渲染库（Rendering）</h4>
+
+<p>Flutter的控件树在实际显示时会转换成对应的渲染对象（<code>RenderObject</code>）树来实现布局和绘制操作。一般情况下，我们只会在调试布局，或者需要使用自定义控件来实现某些特殊效果的时候，才需要考虑渲染对象树的细节。渲染库主要提供的功能类有：</p>
+
+
+
+<pre class="prettyprint"><code class="language-dart hljs scala"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RendererBinding</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">BindingBase</span> <span class="hljs-keyword">with</span> <span class="hljs-title">ServicesBinding</span>, <span class="hljs-title">SchedulerBinding</span>, <span class="hljs-title">HitTestable</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderObject</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractNode</span> <span class="hljs-keyword">with</span> <span class="hljs-title">DiagnosticableTreeMixin</span> <span class="hljs-title">implements</span> <span class="hljs-title">HitTestTarget</span> {</span>
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RenderObject</span> {</span> ... }
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderParagraph</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RenderBox</span> {</span> ... }
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderImage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RenderBox</span> {</span> ... }
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderFlex</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RenderBox</span> <span class="hljs-keyword">with</span> <span class="hljs-title">ContainerRenderObjectMixin</span>&lt;<span class="hljs-title">RenderBox</span>, <span class="hljs-title">FlexParentData</span>&gt;,</span>
+                                        RenderBoxContainerDefaultsMixin&lt;RenderBox, FlexParentData&gt;,
+                                        DebugOverflowIndicatorMixin { ... }</code></pre>
+
+<p><code>RendererBinding</code>是渲染树和Flutter引擎的胶水层，负责管理帧重绘、窗口尺寸和渲染相关参数变化的监听。<code>RenderObject</code>渲染树中所有节点的基类，定义了布局、绘制和合成相关的接口。<code>RenderBox</code>和其三个常用的子类<code>RenderParagraph</code>、<code>RenderImage</code>、<code>RenderFlex</code>则是具体布局和绘制逻辑的实现类。</p>
+
+<p>在Flutter界面渲染过程分为三个阶段：布局、绘制、合成，布局和绘制在Flutter框架中完成，合成则交由引擎负责。</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/16523268a1758fbb?w=1386&amp;h=728&amp;f=png&amp;s=51508" alt="" title=""></p>
+
+<p>控件树中的每个控件通过实现<code>RenderObjectWidget#createRenderObject(BuildContext context) → RenderObject</code>方法来创建对应的不同类型的<code>RenderObject</code>对象，组成渲染对象树。因为Flutter极大地简化了布局的逻辑，所以整个布局过程中只需要深度遍历一次：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652326d2270f049?w=1038&amp;h=690&amp;f=png&amp;s=64895" alt="" title=""></p>
+
+<p>渲染对象树中的每个对象都会在布局过程中接受父对象的<code>Constraints</code>参数，决定自己的大小，然后父对象就可以按照自己的逻辑决定各个子对象的位置，完成布局过程。子对象不存储自己在容器中的位置，所以在它的位置发生改变时并不需要重新布局或者绘制。子对象的位置信息存储在它自己的<code>parentData</code>字段中，但是该字段由它的父对象负责维护，自身并不关心该字段的内容。同时也因为这种简单的布局逻辑，Flutter可以在某些节点设置布局边界（Relayout boundary），即当边界内的任何对象发生重新布局时，不会影响边界外的对象，反之亦然：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652326fd2a49092?w=994&amp;h=710&amp;f=png&amp;s=75038" alt="" title=""></p>
+
+<p>布局完成后，渲染对象树中的每个节点都有了明确的尺寸和位置，Flutter会把所有对象绘制到不同的图层上：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232737ba33ecd?w=1264&amp;h=690&amp;f=png&amp;s=86504" alt="" title=""></p>
+
+<p>因为绘制节点时也是深度遍历，可以看到第二个节点在绘制它的背景和前景不得不绘制在不同的图层上，因为第四个节点切换了图层（因为“4”节点是一个需要独占一个图层的内容，比如视频），而第六个节点也一起绘制到了红色图层。这样会导致第二个节点的前景（也就是“5”）部分需要重绘时，和它在逻辑上毫不相干但是处于同一图层的第六个节点也必须重绘。为了避免这种情况，Flutter提供了另外一个“重绘边界”的概念：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/16523276c9b36efd?w=1062&amp;h=696&amp;f=png&amp;s=76492" alt="" title=""></p>
+
+<p>在进入和走出重绘边界时，Flutter会强制切换新的图层，这样就可以避免边界内外的互相影响。典型的应用场景就是ScrollView，当滚动内容重绘时，一般情况下其他内容是不需要重绘的。虽然重绘边界可以在任何节点手动设置，但是一般不需要我们来实现，Flutter提供的控件默认会在需要设置的地方自动设置。</p>
+
+
+
+<h4 id="控件库widgets">控件库（Widgets）</h4>
+
+<p>Flutter的控件库提供了非常丰富的控件，包括最基本的文本、图片、容器、输入框和动画等等。在Flutter中“一切皆是控件”，通过组合、嵌套不同类型的控件，就可以构建出任意功能、任意复杂度的界面。它包含的最主要的几个类有：</p>
+
+
+
+<pre class="prettyprint"><code class="language-dart hljs php"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WidgetsFlutterBinding</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">BindingBase</span> <span class="hljs-title">with</span> <span class="hljs-title">GestureBinding</span>, <span class="hljs-title">ServicesBinding</span>, <span class="hljs-title">SchedulerBinding</span>,
+            <span class="hljs-title">PaintingBinding</span>, <span class="hljs-title">RendererBinding</span>, <span class="hljs-title">WidgetsBinding</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Widget</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">DiagnosticableTree</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StatelessWidget</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Widget</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StatefulWidget</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Widget</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderObjectWidget</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Widget</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Element</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">DiagnosticableTree</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">BuildContext</span> {</span> ... }
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StatelessElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ComponentElement</span> {</span> ... }
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StatefulElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ComponentElement</span> {</span> ... }
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RenderObjectElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Element</span> {</span> ... }
+...</code></pre>
+
+<p>基于Flutter控件系统开发的程序都需要使用<code>WidgetsFlutterBinding</code>，它是Flutter的控件框架和Flutter引擎的胶水层。<code>Widget</code>就是所有控件的基类，它本身所有的属性都是只读的。<code>RenderObjectWidget</code>所有的实现类则负责提供配置信息并创建具体的<code>RenderObjectElement</code>。<code>Element</code>是Flutter用来分离控件树和真正的渲染对象的中间层，控件用来描述对应的element属性，控件重建后可能会复用同一个element。<code>RenderObjectElement</code>持有真正负责布局、绘制和碰撞测试（hit test）的<code>RenderObject</code>对象。</p>
+
+<p><code>StatelessWidget</code>和<code>StatefulWidget</code>并不会直接影响<code>RenderObject</code>的创建，它们只负责创建对应的<code>RenderObjectWidget</code>，<code>StatelessElement</code>和<code>StatefulElement</code>也是类似的功能。</p>
+
+<p>它们之间的关系如下图：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652327a9a4e0d09?w=1470&amp;h=398&amp;f=png&amp;s=86669" alt="" title=""></p>
+
+<p>如果控件的属性发生了变化（因为控件的属性是只读的，所以变化也就意味着重新创建了新的控件树），但是其树上每个节点的类型没有变化时，element树和render树可以完全重用原来的对象（因为element和render object的属性都是可变的）：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652327e7ac48654?w=1458&amp;h=812&amp;f=png&amp;s=195064" alt="" title=""></p>
+
+<p>但是，如果控件树种某个节点的类型发生了变化，则element树和render树中的对应节点也需要重新创建：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232805b4aa405?w=1450&amp;h=374&amp;f=png&amp;s=77046" alt="" title=""></p>
+
+
+
+<h2 id="外卖全品类页面实践">外卖全品类页面实践</h2>
+
+<p>在调研了Flutter的各项特性和实现原理之后，外卖计划灰度上线Flutter版的全品类页面。对于将Flutter页面作为App的一部分这种集成模式，官方并没有提供<a href="https://github.com/flutter/flutter/wiki/Add-Flutter-to-existing-apps" rel="nofollow">完善的支持</a>，所以我们首先需要了解Flutter是如何编译、打包并且运行起来的。</p>
+
+
+
+<h4 id="flutter-app构建过程">Flutter App构建过程</h4>
+
+<p>最简单的Flutter工程至少包含两个文件：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/16523282e5651dae?w=180&amp;h=73&amp;f=png&amp;s=8547" alt="" title=""></p>
+
+<p>运行Flutter程序时需要对应平台的宿主工程，在Android上Flutter通过自动创建一个Gradle项目来生成宿主，在项目目录下执行<code>flutter create .</code>，Flutter会创建ios和android两个目录，分别构建对应平台的宿主项目，Android目录内容如下：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232852f22b8e3?w=300&amp;h=429&amp;f=png&amp;s=45151" alt="" title=""></p>
+
+<p>此Gradle项目中只有一个app module，构建产物即是宿主APK。Flutter在本地运行时默认采用Debug模式，在项目目录执行<code>flutter run</code>即可安装到设备中并自动运行，Debug模式下Flutter使用JIT方式来执行Dart代码，所有的Dart代码都会打包到APK文件中assets目录下，由libflutter.so中提供的DartVM读取并执行：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/16523288795badb0?w=360&amp;h=306&amp;f=png&amp;s=85259" alt="" title=""></p>
+
+<p>kernel_blob.bin是Flutter引擎的底层接口和Dart语言基本功能部分代码：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs coffeescript">third_party<span class="hljs-regexp">/dart/runtime/bin/</span>*.dart
+third_party<span class="hljs-regexp">/dart/runtime/lib/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/_http/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/async/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/collection/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/convert/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/core/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/developer/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/html/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/internal/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/io/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/isolate/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/math/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/mirrors/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/profiler/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/typed_data/</span>*.dart
+third_party<span class="hljs-regexp">/dart/sdk/lib/vmservice/</span>*.dart
+flutter<span class="hljs-regexp">/lib/ui/</span>*.dart</code></pre>
+
+<p>platform.dill则是实现了页面逻辑的代码，也包括Flutter Framework和其他由pub依赖的库代码：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vbnet">flutter_tutorial_2/<span class="hljs-keyword">lib</span>/main.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/widgets/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/services/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/semantics/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/scheduler/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/rendering/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/physics/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/painting/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/gestures/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/foundation/*.dart
+flutter/packages/flutter/<span class="hljs-keyword">lib</span>/src/animation/*.dart
+.pub-cache/hosted/pub.flutter-io.cn/collection-<span class="hljs-number">1.14</span><span class="hljs-number">.6</span>/<span class="hljs-keyword">lib</span>/*.dart
+.pub-cache/hosted/pub.flutter-io.cn/meta-<span class="hljs-number">1.1</span><span class="hljs-number">.5</span>/<span class="hljs-keyword">lib</span>/*.dart
+.pub-cache/hosted/pub.flutter-io.cn/shared_preferences-<span class="hljs-number">0.4</span><span class="hljs-number">.2</span>/*.dart</code></pre>
+
+<p>kernel_blob.bin和platform.dill都是由flutter_tools中的<a href="https://github.com/flutter/flutter/blob/master/packages/flutter_tools/lib/src/bundle.dart" rel="nofollow">bundle.dart</a>中调用<a href="https://github.com/flutter/flutter/blob/master/packages/flutter_tools/lib/src/compile.dart" rel="nofollow">KernelCompiler</a>生成。</p>
+
+<p>在Release模式（<code>flutter run --release</code>）下，Flutter会使用Dart的AOT运行模式，编译时将Dart代码转换成ARM指令：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652328bffab4384?w=330&amp;h=218&amp;f=png&amp;s=69720" alt="" title=""></p>
+
+<p>kernel_blob.bin和platform.dill都不在打包后的APK中，取代其功能的是(isolate/vm)_snapshot_(data/instr)四个文件。snapshot文件由Flutter SDK中的<code>flutter/bin/cache/artifacts/engine/android-arm-release/darwin-x64/gen_snapshot</code>命令生成，vm_snapshot_*是Dart虚拟机运行所需要的数据和代码指令，isolate_snapshot_*则是每个isolate运行所需要的数据和代码指令。</p>
+
+
+
+<h4 id="flutter-app运行机制">Flutter App运行机制</h4>
+
+<p>Flutter构建出的APK在运行时会将所有assets目录下的资源文件解压到App私有文件目录中的flutter目录下，主要包括处理字符编码的icudtl.dat，还有Debug模式的kernel_blob.bin、platform.dill和Release模式下的4个snapshot文件。默认情况下Flutter在<code>Application#onCreate</code>时调用<code>FlutterMain#startInitialization</code>来启动解压任务，然后在<code>FlutterActivityDelegate#onCreate</code>中调用<code>FlutterMain#ensureInitializationComplete</code>来等待解压任务结束。</p>
+
+<p>Flutter在Debug模式下使用JIT执行方式，主要是为了支持广受欢迎的热刷新功能：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/1652328efe87273b?w=944&amp;h=832&amp;f=png&amp;s=70135" alt="" title=""></p>
+
+<p>触发热刷新时Flutter会检测发生改变的Dart文件，将其同步到App私有缓存目录下，DartVM加载并且修改对应的类或者方法，重建控件树后立即可以在设备上看到效果。</p>
+
+<p>在Release模式下Flutter会直接将snapshot文件映射到内存中执行其中的指令：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232928d2158ab?w=1460&amp;h=264&amp;f=png&amp;s=63875" alt="" title=""></p>
+
+<p>在Release模式下，<code>FlutterActivityDelegate#onCreate</code>中调用<code>FlutterMain#ensureInitializationComplete</code>方法中会将AndroidManifest中设置的snapshot（没有设置则使用上面提到的默认值）文件名等运行参数设置到对应的C++同名类对象中，构造<code>FlutterNativeView</code>实例时调用<code>nativeAttach</code>来初始化DartVM，运行编译好的Dart代码。</p>
+
+
+
+<h4 id="打包android-library">打包Android Library</h4>
+
+<p>了解Flutter项目的构建和运行机制后，我们就可以按照其需求打包成AAR然后集成到现有原生App中了。首先在andorid/app/build.gradle中修改：</p>
+
+<table>
+<thead>
+<tr>
+  <th>APK</th>
+  <th>AAR</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>修改android插件类型</td>
+  <td>apply plugin: ‘com.android.application’</td>
+</tr>
+<tr>
+  <td>删除applicationId字段</td>
+  <td>applicationId “com.example.fluttertutorial”</td>
+</tr>
+<tr>
+  <td>建议添加发布所有配置功能，方便调试</td>
+  <td>-</td>
+</tr>
+</tbody></table>
+
+
+<p>简单修改后我们就可以使用Android Studio或者Gradle命令行工具将Flutter代码打包到aar中了。Flutter运行时所需要的资源都会包含在aar中，将其发布到maven服务器或者本地maven仓库后，就可以在原生App项目中引用。</p>
+
+<p>但这只是集成的第一步，为了让Flutter页面无缝衔接到外卖App中，我们需要做的还有很多。</p>
+
+
+
+<h4 id="图片资源复用">图片资源复用</h4>
+
+<p>Flutter默认将所有的图片资源文件打包到assets目录下，但是我们并不是用Flutter开发全新的页面，图片资源原来都会按照Android的规范放在各个drawable目录，即使是全新的页面也会有很多图片资源复用的场景，所以在assets目录下新增图片资源并不合适。</p>
+
+<p>Flutter官方并没有提供直接调用drawable目录下的图片资源的途径，毕竟drawable这类文件的处理会涉及大量的Android平台相关的逻辑（屏幕密度、系统版本、语言等等），assets目录文件的读取操作也在引擎内部使用C++实现，在Dart层面实现读取drawable文件的功能比较困难。Flutter在处理assets目录中的文件时也支持添加<a href="https://flutter.io/assets-and-images/#resolution-aware" rel="nofollow">多倍率的图片资源</a>，并能够在使用时<a href="https://docs.flutter.io/flutter/widgets/Image/Image.asset.html" rel="nofollow">自动选择</a>，但是Flutter要求每个图片必须提供1x图，然后才会识别到对应的其他倍率目录下的图片：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs haml">flutter:
+  assets:
+    -<span class="ruby"> images/cat.png
+</span>    -<span class="ruby"> images/<span class="hljs-number">2</span>x/cat.png
+</span>    -<span class="ruby"> images/<span class="hljs-number">3.5</span>x/cat.png</span></code></pre>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">new</span> Image.asset(<span class="hljs-string">'images/cat.png'</span>);</code></pre>
+
+<p>这样配置后，才能正确地在不同分辨率的设备上使用对应密度的图片。但是为了减小APK包体积我们的位图资源一般只提供常用的2x分辨率，其他分辨率的设备会在运行时自动缩放到对应大小。针对这种特殊的情况，我们在不增加包体积的前提下，同样提供了和原生App一样的能力：</p>
+
+<ol>
+<li>在调用Flutter页面之前将指定的图片资源按照设备屏幕密度缩放，并存储在App私有目录下。</li>
+<li>Flutter中使用时通过自定义的<code>WMImage</code>控件来加载，实际是通过转换成FileImage并自动设置scale为devicePixelRatio来加载。</li>
+</ol>
+
+<p>这样就可以同时解决APK包大小和图片资源缺失1x图的问题。</p>
+
+
+
+<h4 id="flutter和原生代码的通信">Flutter和原生代码的通信</h4>
+
+<p>我们只用Flutter实现了一个页面，现有的大量逻辑都是用Java实现，在运行时会有许多场景必须使用原生应用中的逻辑和功能，例如网络请求，我们统一的网络库会在每个网络请求中添加许多通用参数，也会负责成功率等指标的监控，还有异常上报，我们需要在捕获到关键异常时将其堆栈和环境信息上报到服务器。这些功能不太可能立即使用Dart实现一套出来，所以我们需要使用Dart提供的Platform Channel功能来实现Dart→Java之间的互相调用。</p>
+
+<p>以网络请求为例，我们在Dart中定义一个<code>MethodChannel</code>对象：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs coffeescript"><span class="hljs-reserved">import</span> <span class="hljs-string">'dart:async'</span>;
+<span class="hljs-reserved">import</span> <span class="hljs-string">'package:flutter/services.dart'</span>;
+<span class="hljs-reserved">const</span> MethodChannel _channel = <span class="hljs-reserved">const</span> MethodChannel(<span class="hljs-string">'com.sankuai.waimai/network'</span>);
+Future&lt;Map&lt;String, dynamic&gt;&gt; post(String path, [Map&lt;String, dynamic&gt; form]) async {
+  <span class="hljs-keyword">return</span> _channel.invokeMethod(<span class="hljs-string">"post"</span>, {<span class="hljs-string">'path'</span>: path, <span class="hljs-string">'body'</span>: form}).<span class="hljs-keyword">then</span>((result) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Map&lt;String, dynamic&gt;.from(result);
+  }).catchError<span class="hljs-function"><span class="hljs-params">((_) =&gt; <span class="hljs-literal">null</span>)</span>;
+}</span></code></pre>
+
+<p>然后在Java端实现相同名称的MethodChannel：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FlutterNetworkPlugin</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MethodChannel</span>.<span class="hljs-title">MethodCallHandler</span> {</span>
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String CHANNEL_NAME = <span class="hljs-string">"com.sankuai.waimai/network"</span>;
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onMethodCall</span>(MethodCall methodCall, <span class="hljs-keyword">final</span> MethodChannel.Result result) {
+        <span class="hljs-keyword">switch</span> (methodCall.method) {
+            <span class="hljs-keyword">case</span> <span class="hljs-string">"post"</span>:
+                RetrofitManager.performRequest(post((String) methodCall.argument(<span class="hljs-string">"path"</span>), (Map) methodCall.argument(<span class="hljs-string">"body"</span>)),
+                        <span class="hljs-keyword">new</span> DefaultSubscriber&lt;Map&gt;() {
+                            <span class="hljs-annotation">@Override</span>
+                            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onError</span>(Throwable e) {
+                                result.error(e.getClass().getCanonicalName(), e.getMessage(), <span class="hljs-keyword">null</span>);
+                            }
+
+                            <span class="hljs-annotation">@Override</span>
+                            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onNext</span>(Map stringBaseResponse) {
+                                result.success(stringBaseResponse);
+                            }
+                        }, tag);
+                <span class="hljs-keyword">break</span>;
+
+            <span class="hljs-keyword">default</span>:
+                result.notImplemented();
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+}</code></pre>
+
+<p>在Flutter页面中注册后，调用post方法就可以调用对应的Java实现：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs lasso">loadData: (callback) async {
+    <span class="hljs-built_in">Map</span><span class="hljs-subst">&lt;</span><span class="hljs-built_in">String</span>, dynamic<span class="hljs-subst">&gt;</span> <span class="hljs-built_in">data</span> <span class="hljs-subst">=</span> await post(<span class="hljs-string">"home/groups"</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">data</span> <span class="hljs-subst">==</span> <span class="hljs-built_in">null</span>) {
+      callback(<span class="hljs-literal">false</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+    _data <span class="hljs-subst">=</span> AllCategoryResponse<span class="hljs-built_in">.</span>fromJson(<span class="hljs-built_in">data</span>);
+    <span class="hljs-keyword">if</span> (_data <span class="hljs-subst">==</span> <span class="hljs-built_in">null</span> <span class="hljs-subst">||</span> _data<span class="hljs-built_in">.</span>code <span class="hljs-subst">!=</span> <span class="hljs-number">0</span>) {
+      callback(<span class="hljs-literal">false</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+    callback(<span class="hljs-literal">true</span>);
+  }),</code></pre>
+
+
+
+<h4 id="so库兼容性">SO库兼容性</h4>
+
+<p>Flutter官方只提供了四种CPU架构的SO库：armeabi-v7a、arm64-v8a、x86和x86-64，其中x86系列只支持Debug模式，但是外卖使用的大量SDK都只提供了armeabi架构的库。虽然我们可以通过修改引擎<code>src</code>根目录和<code>third_party/dart</code>目录下<code>build/config/arm.gni</code>，<code>third_party/skia</code>目录下的<code>BUILD.gn</code>等配置文件来编译出armeabi版本的Flutter引擎，但是实际上市面上绝大部分设备都已经支持armeabi-v7a，其提供的硬件加速浮点运算指令可以大大提高Flutter的运行速度，在灰度阶段我们可以主动屏蔽掉不支持armeabi-v7a的设备，直接使用armeabi-v7a版本的引擎。做到这点我们首先需要修改Flutter提供的引擎，在Flutter安装目录下的<code>bin/cache/artifacts/engine</code>下有Flutter下载的所有平台的引擎：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232b18d709cb4?w=200&amp;h=418&amp;f=png&amp;s=87319" alt="" title=""></p>
+
+<p>我们只需要修改android-arm、android-arm-profile和android-arm-release下的flutter.jar，将其中的lib/armeabi-v7a/libflutter.so移动到lib/armeabi/libflutter.so即可：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash"><span class="hljs-built_in">cd</span> <span class="hljs-variable">$FLUTTER_ROOT</span>/bin/cache/artifacts/engine
+<span class="hljs-keyword">for</span> arch <span class="hljs-keyword">in</span> android-arm android-arm-profile android-arm-release; <span class="hljs-keyword">do</span>
+  <span class="hljs-built_in">pushd</span> <span class="hljs-variable">$arch</span>
+  cp flutter.jar flutter-armeabi-v7a.jar <span class="hljs-comment"># 备份</span>
+  unzip flutter.jar lib/armeabi-v7a/libflutter.so
+  mv lib/armeabi-v7a lib/armeabi
+  zip <span class="hljs-operator">-d</span> flutter.jar lib/armeabi-v7a/libflutter.so
+  zip flutter.jar lib/armeabi/libflutter.so
+  <span class="hljs-built_in">popd</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+<p>这样在打包后Flutter的SO库就会打到APK的lib/armeabi目录中。在运行时如果设备不支持armeabi-v7a可能会崩溃，所以我们需要主动识别并屏蔽掉这类设备，在Android上判断设备是否支持armeabi-v7a也很简单：</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs "><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isARMv7Compatible</span>() {
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">if</span> (SDK_INT &gt;= LOLLIPOP) {
+            <span class="hljs-keyword">for</span> (String abi : Build.SUPPORTED_32_BIT_ABIS) {
+                <span class="hljs-keyword">if</span> (abi.equals(<span class="hljs-string">"armeabi-v7a"</span>)) {
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
+                }
+            }
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> (CPU_ABI.equals(<span class="hljs-string">"armeabi-v7a"</span>) || CPU_ABI.equals(<span class="hljs-string">"arm64-v8a"</span>)) {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
+            }
+        }
+    } <span class="hljs-keyword">catch</span> (Throwable e) {
+        L.wtf(e);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+}</code></pre>
+
+
+
+<h4 id="灰度和自动降级策略">灰度和自动降级策略</h4>
+
+<p>Horn是一个美团内部的跨平台配置下发SDK，使用Horn可以很方便地指定灰度开关：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232a955a06d05?w=1768&amp;h=650&amp;f=png&amp;s=96663" alt="" title=""></p>
+
+<p>在条件配置页面定义一系列条件，然后在参数配置页面添加新的字段flutter即可：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232adc798f7e2?w=1920&amp;h=340&amp;f=png&amp;s=92131" alt="" title=""></p>
+
+<p>因为在客户端做了ABI兜底策略，所以这里定义的ABI规则并没有启用。</p>
+
+<p>Flutter目前仍然处于Beta阶段，灰度过程中难免发生崩溃现象，观察到崩溃后再针对机型或者设备ID来做降级虽然可以尽量降低影响，但是我们可以做到更迅速。外卖的Crash采集SDK同时也支持JNI Crash的收集，我们专门为Flutter注册了崩溃监听器，一旦采集到Flutter相关的JNI Crash就立即停止该设备的Flutter功能，启动Flutter之前会先判断<code>FLUTTER_NATIVE_CRASH_FLAG</code>文件是否存在，如果存在则表示该设备发生过Flutter相关的崩溃，很有可能是不兼容导致的问题，当前版本周期内在该设备上就不再使用Flutter功能。</p>
+
+<p>除了崩溃以外，Flutter页面中的Dart代码也可能发生异常，例如服务器下发数据格式错误导致解析失败等等，Dart也提供了全局的异常捕获功能：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs coffeescript"><span class="hljs-reserved">import</span> <span class="hljs-string">'package:wm_app/plugins/wm_metrics.dart'</span>;
+
+<span class="hljs-reserved">void</span> main() {
+  runZoned<span class="hljs-function"><span class="hljs-params">(() =&gt; runApp(WaimaiApp()), onError: (Object obj, StackTrace stack) {
+    uploadException(<span class="hljs-string">"$obj\n$stack"</span>);
+  })</span>;
+}</span></code></pre>
+
+<p>这样我们就可以实现全方位的异常监控和完善的降级策略，最大程度减少灰度时可能对用户带来的影响。</p>
+
+
+
+<h4 id="分析崩溃堆栈和异常数据">分析崩溃堆栈和异常数据</h4>
+
+<p>Flutter的引擎部分全部使用C/C++实现，为了减少包大小，所有的SO库在发布时都会去除符号表信息。和其他的JNI崩溃堆栈一样，我们上报的堆栈信息中只能看到内存地址偏移量等信息：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs lasso"><span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span> <span class="hljs-subst">***</span>
+Build fingerprint: <span class="hljs-string">'Rock/odin/odin:7.1.1/NMF26F/1527007828:user/dev-keys'</span>
+Revision: <span class="hljs-string">'0'</span>
+Author: collect <span class="hljs-keyword">by</span> <span class="hljs-string">'libunwind'</span>
+ABI: <span class="hljs-string">'arm64-v8a'</span>
+pid: <span class="hljs-number">28937</span>, tid: <span class="hljs-number">29314</span>, name: <span class="hljs-number">1.</span>ui  <span class="hljs-subst">&gt;&gt;&gt;</span> com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew <span class="hljs-subst">&lt;&lt;&lt;</span>
+signal <span class="hljs-number">11</span> (SIGSEGV), code <span class="hljs-number">1</span> (SEGV_MAPERR), fault addr <span class="hljs-number">0x0</span>
+
+backtrace:
+    r0 <span class="hljs-number">00000000</span>  r1 ffffffff  r2 c0e7cb2c  r3 c15affcc
+    r4 c15aff88  r5 c0e7cb2c  r6 c15aff90  r7 bf567800
+    r8 c0e7cc58  r9 <span class="hljs-number">00000000</span>  sl c15aff0c  fp <span class="hljs-number">00000001</span>
+    ip <span class="hljs-number">80000000</span>  sp c0e7cb28  lr c11a03f9  pc c1254088  cpsr <span class="hljs-number">200</span>c0030
+    <span class="hljs-variable">#00</span> pc <span class="hljs-number">002</span>d7088  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#01</span> pc <span class="hljs-number">002</span>d5a23  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#02</span> pc <span class="hljs-number">002</span>d95b5  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#03</span> pc <span class="hljs-number">002</span>d9f33  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#04</span> pc <span class="hljs-number">00068e6</span>d  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#05</span> pc <span class="hljs-number">00067</span>da5  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#06</span> pc <span class="hljs-number">00067</span>d5f  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#07</span> pc <span class="hljs-number">003</span>b1877  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#08</span> pc <span class="hljs-number">003</span>b1db5  /<span class="hljs-built_in">data</span>/app/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew<span class="hljs-subst">-</span><span class="hljs-number">1</span>/lib/arm/libflutter<span class="hljs-built_in">.</span>so
+    <span class="hljs-variable">#09</span> pc <span class="hljs-number">0000241</span>c  /<span class="hljs-built_in">data</span>/<span class="hljs-built_in">data</span>/com<span class="hljs-built_in">.</span>sankuai<span class="hljs-built_in">.</span>meituan<span class="hljs-built_in">.</span>takeoutnew/app_flutter/vm_snapshot_instr</code></pre>
+
+<p>单纯这些信息很难定位问题，所以我们需要使用NDK提供的ndk-stack来解析出具体的代码位置：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs livecodeserver">ndk-stack -sym PATH [-dump PATH]
+Symbolizes <span class="hljs-operator">the</span> stack trace <span class="hljs-built_in">from</span> <span class="hljs-operator">an</span> Android native crash.
+  -sym PATH   sets <span class="hljs-operator">the</span> root <span class="hljs-built_in">directory</span> <span class="hljs-keyword">for</span> symbols
+  -dump PATH  sets <span class="hljs-operator">the</span> <span class="hljs-built_in">file</span> containing <span class="hljs-operator">the</span> crash dump (default <span class="hljs-keyword">stdin</span>)</code></pre>
+
+<p>如果使用了定制过的引擎，必须使用<code>engine/src/out/android-release</code>下编译出的libflutter.so文件。一般情况下我们使用的是官方版本的引擎，可以在<a href="https://console.cloud.google.com/storage/browser/flutter_infra/flutter/" rel="nofollow">flutter_infra</a>页面直接下载带有符号表的SO文件，根据打包时使用的Flutter工具版本下载对应的文件即可。比如0.4.4 beta版本：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">$ flutter --version <span class="hljs-preprocessor"># version命令可以看到Engine对应的版本 06afdfe54e</span>
+Flutter <span class="hljs-number">0.4</span><span class="hljs-number">.4</span> • channel beta • https://github<span class="hljs-preprocessor">.com</span>/flutter/flutter<span class="hljs-preprocessor">.git</span>
+Framework • revision f9bb4289e9 (<span class="hljs-number">5</span> weeks ago) • <span class="hljs-number">2018</span>-<span class="hljs-number">05</span>-<span class="hljs-number">11</span> <span class="hljs-number">21</span>:<span class="hljs-number">44</span>:<span class="hljs-number">54</span> -<span class="hljs-number">0700</span>
+Engine • revision <span class="hljs-number">06</span>afdfe54e
+Tools • Dart <span class="hljs-number">2.0</span><span class="hljs-number">.0</span>-dev<span class="hljs-number">.54</span><span class="hljs-number">.0</span><span class="hljs-preprocessor">.flutter</span>-<span class="hljs-number">46</span>ab040e58
+$ cat flutter/bin/internal/engine<span class="hljs-preprocessor">.version</span> <span class="hljs-preprocessor"># flutter安装目录下的engine.version文件也可以看到完整的版本信息 06afdfe54ebef9168a90ca00a6721c2d36e6aafa</span>
+<span class="hljs-number">06</span>afdfe54ebef9168a90ca00a6721c2d36e6aafa</code></pre>
+
+<p>拿到引擎版本号后在 <a href="https://console.cloud.google.com/storage/browser/flutter_infra/flutter/06afdfe54ebef9168a90ca00a6721c2d36e6aafa/" rel="nofollow">https://console.cloud.google.com/storage/browser/flutter_infra/flutter/06afdfe54ebef9168a90ca00a6721c2d36e6aafa/</a> 看到该版本对应的所有构建产物，下载android-arm-release、android-arm64-release和android-x86目录下的symbols.zip，并存放到对应目录：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232b7d2a064e6?w=300&amp;h=111&amp;f=png&amp;s=29141" alt="" title=""></p>
+
+<p>执行ndk-stack即可看到实际发生崩溃的代码和具体行数信息：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-title">ndk</span>-stack -sym flutter-production-syms/<span class="hljs-number">06</span>afdfe54ebef9168a90ca00a6721c2d36e6aafa/armeabi-v7a -dump flutter_jni_crash.txt 
+********** <span class="hljs-type">Crash</span> dump: **********
+<span class="hljs-type">Build</span> fingerprint: '<span class="hljs-type">Rock</span>/odin/odin:<span class="hljs-number">7.1</span><span class="hljs-number">.1</span>/<span class="hljs-type">NMF26F</span>/<span class="hljs-number">1527007828</span>:user/dev-keys'
+<span class="hljs-title">pid</span>: <span class="hljs-number">28937</span>, tid: <span class="hljs-number">29314</span>, name: <span class="hljs-number">1.</span>ui  &gt;&gt;&gt; com.sankuai.meituan.takeoutnew &lt;&lt;&lt;
+<span class="hljs-title">signal</span> <span class="hljs-number">11</span> (<span class="hljs-type">SIGSEGV</span>), code <span class="hljs-number">1</span> (<span class="hljs-type">SEGV_MAPERR</span>), fault addr <span class="hljs-number">0x0</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">00</span> pc <span class="hljs-number">002</span>d7088  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> minikin::<span class="hljs-type">WordBreaker</span>::setText<span class="hljs-container">(<span class="hljs-title">unsigned</span> <span class="hljs-title">short</span> <span class="hljs-title">const</span>*, <span class="hljs-title">unsigned</span> <span class="hljs-title">int</span>)</span> at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../flutter/third_party/txt/src/minikin/<span class="hljs-type">WordBreaker</span>.cpp:55</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">01</span> pc <span class="hljs-number">002</span>d5a23  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> minikin::<span class="hljs-type">LineBreaker</span>::setText<span class="hljs-container">()</span> at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../flutter/third_party/txt/src/minikin/<span class="hljs-type">LineBreaker</span>.cpp:74</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">02</span> pc <span class="hljs-number">002</span>d95b5  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> txt::<span class="hljs-type">Paragraph</span>::<span class="hljs-type">ComputeLineBreaks</span><span class="hljs-container">()</span> at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../flutter/third_party/txt/src/txt/paragraph.cc:273</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">03</span> pc <span class="hljs-number">002</span>d9f33  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> txt::<span class="hljs-type">Paragraph</span>::<span class="hljs-type">Layout</span><span class="hljs-container">(<span class="hljs-title">double</span>, <span class="hljs-title">bool</span>)</span> at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../flutter/third_party/txt/src/txt/paragraph.cc:428</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">04</span> pc <span class="hljs-number">00068e6</span>d  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> blink::<span class="hljs-type">ParagraphImplTxt</span>::layout<span class="hljs-container">(<span class="hljs-title">double</span>)</span> at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../flutter/lib/ui/text/paragraph_impl_txt.cc:54</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">05</span> pc <span class="hljs-number">00067</span>da5  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> tonic::<span class="hljs-type">DartDispatcher</span>&lt;tonic::<span class="hljs-type">IndicesHolder</span>&lt;0u&gt;, void <span class="hljs-container">(<span class="hljs-title">blink</span>::<span class="hljs-type">Paragraph</span>::*)</span><span class="hljs-container">(<span class="hljs-title">double</span>)</span>&gt;::<span class="hljs-type">Dispatch</span><span class="hljs-container">(<span class="hljs-title">void</span> (<span class="hljs-title">blink</span>::<span class="hljs-type">Paragraph</span>::*)</span><span class="hljs-container">(<span class="hljs-title">double</span>)</span>) at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../topaz/lib/tonic/dart_args.h:150</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">06</span> pc <span class="hljs-number">00067</span>d5f  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> void tonic::<span class="hljs-type">DartCall</span>&lt;void <span class="hljs-container">(<span class="hljs-title">blink</span>::<span class="hljs-type">Paragraph</span>::*)</span><span class="hljs-container">(<span class="hljs-title">double</span>)</span>&gt;<span class="hljs-container">(<span class="hljs-title">void</span> (<span class="hljs-title">blink</span>::<span class="hljs-type">Paragraph</span>::*)</span><span class="hljs-container">(<span class="hljs-title">double</span>)</span>, _Dart_NativeArguments*) at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../topaz/lib/tonic/dart_args.h:198</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">07</span> pc <span class="hljs-number">003</span>b1877  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> dart::<span class="hljs-type">NativeEntry</span>::<span class="hljs-type">AutoScopeNativeCallWrapperNoStackCheck</span><span class="hljs-container">(<span class="hljs-title">_Dart_NativeArguments</span>*, <span class="hljs-title">void</span> (*)</span><span class="hljs-container">(<span class="hljs-title">_Dart_NativeArguments</span>*)</span>) at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../third_party/dart/runtime/vm/native_entry.cc:198</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">08</span> pc <span class="hljs-number">003</span>b1db5  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/app/com.sankuai.meituan.takeoutnew-1/lib/arm/libflutter.so: <span class="hljs-type">Routine</span> dart::<span class="hljs-type">NativeEntry</span>::<span class="hljs-type">LinkNativeCall</span><span class="hljs-container">(<span class="hljs-title">_Dart_NativeArguments</span>*)</span> at /b/build/slave/<span class="hljs-type">Linux_Engine</span>/build/src/out/android_release/../../third_party/dart/runtime/vm/native_entry.cc:348</span>
+<span class="hljs-type">Stack</span> frame #<span class="hljs-number">09</span> pc <span class="hljs-number">0000241</span>c  /<span class="hljs-typedef"><span class="hljs-keyword">data</span>/<span class="hljs-keyword">data</span>/com.sankuai.meituan.takeoutnew/app_flutter/vm_snapshot_instr</span></code></pre>
+
+<p>Dart异常则比较简单，默认情况下Dart代码在编译成机器码时并没有去除符号表信息，所以Dart的异常堆栈本身就可以标识真实发生异常的代码文件和行数信息：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala">FlutterException: type <span class="hljs-string">'_InternalLinkedHashMap&lt;dynamic, dynamic&gt;'</span> is not a subtype of type <span class="hljs-string">'num'</span> in type cast
+<span class="hljs-preprocessor">#0      _$CategoryGroupFromJson (package:wm_app/lib/all_category/model/category_model.g.dart:29)</span>
+<span class="hljs-preprocessor">#1      new CategoryGroup.fromJson (package:wm_app/all_category/model/category_model.dart:51)</span>
+<span class="hljs-preprocessor">#2      _$CategoryListDataFromJson.&lt;anonymous closure&gt; (package:wm_app/lib/all_category/model/category_model.g.dart:5)</span>
+<span class="hljs-preprocessor">#3      MappedListIterable.elementAt (dart:_internal/iterable.dart:414)</span>
+<span class="hljs-preprocessor">#4      ListIterable.toList (dart:_internal/iterable.dart:219)</span>
+<span class="hljs-preprocessor">#5      _$CategoryListDataFromJson (package:wm_app/lib/all_category/model/category_model.g.dart:6)</span>
+<span class="hljs-preprocessor">#6      new CategoryListData.fromJson (package:wm_app/all_category/model/category_model.dart:19)</span>
+<span class="hljs-preprocessor">#7      _$AllCategoryResponseFromJson (package:wm_app/lib/all_category/model/category_model.g.dart:19)</span>
+<span class="hljs-preprocessor">#8      new AllCategoryResponse.fromJson (package:wm_app/all_category/model/category_model.dart:29)</span>
+<span class="hljs-preprocessor">#9      AllCategoryPage.build.&lt;anonymous closure&gt; (package:wm_app/all_category/category_page.dart:46)</span>
+&lt;asynchronous suspension&gt;
+<span class="hljs-preprocessor">#10     _WaimaiLoadingState.build (package:wm_app/all_category/widgets/progressive_loading_page.dart:51)</span>
+<span class="hljs-preprocessor">#11     StatefulElement.build (package:flutter/src/widgets/framework.dart:3730)</span>
+<span class="hljs-preprocessor">#12     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:3642)</span>
+<span class="hljs-preprocessor">#13     Element.rebuild (package:flutter/src/widgets/framework.dart:3495)</span>
+<span class="hljs-preprocessor">#14     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:2242)</span>
+<span class="hljs-preprocessor">#15     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding&amp;PaintingBinding&amp;RendererBinding&amp;WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:626)</span>
+<span class="hljs-preprocessor">#16     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding&amp;PaintingBinding&amp;RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:208)</span>
+<span class="hljs-preprocessor">#17     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:990)</span>
+<span class="hljs-preprocessor">#18     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:930)</span>
+<span class="hljs-preprocessor">#19     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:842)</span>
+<span class="hljs-preprocessor">#20     _rootRun (dart:async/zone.dart:1126)</span>
+<span class="hljs-preprocessor">#21     _CustomZone.run (dart:async/zone.dart:1023)</span>
+<span class="hljs-preprocessor">#22     _CustomZone.runGuarded (dart:async/zone.dart:925)</span>
+<span class="hljs-preprocessor">#23     _invoke (dart:ui/hooks.dart:122)</span>
+<span class="hljs-preprocessor">#24     _drawFrame (dart:ui/hooks.dart:109)</span></code></pre>
+
+
+
+<h4 id="flutter和原生性能对比">Flutter和原生性能对比</h4>
+
+<p>虽然使用原生实现（左）和Flutter实现（右）的全品类页面在实际使用过程中几乎分辨不出来：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232bf45f2ea5d?w=1000&amp;h=885&amp;f=jpeg&amp;s=147113" alt="" title=""></p>
+
+<p>但是我们还需要在性能方面有一个比较明确的数据对比。</p>
+
+<p>我们最关心的两个页面性能指标就是页面加载时间和页面渲染速度。测试页面加载速度可以直接使用美团内部的Metrics性能测试工具，我们将页面Activity对象创建作为页面加载的开始时间，页面API数据返回作为页面加载结束时间。从两个实现的页面分别启动400多次的数据中可以看到，原生实现（AllCategoryActivity）的加载时间中位数为210ms，Flutter实现（FlutterCategoryActivity）的加载时间中位数为231ms。考虑到目前我们还没有针对FlutterView做缓存和重用，FlutterView每次创建都需要初始化整个Flutter环境并加载相关代码，多出的20ms还在预期范围内：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232c6f785c97c?w=1000&amp;h=480&amp;f=png&amp;s=77051" alt="" title=""></p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232c8f8c755c1?w=1000&amp;h=441&amp;f=png&amp;s=72506" alt="" title=""></p>
+
+<p>因为Flutter的UI逻辑和绘制代码都不在主线程执行，Metrics原有的FPS功能无法统计到Flutter页面的真实情况，我们需要用特殊方法来对比两种实现的渲染效率。Android原生实现的界面渲染耗时使用系统提供的<code>FrameMetrics</code>接口进行监控：</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs "><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AllCategoryActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WmBaseActivity</span> {</span>
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span>(Bundle savedInstanceState) {
+        <span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.N) {
+            getWindow().addOnFrameMetricsAvailableListener(<span class="hljs-keyword">new</span> Window.OnFrameMetricsAvailableListener() {
+                List&lt;Integer&gt; frameDurations = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;(<span class="hljs-number">100</span>);
+                <span class="hljs-annotation">@Override</span>
+                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onFrameMetricsAvailable</span>(Window window, FrameMetrics frameMetrics, <span class="hljs-keyword">int</span> dropCountSinceLastInvocation) {
+                    frameDurations.add((<span class="hljs-keyword">int</span>) (frameMetrics.getMetric(TOTAL_DURATION) / <span class="hljs-number">1000000</span>));
+                    <span class="hljs-keyword">if</span> (frameDurations.size() == <span class="hljs-number">100</span>) {
+                        getWindow().removeOnFrameMetricsAvailableListener(<span class="hljs-keyword">this</span>);
+                        L.w(<span class="hljs-string">"AllCategory"</span>, Arrays.toString(frameDurations.toArray()));
+                    }
+                }
+            }, <span class="hljs-keyword">new</span> Handler(Looper.getMainLooper()));
+        }
+        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+        <span class="hljs-comment">// ...</span>
+    }
+}</code></pre>
+
+<p>Flutter在Framework层只能取到每帧中UI操作的CPU耗时，GPU操作都在Flutter引擎内部实现，所以需要修改引擎来监控完整的渲染耗时，在Flutter引擎目录下的<code>src/flutter/shell/common/rasterizer.cc</code>文件中添加：</p>
+
+
+
+<pre class="prettyprint"><code class="language-cpp hljs "><span class="hljs-keyword">void</span> Rasterizer::DoDraw(<span class="hljs-built_in">std</span>::unique_ptr&lt;flow::LayerTree&gt; layer_tree) {
+  <span class="hljs-keyword">if</span> (!layer_tree || !surface_) {
+    <span class="hljs-keyword">return</span>;
+  }
+
+  <span class="hljs-keyword">if</span> (DrawToSurface(*layer_tree)) {
+    last_layer_tree_ = <span class="hljs-built_in">std</span>::move(layer_tree);
+<span class="hljs-preprocessor">#if defined(OS_ANDROID)</span>
+    <span class="hljs-keyword">if</span> (compositor_context_-&gt;frame_count().count() == <span class="hljs-number">101</span>) {
+      <span class="hljs-built_in">std</span>::<span class="hljs-built_in">ostringstream</span> os;
+      os &lt;&lt; <span class="hljs-string">"["</span>;
+      <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-stl_container"><span class="hljs-built_in">vector</span>&lt;TimeDelta&gt;</span> &amp;engine_laps = compositor_context_-&gt;engine_time().Laps();
+      <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-stl_container"><span class="hljs-built_in">vector</span>&lt;TimeDelta&gt;</span> &amp;frame_laps = compositor_context_-&gt;frame_time().Laps();
+      size_t i = <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> engine_iter = engine_laps.begin() + <span class="hljs-number">1</span>, frame_iter = frame_laps.begin() + <span class="hljs-number">1</span>;
+           i &lt; <span class="hljs-number">101</span> &amp;&amp; engine_iter != engine_laps.end(); i++, engine_iter++, frame_iter++) {
+        os &lt;&lt; (*engine_iter + *frame_iter).ToMilliseconds() &lt;&lt; <span class="hljs-string">","</span>;
+      }
+      os &lt;&lt; <span class="hljs-string">"]"</span>;
+      __android_log_write(ANDROID_LOG_WARN, <span class="hljs-string">"AllCategory"</span>, os.str().c_str());
+    }
+<span class="hljs-preprocessor">#endif</span>
+  }
+}</code></pre>
+
+<p>即可得到每帧绘制时真正消耗的时间。测试时我们将两种实现的页面分别打开100次，每次打开后执行两次滚动操作，使其绘制100帧，将这100帧的每帧耗时记录下来：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs livecodeserver"><span class="hljs-keyword">for</span> (( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++ )); <span class="hljs-built_in">do</span>
+    openWMPage allcategory
+    sleep <span class="hljs-number">1</span>
+    adb <span class="hljs-built_in">shell</span> input swipe <span class="hljs-number">500</span> <span class="hljs-number">1000</span> <span class="hljs-number">500</span> <span class="hljs-number">300</span> <span class="hljs-number">900</span>
+    adb <span class="hljs-built_in">shell</span> input swipe <span class="hljs-number">500</span> <span class="hljs-number">1000</span> <span class="hljs-number">500</span> <span class="hljs-number">300</span> <span class="hljs-number">900</span>
+    adb <span class="hljs-built_in">shell</span> input keyevent <span class="hljs-number">4</span>
+done</code></pre>
+
+<p>将测试结果的100次启动中每帧耗时取平均値，得到每帧平均耗时情况（横坐标轴为帧序列，纵坐标轴为每帧耗时，单位为毫秒）：</p>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/10/165232cdf14be6d0?w=900&amp;h=262&amp;f=png&amp;s=44207" alt="" title=""></p>
+
+<p>Android原生实现和Flutter版本都会在页面打开的前5帧超过16ms，刚打开页面时原生实现需要创建大量View，Flutter也需要创建大量Widget，后续帧中可以重用大部分控件和渲染节点（原生的RenderNode和Flutter的RenderObject），所以启动时的布局和渲染操作都是最耗时的。</p>
+
+<p>10000帧（100次×100帧每次）中Android原生总平均値为10.21ms，Flutter总平均値为12.28ms，Android原生实现总丢帧数851帧8.51%，Flutter总丢帧987帧9.87%。在原生实现的触摸事件处理和过度绘制充分优化的前提下，Flutter完全可以媲美原生的性能。</p>
+
+
+
+<h2 id="总结">总结</h2>
+
+<p>Flutter目前仍处于早期阶段，也还没有发布正式的Release版本，不过我们看到Flutter团队一直在为这一目标而努力。虽然Flutter的开发生态不如Android和iOS原生应用那么成熟，许多常用的复杂控件还需要自己实现，有的甚至会比较困难（比如官方尚未提供的<a href="https://github.com/flutter/flutter/issues/12319" rel="nofollow">ListView.scrollTo(index)</a>功能），但是在高性能和跨平台方面Flutter在众多UI框架中还是有很大优势的。</p>
+
+<p>开发Flutter应用只能使用Dart语言，Dart本身既有静态语言的特性，也支持动态语言的部分特性，对于Java和JavaScript开发者来说门槛都不高，3-5天可以快速上手，大约1-2周可以熟练掌握。在开发全品类页面的Flutter版本时我们也深刻体会到了Dart语言的魅力，Dart的语言特性使得Flutter的界面构建过程也比Android原生的XML+JAVA更直观，代码量也从原来的900多行减少到500多行（排除掉引用的公共组件）。Flutter页面集成到App后APK体积至少会增加5.5MB，其中包括3.3MB的SO库文件和2.2MB的ICU数据文件，此外业务代码1300行编译产物的大小有2MB左右。</p>
+
+<p>Flutter本身的特性适合追求iOS和Android跨平台的一致体验，追求高性能的UI交互效果的场景，不适合追求动态化部署的场景。Flutter在Android上已经可以实现动态化部署，但是由于Apple的限制，在iOS上实现动态化部署非常困难，Flutter团队也正在和Apple积极沟通。</p>
+
+<p>美团外卖大前端团队将来也会继续在更多场景下使用Flutter实现，并且将实践过程中发现和修复的问题积极反馈到开源社区，帮助Flutter更好地发展。如果你也对Flutter感兴趣，欢迎加入。</p>
+
+
+
+<h2 id="参考资料">参考资料</h2>
+
+<ol>
+<li><p><a href="https://flutter-io.cn/" rel="nofollow">Flutter中文官网</a> </p></li>
+<li><p><a href="https://flutter.io/technical-overview/" rel="nofollow">Flutter框架技术概览</a></p></li>
+<li><p><a href="https://pub.Dartlang.org/flutter/" rel="nofollow">Flutter插件仓库</a></p></li>
+<li><p><a href="https://www.Dartlang.org/guides/language/language-tour" rel="nofollow">A Tour of the Dart Language</a></p></li>
+<li><p><a href="https://www.Dartlang.org/guides/libraries/library-tour" rel="nofollow">A Tour of the Dart Libraries</a> </p></li>
+<li><p><a href="https://hackernoon.com/why-flutter-uses-Dart-dd635a054ebf" rel="nofollow">Why Flutter Uses Dart</a></p></li>
+<li><p><a href="https://flutter.io/layout/" rel="nofollow">Flutter Layout机制简介</a></p></li>
+<li><p><a href="https://www.youtube.com/watch?v=dkyY9WCGMi0" rel="nofollow">Flutter’s Layered Design</a></p></li>
+<li><p><a href="https://www.youtube.com/watch?v=UUfXWzp0-DU" rel="nofollow">Flutter’s Rendering Pipeline</a></p></li>
+<li><p><a href="https://confengine.com/yow-2017-brisbane/proposal/5426/flutter-the-best-way-to-build-for-mobile" rel="nofollow">Flutter: The Best Way to Build for Mobile?@GOTO conf</a></p></li>
+<li><p><a href="https://github.com/flutter/engine/wiki" rel="nofollow">Flutter Engine</a></p></li>
+<li><p><a href="https://flutter.io/platform-channels/" rel="nofollow">Writing custom platform-specific code with platform channels</a></p></li>
+<li><p><a href="https://github.com/flutter/engine/wiki/Flutter-Engine-Operation-in-AOT-Mode" rel="nofollow">Flutter Engine Operation in AOT Mode</a></p></li>
+<li><p><a href="https://github.com/flutter/flutter/wiki/Flutter%27s-modes" rel="nofollow">Flutter’s modes</a></p></li>
+<li><p><a href="https://github.com/flutter/engine/wiki/Symbolicating-production-crash-stacks" rel="nofollow">Symbolicating-production-crash-stacks</a></p></li>
+</ol>
+
+
+
+<h2 id="作者简介">作者简介</h2>
+
+<p>少杰，美团高级工程师，2017年加入美团，目前主要负责外卖App监控等基础设施建设工作。</p>
+
+
+
+<h2 id="招聘">招聘</h2>
+
+<p>美团外卖诚招Android、iOS、FE高级/资深工程师和技术专家，Base北京、上海、成都，欢迎有兴趣的同学投递简历到wukai05#meituan.com。 <br>
+<img src="https://user-gold-cdn.xitu.io/2018/8/10/165232d1a68685a1?w=1875&amp;h=835&amp;f=png&amp;s=142461" alt="" title=""></p>            </div>
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/MeituanTech/article/details/81567238,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/MeituanTech/article/details/81567238,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/MeituanTech/article/details/81567238,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/MeituanTech/article/details/81567238,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+        <div class="p4course_target" ></div><script>window.p4sdk_enable_courseBox=true</script>        <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/MeituanTech/article/details/81567238#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/Brightshadow11111/article/details/80404122,BlogCommendFromBaidu_0"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/Brightshadow11111/article/details/80404122,BlogCommendFromBaidu_0"}'>
+		<a href="https://blog.csdn.net/Brightshadow11111/article/details/80404122" target="_blank" title="对<em>flutter</em>的一些认识">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						对<em>flutter</em>的一些认识				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/0/8/3_brightshadow11111.jpg" alt="Brightshadow11111" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">Brightshadow11111</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">05-22</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1706</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							官方文档也大致看了两遍，写了几天的flutter，基本上对于flutter有了一些认识那么flutter 是什么：它是google的一套跨平台框架，使用dart语言，支持android，ios，貌似还...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/qq_16071655/article/details/79671111,BlogCommendFromBaidu_1"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/qq_16071655/article/details/79671111,BlogCommendFromBaidu_1"}'>
+		<a href="https://blog.csdn.net/qq_16071655/article/details/79671111" target="_blank" title="Android程序员学习<em>Flutter</em>入坑之路1：运行第一个<em>Flutter</em>程序">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Android程序员学习<em>Flutter</em>入坑之路1：运行第一个<em>Flutter</em>程序				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/A/9/4/3_qq_16071655.jpg" alt="qq_16071655" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_16071655</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-23</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1370</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							Android studio搭建Flutter环境下面这个放在第一步是很重要的。一定要注意一定要注意官方文档下面 Note：....描述 如果在中国搭建Flutter环境，必须配置两个环境变量。PUB...					</p>
+			</div>
+					</a>
+	</div>
+									<div class="recommend-item-box recommend-ad-box clearfix">
+					<script type="text/javascript" src="//rabc1.iteye.com/production/source/pc3553.js?pkcgstj=jm"></script>
+				</div>
+			
+					<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/maoreyou/article/details/80887699,BlogCommendFromBaidu_2"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/maoreyou/article/details/80887699,BlogCommendFromBaidu_2"}'>
+		<a href="https://blog.csdn.net/maoreyou/article/details/80887699" target="_blank" title="深入理解<em>flutter</em>的编译<em>原理</em>与优化">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						深入理解<em>flutter</em>的编译<em>原理</em>与优化				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/D/1/D/3_maoreyou.jpg" alt="maoreyou" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">maoreyou</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-02</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							366</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							摘要： 闲鱼技术-正物 问题背景 对于开发者而言，什么是Flutter？它是用什么语言编写的，包含哪几部分，是如何被编译，运行到设备上的呢？Flutter如何做到Debug模式Hot Reload快速...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/hekaiyou/article/details/77875777,BlogCommendFromBaidu_3"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/hekaiyou/article/details/77875777,BlogCommendFromBaidu_3"}'>
+		<a href="https://blog.csdn.net/hekaiyou/article/details/77875777" target="_blank" title="<em>Flutter</em>简介">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>Flutter</em>简介				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/F/2/3_hekaiyou.jpg" alt="hekaiyou" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">hekaiyou</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">09-07</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1.1万</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							Flutter makes it easy and fast to build beautiful mobile apps.
+
+
+这是Flutter项目主页上对Flutter的定义，它可以轻松、快速地...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/PD_Wang/article/details/80118787,BlogCommendFromBaidu_4"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/PD_Wang/article/details/80118787,BlogCommendFromBaidu_4"}'>
+		<a href="https://blog.csdn.net/PD_Wang/article/details/80118787" target="_blank" title="Android 开发者的 <em>Flutter</em>（三） —— <em>Flutter</em> 中的动画与绘制">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Android 开发者的 <em>Flutter</em>（三） —— <em>Flutter</em> 中的动画与绘制				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/D/6/D/3_pd_wang.jpg" alt="PD_Wang" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">PD_Wang</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-28</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							198</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+  声明：阅读该文章请确保你有 Android 开发的相关知识  
+  这是《Android 开发者的 Flutter》系列的第三篇，如果想看上一篇请参考：  
+  Android 开发者的 Flu...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u010126792/article/details/81983178,BlogCommendFromBaidu_5"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u010126792/article/details/81983178,BlogCommendFromBaidu_5"}'>
+		<a href="https://blog.csdn.net/u010126792/article/details/81983178" target="_blank" title="<em>Flutter</em>介绍">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>Flutter</em>介绍				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/0/6/F/3_u010126792.jpg" alt="u010126792" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u010126792</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-24</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							46</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							1.flutter简介
+
+Flutter是Google使用Dart语言开发的移动应用开发框架，使用一套Dart代码就能快速构建高性能、高保真的iOS和Android应用程序，并且在排版、图标、滚动、点...					</p>
+			</div>
+					</a>
+	</div>
+								<div class="recommend-item-box recommend-ad-box" id="a_d_feed_0"></div>
+			<script>
+				var width = $("div.recommend-box").outerWidth() - 48;
+				NEWS_FEED({
+					w: width,
+					h: 60,
+					showid: 'Afihld',
+					placeholderId: 'a_d_feed_0',
+					inject: 'define',
+					define: {
+						imagePosition: 'left',
+						imageBorderRadius: 0,
+						imageWidth: 90,
+						imageHeight: 60,
+						imageFill: 'clip',
+						displayImage: true,
+						displayTitle: true,
+						titleFontSize: 20,
+						titleFontColor: '#333',
+						titleFontFamily: 'Microsoft Yahei',
+						titleFontWeight: 'bold',
+						titlePaddingTop: 0,
+						titlePaddingRight: 0,
+						titlePaddingBottom: 10,
+						titlePaddingLeft: 8,
+						displayDesc: true,
+						descFontSize: 14,
+						descPaddingLeft: 14,
+						descFontColor: '#6b6b6b',
+						descFontFamily: 'Microsoft Yahei',
+						paddingTop: 0,
+						paddingRight: 0,
+						paddingBottom: 0,
+						paddingLeft: 0,
+						backgroundColor: '#fff',
+						hoverColor: '#ca0c16'
+					}
+				})
+			</script>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/chichengjunma/article/details/82078241,BlogCommendFromBaidu_6"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/chichengjunma/article/details/82078241,BlogCommendFromBaidu_6"}'>
+		<a href="https://blog.csdn.net/chichengjunma/article/details/82078241" target="_blank" title="<em>Flutter</em>入门系列（二）---<em>Flutter</em>的<em>原理</em>及<em>美团</em>的<em>实践</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>Flutter</em>入门系列（二）---<em>Flutter</em>的<em>原理</em>及<em>美团</em>的<em>实践</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/9/7/E/3_chichengjunma.jpg" alt="chichengjunma" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">chichengjunma</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-26</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							135</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							转载自：美团技术团队
+
+导读
+
+Flutter是Google开发的一套全新的跨平台、开源UI框架，支持iOS、Android系统开发，并且是未来新操作系统Fuchsia的默认开发套件。自从2017年5...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/hytfly/article/details/81138393,BlogCommendFromBaidu_7"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/hytfly/article/details/81138393,BlogCommendFromBaidu_7"}'>
+		<a href="https://blog.csdn.net/hytfly/article/details/81138393" target="_blank" title="初探<em>Flutter</em>，初步解析<em>Flutter</em>，安卓ios统一开发还真有可能。还有谷歌的Fuchsia系统。">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						初探<em>Flutter</em>，初步解析<em>Flutter</em>，安卓ios统一开发还真有可能。还有谷歌的Fuchsia系统。				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/1/3/F/3_hytfly.jpg" alt="hytfly" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">hytfly</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-20</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							212</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							Flutter Framework使用Dart语言开发，所以App进程中需要一个Dart运行环境（VM），和Android Art一样，Flutter也对Dart源码做了AOT编译，直接将Dart源码...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/hekaiyou/article/details/72862653,BlogCommendFromBaidu_8"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/hekaiyou/article/details/72862653,BlogCommendFromBaidu_8"}'>
+		<a href="https://blog.csdn.net/hekaiyou/article/details/72862653" target="_blank" title="<em>Flutter</em>进阶—平台插件">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>Flutter</em>进阶—平台插件				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/F/2/3_hekaiyou.jpg" alt="hekaiyou" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">hekaiyou</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">06-04</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							7295</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							这篇文章我们会学习Flutter应用程序如何与iOS和Android设备上可用的平台特定代码集成，这包括设备API，（比如url_launcher和battery）和第三方平台SDK（比如Fireba...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/alice_tl/article/details/81175943,BlogCommendFromBaidu_9"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/alice_tl/article/details/81175943,BlogCommendFromBaidu_9"}'>
+		<a href="https://blog.csdn.net/alice_tl/article/details/81175943" target="_blank" title="<em>Flutter</em>学习总结系列----第一章、<em>Flutter</em>基础全面详解">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>Flutter</em>学习总结系列----第一章、<em>Flutter</em>基础全面详解				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/2/B/9/3_alice_tl.jpg" alt="alice_tl" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">alice_tl</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-23</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							117</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							转载自 AWeiLoveAndroid的博客：https://www.jianshu.com/p/2c9867e737a1
+
+Flutter学习总结：
+
+更多相关内容和示例代码，请看我的github：...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box type_hot_word">
+									<div class="content clearfix oneline">
+				<h5 class="float-left">相关热词</h5>
+				<div class="float-left">
+									<span>
+						<a href="https://blog.csdn.net/niyuelin1990/article/details/78041561" target="_blank">
+						flutter聽</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/johnWcheung/article/details/78996274" target="_blank">
+						flutter群</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/hekaiyou/article/details/72862653" target="_blank">
+						flutter库</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/zhangxiangliang2/article/details/75675693" target="_blank">
+						flutter读</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/qq_30295213/article/details/80663594" target="_blank">
+						flutter中</a>
+					</span>
+								</div>
+			</div>
+					</div>
+	
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/MeituanTech">
+                <img src="https://avatar.csdn.net/3/5/E/3_meituantech.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/MeituanTech" target="_blank" class="text-truncate" id="uid">meituantech</a>
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/MeituanTech/article/details/81567238" target="_self">关注</a>
+                            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="285">
+                        <dt><a href="https://blog.csdn.net/meituantech?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/meituantech?t=1"><span class="count">285</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="366">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">366</span></dd>
+        </dl>
+        <dl class="text-center" title="91">
+            <dt>喜欢</dt>
+            <dd><span class="count">91</span></dd>
+        </dl>
+        <dl class="text-center" title="76">
+            <dt>评论</dt>
+            <dd><span class="count">76</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="4级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-4"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="82702">
+                8万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="1362">
+                1362            </dd>
+        </dl>
+        <dl title="43843">
+            <dt>排名：</dt>
+            <dd>4万+</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                        <a class="icon-badge" title="持之以恒">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-lasting"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item2">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-lasting"></use>
+                        </svg>
+                        <p>持之以恒</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予每个自然月内发布4篇或4篇以上原创或翻译IT博文的用户。不积跬步无以至千里，不积小流无以成江海，程序人生的精彩需要坚持不懈地积累！
+                    </div>
+                </div>
+            </div>
+        </a>
+                            </div>
+    </div>		    <div class="csdn-tracking-statistics mb8 box-shadow" data-pid="blog" data-mod="popu_4" style="height:250px;">
+    <div class="aside-content text-center" id="cpro_u2734133">
+      <!-- 广告位：PC-博客内页-百度联盟-300x250 --><script type="text/javascript" src="//rabc1.iteye.com/source/api/ymebi.js?bwoc=oltly"></script>    </div>
+</div>
+		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/MeituanTech/article/details/82108690" target="_blank">WMRouter：美团外卖Android开源路由框架</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/MeituanTech/article/details/82108667" target="_blank">深入理解JSCore</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/MeituanTech/article/details/81773298" target="_blank">美团在O2O场景下的广告营销</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/MeituanTech/article/details/81772879" target="_blank">写给工程师的十条精进原则</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/MeituanTech/article/details/81566769" target="_blank">美团扫码付的前端可用性保障实践</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    		    		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/08">
+                    2018年8月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/07">
+                    2018年7月                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/06">
+                    2018年6月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/05">
+                    2018年5月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/04">
+                    2018年4月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/03">
+                    2018年3月                    <span class="count float-right">18篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/02">
+                    2018年2月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2018/01">
+                    2018年1月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/12">
+                    2017年12月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/11">
+                    2017年11月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/10">
+                    2017年10月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/09">
+                    2017年9月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/07">
+                    2017年7月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/06">
+                    2017年6月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/05">
+                    2017年5月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/04">
+                    2017年4月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/03">
+                    2017年3月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/02">
+                    2017年2月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2017/01">
+                    2017年1月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/12">
+                    2016年12月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/11">
+                    2016年11月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/10">
+                    2016年10月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/09">
+                    2016年9月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/08">
+                    2016年8月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/07">
+                    2016年7月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/06">
+                    2016年6月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/05">
+                    2016年5月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/04">
+                    2016年4月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/03">
+                    2016年3月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/02">
+                    2016年2月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2016/01">
+                    2016年1月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/12">
+                    2015年12月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/11">
+                    2015年11月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/10">
+                    2015年10月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/09">
+                    2015年9月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/08">
+                    2015年8月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/07">
+                    2015年7月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/06">
+                    2015年6月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/05">
+                    2015年5月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/03">
+                    2015年3月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/02">
+                    2015年2月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2015/01">
+                    2015年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/12">
+                    2014年12月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/10">
+                    2014年10月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/09">
+                    2014年9月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/08">
+                    2014年8月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/06">
+                    2014年6月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/05">
+                    2014年5月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/04">
+                    2014年4月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/03">
+                    2014年3月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/02">
+                    2014年2月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2014/01">
+                    2014年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/meituantech/article/month/2013/12">
+                    2013年12月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/meituantech/article/details/79523525">使用Vue.js开发微信小程序：开源框架mpvue解析</a>
+					<p class="read">阅读量：<span>10999</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/meituantech/article/details/81567238">Flutter原理与美团的实践</a>
+					<p class="read">阅读量：<span>10463</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/meituantech/article/details/79922326">工程师如何在工作中提升自己?</a>
+					<p class="read">阅读量：<span>6832</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/meituantech/article/details/79668185">每天数百亿用户行为数据，美团点评怎么实现秒级转化分析？</a>
+					<p class="read">阅读量：<span>4697</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/meituantech/article/details/82108690">WMRouter：美团外卖Android开源路由框架</a>
+					<p class="read">阅读量：<span>4494</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/meituantech/article/details/82108667#comments">深入理解JSCore</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/wjf1997" class="user-name" target="_blank">wjf1997</a>：理解的很深入啊                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/meituantech/article/details/82108690#comments">WMRouter：美团外卖Andr...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/wjf1997" class="user-name" target="_blank">wjf1997</a>：感谢博主分享                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/meituantech/article/details/82108667#comments">深入理解JSCore</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/jiujiya123" class="user-name" target="_blank">jiujiya123</a>：谢谢                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/meituantech/article/details/82108667#comments">深入理解JSCore</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_29924317" class="user-name" target="_blank">qq_29924317</a>：很棒                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/meituantech/article/details/82108690#comments">WMRouter：美团外卖Andr...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/ziyou_xw" class="user-name" target="_blank">ziyou_xw</a>：感谢前辈的无私奉献精神！                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		<div id="asideFooter">
+			
+		<div class="aside-box">
+						<script type="text/javascript" src="//rabc1.iteye.com/source/res/yn6yz.js?ojylrgb=yk"></script>
+					</div>
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>3</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments long-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+						2				</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/meituantech/article/details/81566769" title="美团扫码付的前端可用性保障实践">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+								<li class="">
+			<a class="btn-comments hover-box low-height" href="https://blog.csdn.net/meituantech/article/details/81772879" title="写给工程师的十条精进原则">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-xiayiye"></use>
+				</svg>
+				<span class="hover-show text">下一篇</span>
+			</a>
+		</li>
+						<li class="bdsharebuttonbox"style="margin-top: 8px;">
+			<script type="text/javascript" src="//cjhd.mediav.com/js/interactive_plugin.js"></script> 
+			<style>
+				#_360_interactive > *{
+					 margin-left: -8px;
+				}
+			</style>
+			<div id="_360_interactive" > 
+				<script> INTERACTIVE_PLUGIN.render({ showid : 'N0ufqn', w: 60, h: 60, type: 'hover', placeholderId: '_360_interactive' }); </script> 
+			</div>
+			<img src="//img-ads.csdn.net/2016/201608021757063065.png" style="margin: 0 auto;display: block;" alt="">
+		</li>
+	  	</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "Flutter原理与美团的实践";
+    var ChannelId = 14;
+    var articleId = "81567238";
+    var commentscount = 2;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/MeituanTech/article/details/81567238";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "flutter+is+not+a+subtype+of+type+%27%28string%2C+dynamic%29+%3D%3E+mapentry%3Cdynamic%2C+i%2Ff";
+    var needInsertBaidu = false;
+    // 代码段样式
+    var codeStyle = '';
+    var highlight = ["flutter","\u539f\u7406","\u7f8e\u56e2","\u5b9e\u8df5"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"Flutter原理与美团的实践");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9376486353.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=flutter+is+not+a+subtype+of+type+%27%28string%2C+dynamic%29+%3D%3E+mapentry%3Cdynamic%2C+i%2Ff"  type="text/javascript"></script>
+</body>
+<div class="box-box-aways">
+    <a class="btn-remove">
+        关闭
+    </a>
+		<div id="adAways">
+		<script>
+			(function() {
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5868728',
+					container: 'adAways',
+					size: '250,500',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+		<script src="https://dup.baidustatic.com/js/os.js"></script>
+</div>
+
+</div>
+<div class="box-box-default">
+    <a class="btn-remove">
+        关闭
+    </a>
+		<div id="right_height_a_d"></div>
+</div>
+<div class="box-box-large">
+    <a class="btn-remove">
+        关闭
+    </a>
+		<div id="right_alert_a_d"></div>
+</div>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>

@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/gitchat/article/details/81172576"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="分层架构由来已久，将一个软件系统进行分层，似乎已经成为了每个开发人员的固有意识，甚至不必思考即可自然得出。这其中最为经典的就是三层架构以及领域驱动设计提出的四层架构。" />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>一文读懂分层架构 - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9b39979775.min.css">
+
+    <script type="text/javascript">
+        var username = "GitChat";
+        var blog_address = "https://blog.csdn.net/gitchat";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = false;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/gitchat/article/details/81172576"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin3-template";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/gitchat">GitChat技术杂谈...</a></span>
+			<i>></i>
+			<span>一文读懂分层架构</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">一文读懂分层架构</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年07月23日 18:40:33</span>
+						<span class="read-count">阅读数：23153</span>
+												
+																															</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+					版权声明：本文为GitChat作者的原创文章，未经 GitChat 允许不得转载。					https://blog.csdn.net/GitChat/article/details/81172576				</div>
+								            <div class="markdown_views">
+                <h3 id="作者简介">作者简介</h3>
+
+<blockquote>
+  <p>张逸，曾先后就职于中兴通讯、惠普 GDCC、中软国际、ThoughtWorks 等大型中外企业，任职角色为高级软件工程师、架构师、技术总监、首席咨询师。GitChat 畅销精品课作者。 <br>
+  <br>
+  精通包括 Java、Scala、Python、C#、JavaScript、Ruby 等多种语言，熟练掌握面向对象思想、测试驱动开发与重构、领域驱动设计、函数式编程、架构、大数据分析、敏捷与过程改进，并致力于大型软件企业的面向服务系统架构设计、大数据平台架构设计以及互联网 Web 系统架构设计。 <br>
+  <br>
+  著译作包括《软件设计精要与模式》、《Java 设计模式》、《恰如其分的软件架构》、《WCF 服务编程》、《人件》、《重构——改善既有代码设计》评注版、以及《架构之美（Beatiful Architecture）》评注版。 <br>
+  <br>
+  版权声明 <br>
+  本文及文中所涉及课程均为 GitChat 平台独家发布，未经授权不得转载。</p>
+</blockquote>
+
+<h3 id="认识分层架构">认识分层架构</h3>
+
+<p>分层架构是运用最为广泛的架构模式，几乎每个软件系统都需要通过层（Layer）来隔离不同的关注点（Concern Point），以此应对不同需求的变化，使得这种变化可以独立进行；此外，分层架构模式还是隔离业务复杂度与技术复杂度的利器，《领域驱动设计模式、原理与实践》写道：</p>
+
+<blockquote>
+  <p><em>为了避免将代码库变成大泥球（BBoM）并因此减弱领域模型的完整性且最终减弱可用性，系统架构要支持技术复杂性与领域复杂性的分离。引起技术实现发生变化的原因与引起领域逻辑发生变化的原因显然不同，这就导致<strong>基础设施和领域逻辑问题会以不同速率发生变化。</strong></em></p>
+</blockquote>
+
+<p>这里所谓的“以不同速率发生变化”，其实就是引起变化的原因各有不同，这正好是单一职责原则（Single-Responsibility Principle，SRP）的体现。Robert Martin 认为单一职责原则就是“一个类应该只有一个引起它变化的原因”，换言之，如果有两个引起类变化的原因，就需要分离。单一职责原则可以理解为架构原则，这时要考虑的就不是类，而是层次。我们为什么要将业务与基础设施分开？正是因为引起它们变化的原因不同。</p>
+
+<h3 id="经典分层架构">经典分层架构</h3>
+
+<p>分层架构由来已久，将一个软件系统进行分层，似乎已经成为了每个开发人员的固有意识，甚至不必思考即可自然得出。这其中最为经典的就是三层架构以及领域驱动设计提出的四层架构。</p>
+
+<p><strong>经典三层架构</strong></p>
+
+<p>在软件架构中，经典三层架构自顶向下由用户界面层（User Interface Layer）、业务逻辑层（Business Logic Layer）与数据访问层（Data Access Layer）组成。该分层架构之所以能够流行，是有其历史原因的。在提出该分层架构的时代，多数企业系统往往较为简单，本质上都是一个单体架构（Monolithic Architecture）的数据库管理系统。这种分层架构已经是Client-Server架构的进化了，它有效地隔离了业务逻辑与数据访问逻辑，使得这两个不同关注点能够相对自由和独立地演化。一个经典的三层架构如下所示： <br>
+</p><center><img src="https://img-blog.csdn.net/2018072318032538"></center><p></p>
+
+<p><strong>领域驱动设计的经典分层架构</strong></p>
+
+<p>领域驱动设计在经典三层架构的基础上做了进一步改良，在用户界面层与业务逻辑层之间引入了新的一层，即应用层（Application Layer）。同时，一些层次的命名也发生了变化。将业务逻辑层更名为领域层自然是题中应有之义，而将数据访问层更名为基础设施层（Infrastructure Layer），则突破了之前数据库管理系统的限制，扩大了这个负责封装技术复杂度的基础层次的内涵。下图为 Eric Evans 在其经典著作《领域驱动设计》中的分层架构：</p>
+
+<p></p><center><img src="https://img-blog.csdn.net/20180723180423911"></center><p></p>
+
+
+
+<h3 id="追溯分层架构的本源">追溯分层架构的本源</h3>
+
+<p>当分层架构变得越来越普及时，我们的设计反而变得越来越僵化。一部分软件设计师并未理解分层架构的本质，只知道依样画葫芦地将分层应用到系统中。要么采用经典的三层架构，要么遵循领域驱动设计改进的四层架构，却未思考和叩问如此分层究竟有何道理？这是分层架构被滥用的根源。</p>
+
+<p>视分层（Layer）为一个固有的架构模式，其滥觞应为 Frank Buschmann 等人著的《面向模式的软件架构》第一卷《模式系统》。该模式参考了 ISO 对 TCP/IP 协议的分层。《模式系统》对分层的描述为：</p>
+
+<blockquote>
+  <p>分层架构模式有助于构建这样的应用：它能被分解成子任务组，其中每个子任务组处于一个特定的抽象层次上。</p>
+</blockquote>
+
+<p>显然，这里所谓的“分层”首先是一个逻辑的分层，对子任务组的分解需要考虑抽象层次，一种水平的抽象层次。既然为水平的分层，必然存在层的高与低；而抽象层次的不同，又决定了分层的数量。因此，对于分层架构，我们需要解决如下问题：</p>
+
+<ul>
+<li>分层的依据与原则是什么？</li>
+<li>层与层之间是怎样协作的？</li>
+</ul>
+
+<p><strong>分层的依据与原则</strong></p>
+
+<p>我们之所以要以水平方式对整个系统进行分层，是我们下意识地确定了一个认知规则：<strong>机器为本，用户至上</strong>。机器是运行系统的基础，而我们打造的系统却是为用户提供服务的。分层架构中的层次越往上，其抽象层次就越面向业务，面向用户；分层架构中的层次越往下，其抽象层次就变得越通用，面向设备。为什么经典分层架构为三层架构？正是源于这样的认知规则：其上，面向用户的体验与交互；其中，面向应用与业务逻辑；其下，面对各种外部资源与设备。在进行分层架构设计时，我们完全可以基于这个经典的三层架构，沿着水平方向进一步切分属于不同抽象层次的关注点。因此，<strong>分层的第一个依据是基于关注点为不同的调用目的划分层次</strong>。以领域驱动设计的四层架构为例，之所以引入应用层（Application Layer），就是为了给调用者提供完整的业务用例。</p>
+
+<p><strong>分层的第二个依据是面对变化</strong>。分层时应针对不同的变化原因确定层次的边界，严禁层次之间互相干扰，或者至少将变化对各层带来的影响降到最低。例如数据库结构的修改自然会影响到基础设施层的数据模型以及领域层的领域模型，但当我们仅需要修改基础设施层中数据库访问的实现逻辑时，就不应该影响到领域层了。<strong>层与层之间的关系应该是正交的</strong>。所谓“正交”，并非二者之间没有关系，而是垂直相交的两条直线。唯一相关的依赖点是这两条直线的相交点，即两层之间的协作点。正交的两条直线，无论哪条直线进行延伸，都不会对另一条直线产生任何影响（指直线的投影）。如果非正交，即“斜交”，当一条直线延伸时，它总是会投影到另一条直线，这就意味着另一条直线会受到它变化的影响。</p>
+
+<p>在进行分层时，我们还应该<strong>保证同一层的组件处于同一个抽象层次</strong>。这是分层架构的设计原则，它借鉴了 Kent Beck 在 Smalltalk Best Practice Patterns 一书提出的“组合方法”模式。该模式要求一个方法中的所有操作处于相同的抽象层，这就是所谓的“单一抽象层次原则（SLAP）”。这一原则可以运用到分层架构中。例如在一个基于元数据的多租户报表系统中，我们特别定义了一个引擎层（engine layer），这是一个隐喻，相当于为报表系统提供报表、实体与数据的驱动引擎。引擎层之下，是基础设施层，提供了多租户、数据库访问与元数据解析与管理等功能。在引擎层之上是一个控制层，通过该控制层的组件可以将引擎层的各个组件组合起来。分层架构的顶端是面向用户的用户展现层。如下图所示：</p>
+
+<p></p><center><img src="https://img-blog.csdn.net/20180723180725225"></center><p></p>
+
+
+
+<h3 id="层之间的协作">层之间的协作</h3>
+
+<p>在我们固有的认识中，分层架构的依赖都是自顶向下传递的，这也符合大多数人对分层的认知模型。从抽象层次看，层次越处于下端，就会变得越通用越公共，与具体的业务隔离得越远。出于重用的考虑，这些通用和公共的功能往往会被单独剥离出来形成平台或框架，在系统边界内的低层，除了面向高层提供足够的实现外，就都成了平台或框架的调用者。换言之，越是通用的层，越有可能与外部平台或框架形成强依赖。若依赖的传递方向仍然采用自顶向下，就会导致系统的业务对象也随之依赖于外部平台或框架。</p>
+
+<p>依赖倒置原则（Dependency Inversion Principle，DIP）提出了对这种自顶向下依赖的挑战，它要求“高层模块不应该依赖于低层模块，二者都应该依赖于抽象。”这个原则正本清源，给了我们当头棒喝——谁规定在分层架构中，依赖就一定要沿着自顶向下的方向传递？我们常常理解依赖，是因为被依赖方需要为依赖方（调用方）提供功能支撑，这是从功能重用的角度来考虑的。但我们不能忽略变化对系统产生的影响！与建造房屋一样，我们自然希望分层的模块“构建”在稳定的模块之上。谁更稳定？抽象更稳定。因此，依赖倒置原则隐含的本质是：<strong>我们要依赖不变或稳定的元素（类、模块或层）。</strong>也就是该原则的第二句话：抽象不应该依赖于细节，细节应该依赖于抽象。</p>
+
+<p>这一原则实际是“面向接口设计”原则的体现，即“针对接口编程，而不是针对实现编程”。高层模块对低层模块的实现是一无所知的，带来的好处是：</p>
+
+<ul>
+<li>低层模块的细节实现可以独立变化，避免变化对高层模块产生污染</li>
+<li>在编译时，高层模块可以独立于低层模块单独存在</li>
+<li>对于高层模块而言，低层模块的实现是可替换的</li>
+</ul>
+
+<p>倘若高层依赖于低层的抽象，必然会面对一个问题：如何将具体的实现传递给高层的类？由于在高层通过接口隔离了对具体实现的依赖，就意味着这个具体依赖被转移到了外部，究竟使用哪一种具体实现，由外部的调用者来决定。只有在运行调用者代码时，才将外面的依赖传递给高层的类。Martin Fowler 形象地将这种机制称为“依赖注入（dependency injection）”。</p>
+
+<p><strong>为了更好地解除高层对低层的依赖，我们往往需要将依赖倒置原则与依赖注入结合起来。</strong></p>
+
+<p>层之间的协作并不一定是自顶向下的传递通信，也有可能是自底向上通信，例如在 CIMS（计算机集成制造系统）中，往往会由低层的设备监测系统监测（侦听）设备状态的变化。当状态发生变化时，需要将变化的状态通知到上层的业务系统。如果说自顶向下的消息传递往往被描述为“请求（或调用）”，则自底向上的消息传递则往往被形象地称之为“通知”。倘若我们颠倒一下方向，自然也可以视为这是上层对下层的观察，故而可以运用观察者模式（Observer Pattern），在上层定义 Observer 接口，并提供 update() 方法供下层在感知状态发生变更时调用。或者，我们也可以认为这是一种回调机制。虽然本质上这并非回调，但设计原理是一样的。</p>
+
+<p>如果采用了观察者模式，则与前面讲述的依赖倒置原则有差相仿佛之意，因为下层为了通知上层，需要调用上层提供的 Observer 接口。如此看来，无论是上层对下层的“请求（或调用）”，抑或下层对上层的“通知”，都颠覆了我们固有思维中那种高层依赖低层的理解。</p>
+
+<p>现在，我们对分层架构有了更清醒的认识。我们必须要打破那种谈分层架构必为经典三层架构又或领域驱动设计推荐的四层架构这种固有思维，而是将分层视为关注点分离的水平抽象层次的体现。既然如此，架构的抽象层数就不是固定的，甚至每一层的名称也未必遵循固有（经典）的分层架构要求。设计系统的层需得结合该系统的具体业务场景而定。当然，我们也要认识到层次多少的利弊：<strong>过多的层会引入太多的间接而增加不必要的开支，层太少又可能导致关注点不够分离，导致系统的结构不合理。</strong></p>
+
+<p>我们还需要正视架构中各层之间的协作关系，打破高层依赖低层的固有思维，从解除耦合（或降低耦合）的角度探索层之间可能的协作关系。另外，我们还需要确定分层的架构原则（或约束），例如是否允许跨层调用，即每一层都可以使用比它低的所有层的服务，而不仅仅是相邻低层。这就是所谓的“松散分层系统（Relaxed Layered System）”。</p>
+
+
+
+<h3 id="该怎么演进领域驱动架构">该怎么演进领域驱动架构？</h3>
+
+<p>我们在上文中回顾了经典三层架构与领域驱动设计四层架构，<strong>然而任何技术结论都并非句点，而仅仅代表了满足当时技术背景的一种判断，技术总是在演进，领域驱动架构亦是如此。</strong>与其关心结果，不如将眼睛投往这个演进的过程，或许风景会更加动人。</p>
+
+<p>根据“依赖倒置原则”与 Robert Martin 提出的“整洁架构”思想，我们推翻了Eric Evans 在《领域驱动设计》书中提出的分层架构。Vaughn Vernon 在《实现领域驱动设计》一书中给出了改良版的分层架构，他将基础设施层奇怪地放在了整个架构的最上面：</p>
+
+<p></p><center><img src="https://img-blog.csdn.net/20180723181005973"></center><p></p>
+
+<p>整个架构模型清晰地表达了领域层别无依赖的特质，但整个架构却容易给人以一种错乱感。单以这个分层模型来看，虽则没有让高层依赖低层，却又反过来让低层依赖了高层，这仍然是不合理的。当然你可以说此时的基础设施层已经变成了高层，然而从之前分析的南向网关与北向网关来说，基础设施层存在被“肢解”的可能。坦白讲，这个架构模型仍然没有解决人们对分层架构的认知错误，例如它并没有很好地表达依赖倒置原则与依赖注入。还需要注意的是，这个架构模型将基础设施层放在了整个分层架构的最顶端，导致它依赖了用户界面层，这似乎并不能自圆其说。我们需要重新梳理领域驱动架构，展示它的演进过程。</p>
+
+<p>那么到底该怎么演进领域驱动架构？感兴趣的同学可以在我的达人课<a href="https://gitbook.cn/gitchat/column/5b3235082ab5224deb750e02?utm_source=zd18071701" rel="nofollow">《领域驱动战略设计实践》</a>里了解更系统的架构知识内容。<strong>这是专门为了想提高软件架构设计能力的软件架构师量身定制的系统课程，也是是国内第一个全面讲解 DDD 的原创课程。</strong></p>
+
+<p>本课程限时特价 39 元，共计 34 篇，形式为“图文+音频”；特价截止日期： 7月30日 。 <br>
+</p><center><strong>扫码试读或<a href="https://gitbook.cn/gitchat/column/5b3235082ab5224deb750e02?utm_source=zd18071701" rel="nofollow">点此试读购买</a></strong> <br>
+<img src="https://img-blog.csdn.net/20180723183027955" width="300" height="300"></center><p></p>            </div>
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/gitchat/article/details/81172576,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/gitchat/article/details/81172576,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/gitchat/article/details/81172576,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/gitchat/article/details/81172576,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+                <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/gitchat/article/details/81172576#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u010376788/article/details/49338225,BlogCommendFromBaidu_0"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u010376788/article/details/49338225,BlogCommendFromBaidu_0"}'>
+		<a href="https://blog.csdn.net/u010376788/article/details/49338225" target="_blank" title="Web五层架构">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Web五层架构				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/9/2/3_u010376788.jpg" alt="u010376788" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u010376788</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">10-23</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							8096</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							这篇文章其实是去年我给别人讲Web分层结构时做的一个ppt，只是个人的观点和想法。
+1.Model1和Model2
+首先，Model1是指JSP+JavaBean。Model1比较适合于一些较小项目，...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/ce123/article/details/52565520,BlogCommendFromBaidu_1"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/ce123/article/details/52565520,BlogCommendFromBaidu_1"}'>
+		<a href="https://blog.csdn.net/ce123/article/details/52565520" target="_blank" title="软件架构之分层模式(Layered Architecture)">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						软件架构之分层模式(Layered Architecture)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/D/3/A/3_ce123.jpg" alt="ce123" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">ce123</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">09-18</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1.1万</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							分层模式是最通用的架构,也被叫做N层架构模式(n-tier architecture pattern).这也是Java EE应用经常采用的标准模式.基本上都知道它.这种架构模式非常适合传统的IT通信和...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/gBbQRglVIr3dYi82/article/details/80891778,BlogCommendFromBaidu_2"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/gBbQRglVIr3dYi82/article/details/80891778,BlogCommendFromBaidu_2"}'>
+		<a href="https://blog.csdn.net/gBbQRglVIr3dYi82/article/details/80891778" target="_blank" title="《架构方法论》<em>分层架构</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						《架构方法论》<em>分层架构</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/E/D/4/3_gbbqrglvir3dyi82.jpg" alt="gBbQRglVIr3dYi82" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">gBbQRglVIr3dYi82</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">07-02</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							108</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+  
+    
+                    
+
+                    
+
+                    
+                    
+     ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/jiandaxiami/article/details/79725088,BlogCommendFromBaidu_3"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/jiandaxiami/article/details/79725088,BlogCommendFromBaidu_3"}'>
+		<a href="https://blog.csdn.net/jiandaxiami/article/details/79725088" target="_blank" title="软件架构设计之<em>分层架构</em>（三层架构）">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						软件架构设计之<em>分层架构</em>（三层架构）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/8/5/1/3_jiandaxiami.jpg" alt="jiandaxiami" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">jiandaxiami</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-28</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							756</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							    在软件体系架构设计中，分层式结构是最常见，也是最重要的一种结构。微软推荐的分层式结构一般分为三层，从下至上分别为：数据访问层、业务逻辑层（又或称为领域层）、表示层。各层的作用1：数据访问层：主...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u012102306/article/details/50771544,BlogCommendFromBaidu_4"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u012102306/article/details/50771544,BlogCommendFromBaidu_4"}'>
+		<a href="https://blog.csdn.net/u012102306/article/details/50771544" target="_blank" title="三层架构(我的理解及详细分析)">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						三层架构(我的理解及详细分析)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/5/7/C/3_u012102306.jpg" alt="u012102306" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u012102306</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-01</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							3311</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							今天看到朋友在维护程序，忽然想到了三层的事情，又看到了一个比喻很好的博客，采购、厨师，服务员(个人觉得用顾客更合适吧？顾客提出需求)，就留作复习用了
+ .. 三层的解耦思想更重要一些，将数据源、业务操...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/sinat_33087001/article/details/78924414,BlogCommendFromBaidu_5"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/sinat_33087001/article/details/78924414,BlogCommendFromBaidu_5"}'>
+		<a href="https://blog.csdn.net/sinat_33087001/article/details/78924414" target="_blank" title="【架构设计 领域驱动开发 一】三层VSDDD">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						【架构设计 领域驱动开发 一】三层VSDDD				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/0/5/1/3_sinat_33087001.jpg" alt="sinat_33087001" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">sinat_33087001</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-28</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							926</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							本篇为架构设计系列的第一篇，希望通过本系列转变自己的软件设计思想。不再只是单纯代码的搬运工，而要有自己的设计想法。本篇文章较长，部分内容学习以下提及的四篇文章，也有部分内容引自这些文章，尊重作者原创，...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/bboyfeiyu/article/details/45136299,BlogCommendFromBaidu_6"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/bboyfeiyu/article/details/45136299,BlogCommendFromBaidu_6"}'>
+		<a href="https://blog.csdn.net/bboyfeiyu/article/details/45136299" target="_blank" title="软件架构模式之<em>分层架构</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						软件架构模式之<em>分层架构</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/3/5/2/3_bboyfeiyu.jpg" alt="bboyfeiyu" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">bboyfeiyu</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-19</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1.8万</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							对程序员来说很常见一种情况是在没有合理的程序架构时就开始编程，没有一个清晰的和定义好的架构的时候，大多数开发者和架构师通常会使用标准式的传统分层架构模式（也被称为多层架构）——通过将源码模块分割为几个...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/gengwei80/article/details/2141880,BlogCommendFromBaidu_7"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/gengwei80/article/details/2141880,BlogCommendFromBaidu_7"}'>
+		<a href="https://blog.csdn.net/gengwei80/article/details/2141880" target="_blank" title="分层式结构的优缺点">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						分层式结构的优缺点				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/F/9/0/3_gengwei80.jpg" alt="gengwei80" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">gengwei80</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-03</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							7292</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							分层式结构究竟其优势何在？Martin Fowler在《Patterns of Enterprise Application Architecture》一书中给出了答案：1、开发人员可以只关注整个结构...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u010841151/article/details/52139942,BlogCommendFromBaidu_8"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u010841151/article/details/52139942,BlogCommendFromBaidu_8"}'>
+		<a href="https://blog.csdn.net/u010841151/article/details/52139942" target="_blank" title="标准Web系统的架构分层">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						标准Web系统的架构分层				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/C/B/8/3_u010841151.jpg" alt="u010841151" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u010841151</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-06</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							473</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							此文章只为个人学习收藏，转自http://blog.csdn.net/yinwenjie（未经允许严禁用于商业用途！）
+
+
+
+
+版权声明：欢迎转载，但是看在我辛勤劳动的份上，请注明来源：ht...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/snow_2016/article/details/54139557,BlogCommendFromBaidu_9"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/snow_2016/article/details/54139557,BlogCommendFromBaidu_9"}'>
+		<a href="https://blog.csdn.net/snow_2016/article/details/54139557" target="_blank" title="<em>分层架构</em>设计思想">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>分层架构</em>设计思想				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/E/7/E/3_snow_2016.jpg" alt="snow_2016" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">snow_2016</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">01-06</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							714</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							绪论
+
+本文打算探讨一下软件架构设计的一些设计原则与经过实践验证的设计模式。这些软件架构设计的原则和模式已经有几十年的历史了。
+
+分层架构设计
+
+软件，应该根据其职能分成多个层次。分层架构设计思想，有...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box type_hot_word">
+									<div class="content clearfix oneline">
+				<h5 class="float-left">相关热词</h5>
+				<div class="float-left">
+									<span>
+						<a href="https://blog.csdn.net/witnessai1/article/details/52761555" target="_blank">
+						一文hmm</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/j2iayu7y/article/details/79840277" target="_blank">
+						一文深度学习</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/scutjy2015/article/details/74170794" target="_blank">
+						一文看懂</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/lijunfan_rh/article/details/53814483" target="_blank">
+						一文回调函数</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/sinat_38682860/article/details/80502374" target="_blank">
+						一文编码</a>
+					</span>
+								</div>
+			</div>
+					</div>
+	
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/GitChat">
+                <img src="https://avatar.csdn.net/2/8/D/3_gitchat.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/GitChat" target="_blank" class="text-truncate" id="uid">GitChat技术杂谈</a>
+            </p>
+                        <p class="flag">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-blogexpert"></use>
+                </svg>
+                博客专家
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/gitchat/article/details/81172576" target="_self">关注</a>
+                            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="291">
+                        <dt><a href="https://blog.csdn.net/gitchat?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/gitchat?t=1"><span class="count">291</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="3153">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">3153</span></dd>
+        </dl>
+        <dl class="text-center" title="1396">
+            <dt>喜欢</dt>
+            <dd><span class="count">1396</span></dd>
+        </dl>
+        <dl class="text-center" title="2238">
+            <dt>评论</dt>
+            <dd><span class="count">2238</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="7级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-7"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="1500221">
+                150万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="16112">
+                1万+            </dd>
+        </dl>
+        <dl title="937">
+            <dt>排名：</dt>
+            <dd>937</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                <a class="icon-badge" title="专栏达人">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-columns"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item1">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-columns"></use>
+                        </svg>
+                        <p>专栏达人</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    </div>
+                </div>
+            </div> 
+        </a>  
+                        <a class="icon-badge" title="持之以恒">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-lasting"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item2">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-lasting"></use>
+                        </svg>
+                        <p>持之以恒</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予每个自然月内发布4篇或4篇以上原创或翻译IT博文的用户。不积跬步无以至千里，不积小流无以成江海，程序人生的精彩需要坚持不懈地积累！
+                    </div>
+                </div>
+            </div>
+        </a>
+                            </div>
+    </div>		    		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/GitChat/article/details/82392544" target="_blank">创业教父YC创始人Paul Graham就很烦鼓动年轻创业的</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/GitChat/article/details/82321350" target="_blank">如何用 Python 打飞机？</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/GitChat/article/details/82253596" target="_blank">算法是如何体现价值的</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/GitChat/article/details/81976560" target="_blank">开玩乐，在移动端也能进行机器学习？做物体识别？TensorFlow on Android？</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/GitChat/article/details/81943166" target="_blank">20万、50万、100万的算法工程师，有什么区别？</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <div id="asideColumn" class="aside-box">
+    <h3 class="aside-title">博主专栏</h3>
+    <div class="aside-content">
+        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/18040.html">
+                            <img src="https://img-blog.csdn.net/20171114184302113?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/18040.html">GitChat技术杂谈</a></p>
+                        <div class="data">阅读量：<span>76704</span><span class="count">11 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/18151.html">
+                            <img src="https://img-blog.csdn.net/20171124163311340?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/18151.html">人工智能专栏</a></p>
+                        <div class="data">阅读量：<span>199705</span><span class="count">17 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/18324.html">
+                            <img src="https://img-blog.csdn.net/column?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/18324.html">各路达人的技术教程</a></p>
+                        <div class="data">阅读量：<span>0</span><span class="count">0 篇</span></div>
+                    </div>
+                </li>
+                    </ul>
+    </div>
+    </div>
+		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7102149">
+                    安全                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7103344">
+                    前端                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7108635">
+                    深度学习                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7109241">
+                    架构                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7122416">
+                    python                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7126134">
+                    人工智能                    <span class="count float-right">22篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7135914">
+                    管理                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7149004">
+                    运维开发                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7149494">
+                    大数据                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7149513">
+                    区块链                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7149594">
+                    测试                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7152058">
+                    小程序                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7157793">
+                    运维                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7163271">
+                    移动开发                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7178856">
+                    其他                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7293640">
+                    打包                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7293641">
+                    混合开发                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7300623">
+                    运营                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7300624">
+                    微博                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7300625">
+                    推广                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7307141">
+                    产品经理                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7307142">
+                    敏捷开发                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7312427">
+                    wordpress教程                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7314892">
+                    java                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7314893">
+                    spring-boot                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7809626">
+                    DDD-领域驱动设计                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/gitchat/article/category/7889345">
+                    程序人生                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/09">
+                    2018年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/08">
+                    2018年8月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/07">
+                    2018年7月                    <span class="count float-right">28篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/06">
+                    2018年6月                    <span class="count float-right">21篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/05">
+                    2018年5月                    <span class="count float-right">23篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/04">
+                    2018年4月                    <span class="count float-right">27篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/03">
+                    2018年3月                    <span class="count float-right">28篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/02">
+                    2018年2月                    <span class="count float-right">25篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2018/01">
+                    2018年1月                    <span class="count float-right">56篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2017/12">
+                    2017年12月                    <span class="count float-right">70篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2017/11">
+                    2017年11月                    <span class="count float-right">91篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2017/10">
+                    2017年10月                    <span class="count float-right">43篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2017/09">
+                    2017年9月                    <span class="count float-right">51篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/gitchat/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/gitchat/article/details/78410095">想入行 AI，别让那些技术培训坑了你...</a>
+					<p class="read">阅读量：<span>54866</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/gitchat/article/details/78341484">当我说要做大数据工程师时他们都笑我，直到三个月后……</a>
+					<p class="read">阅读量：<span>54023</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/gitchat/article/details/78546894">TensorFlow 人脸识别网络与对抗网络搭建</a>
+					<p class="read">阅读量：<span>44871</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/gitchat/article/details/78454120">聊聊 Spring Boot 2.x 那些事儿</a>
+					<p class="read">阅读量：<span>37048</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/gitchat/article/details/78341401">技术学到多厉害，才能顺利进入BAT？</a>
+					<p class="read">阅读量：<span>32584</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/gitchat/article/details/78341484#comments">当我说要做大数据工程师时他们都笑我...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/MG_ApinG" class="user-name" target="_blank">MG_ApinG</a>：我学完这些是不是快老了                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/gitchat/article/details/78341484#comments">当我说要做大数据工程师时他们都笑我...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_43142834" class="user-name" target="_blank">qq_43142834</a>：感谢分享，非常有用                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/gitchat/article/details/81328516#comments">如何玩转微服务</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/vop444" class="user-name" target="_blank">vop444</a>：很好的介绍了微服务，感谢                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/gitchat/article/details/81328516#comments">如何玩转微服务</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/jpf0o0" class="user-name" target="_blank">jpf0o0</a>：谢谢博主                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/gitchat/article/details/78341484#comments">当我说要做大数据工程师时他们都笑我...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_34455012" class="user-name" target="_blank">qq_34455012</a>：感谢分享                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		<div id="asideFooter">
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>23</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments long-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+						61				</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/gitchat/article/details/81161442" title="我托朝鲜代购买了部朝鲜贵族都在用的手机...">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+								<li class="">
+			<a class="btn-comments hover-box low-height" href="https://blog.csdn.net/gitchat/article/details/81187469" title="如何运用 DDD 解决团队协作与沟通问题？">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-xiayiye"></use>
+				</svg>
+				<span class="hover-show text">下一篇</span>
+			</a>
+		</li>
+					</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "一文读懂分层架构";
+    var ChannelId = 15;
+    var articleId = "81172576";
+    var commentscount = 61;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/gitchat/article/details/81172576";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "%E7%BB%8F%E5%88%86mk%E6%A8%A1%E5%9E%8B%E5%B1%82";
+    var needInsertBaidu = false;
+    // 代码段样式
+    var codeStyle = '';
+    var highlight = ["\u4e00\u6587","\u8bfb\u61c2","\u5206\u5c42\u67b6\u6784"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"一文读懂分层架构");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9376486353.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=%E7%BB%8F%E5%88%86mk%E6%A8%A1%E5%9E%8B%E5%B1%82"  type="text/javascript"></script>
+</body>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>

@@ -1,0 +1,220 @@
+
+
+
+
+
+
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="referrer" content="always"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta property="qc:admins" content="24530273213633466654" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>帐号登录</title>
+    
+
+<!--历史页面专用-->
+<base href='https://csdnimg.cn/release/passport/'>
+<link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+<script>
+    var CFG={
+        BASE_URL : "https://csdnimg.cn/release/passport/",    							 //当前页面对应的虚拟路径,页面j
+        API_URL  : "https://passport.csdn.net/",              					 //当前项目默认的后端API地址
+        ROOT_URL  : "https://passport.csdn.net/",             					 //当前项目根路径, JS跳转
+        STATIC_URL : "https://csdnimg.cn/release/passport/",             					 //本项目静态资源
+        STATIC_GLOBAL_URL : "https://csdnimg.cn/",                 //全局静态资源
+        VER : "1.4.2"
+    }
+</script>
+    <link type="text/css" rel="stylesheet" href="https://csdnimg.cn/release/passport/history/css/bootstrap.css?v=1.4.2" />
+    <link type="text/css" rel="stylesheet" href="https://csdnimg.cn/release/passport/history/css/login.css?v=1.4.2" />
+    <link type="text/css" rel="stylesheet" href="https://csdnimg.cn/release/passport/history/css/weixinqr.css?v=1.4.2" />
+    <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+	  var s = document.getElementsByTagName("script")[0];
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	
+	(function() {
+		 window._smConf = {
+		 organization: 'E2fSjOLnvVdMRc4jLSih',
+		 staticHost: 'static.fengkongcloud.com'
+		 };
+		 var url = (function () {
+		 var originHost = "static2.fengkongcloud.com";
+		 var isHttps = 'https:' === document.location.protocol;
+		 var protocol = isHttps ? 'https://' : 'http://';
+		 var fpJsPath = '/fpv2.js';
+		 var url = protocol + _smConf.staticHost + fpJsPath;
+		 var ua = navigator.userAgent.toLowerCase();
+		 var isWinXP = /windows\s(?:nt\s5.1)|(?:xp)/.test(ua);
+		 var isLowIE = /msie\s[678]\.0/.test(ua);
+		 if(isHttps && isWinXP && isLowIE) {
+		 url = protocol + originHost + fpJsPath;
+		 }
+		 return url;
+		 })();
+		 var sm = document.createElement("script");
+		 var s = document.getElementsByTagName("script")[0];
+		 sm.src = url;
+		 s.parentNode.insertBefore(sm, s);
+		})();
+	</script>
+  </head>
+  <body>
+  	<div id="hidebg"></div>
+    <div class="header"></div>
+    <div class="main" style="background:url(https://csdnimg.cn/passport/login-bg.png)">
+      <div class="container container-custom">
+        <div class="row wrap-login">
+          <div class="login-banner col-sm-6 col-md-7 col-lg-7 hidden-xs">
+              
+              <script>
+                  (function() {
+                      var s = "_" + Math.random().toString(36).slice(2);
+                      document.write('<div id="' + s + '"></div>');
+                      (window.slotbydup=window.slotbydup || []).push({
+                          id: '5873026',
+                          container: s,
+                          size: '550,500',
+                          display: 'inlay-fix'
+                      });
+                      //判断div内容是否为空
+                      var content = $("#s").html();
+                      if(!content){
+                          console.log(s);
+                          document.getElementById(s).innerHTML = '<a href="https://edu.csdn.net/courses?utm_source=login" target="_blank"><img src="https://csdnimg.cn/passport/login-banner.png"  class="img-responsive"></a>';
+                          
+                      }
+                  })();
+              </script>
+          </div>
+          <div class="login-user col-xs-12 col-sm-6 col-md-5 col-lg-5 js_login_user ">
+            <div class="login-part">
+                  <h3><em class="login-title js_login_title">扫码登录</em><a href="javascript:void(0);" class="login-code__open js_login_trigger login-user__active">账号登录</a></h3>
+                  <div class="code-content code-login">
+                      <div class="code-pic">
+                        <div id="wxqr" class="wxqr"></div>
+                      </div>
+                      <span class="code-text js_code_text">微信登录</span>
+                      <div class="code-support">
+                          <div class="line"></div>
+                          <div class="third-part tracking-ad" data-mod="popu_27">
+                              <span style="width: 257px;">第三方帐号登录</span>
+                              
+		                        
+		                        
+		                            <span><font color="red">  </font></span>
+		                        
+		                      
+                              <a id="qqAuthorizationUrl" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=100270989&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DQQProvider&state=test" class="qq"></a>
+                              <a id="sinaAuthorizationUrl" href="https://api.weibo.com/oauth2/authorize?client_id=2601122390&response_type=code&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DSinaWeiboProvider" class="sina"></a>
+			                  <a id="baiduAuthorizationUrl" href="https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=cePqkUpKCBrcnQtARTNPxxQG&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DBaiduProvider" class="baidu"></a>
+			                  <a id="osChinaAuthorizationUrl" href="https://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=cIh1UuWvSyrYlbe93rM6&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DOsChinaProvider&state=test" class="cc"></a>
+			                  <a id="githubAuthorizationUrl" href="https://github.com/login/oauth/authorize?client_id=4bceac0b4d39cf045157&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DGitHubProvider" class="github"></a>
+                              <div class="register-now js_register_text">
+                                  <span>还没有CSDN帐号？</span>
+                                  <a href="" class="js_enter__register">立即注册</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            
+          </div>
+          <div class="login-user col-xs-12 col-sm-6 col-md-5 col-lg-5 js_login_user hide login-opacity">
+              <div class="login-part">
+              <h3>帐号登录<a href="javascript:void(0);" class="login-code__open js_login_trigger login-code__active">扫码登录</a></h3>
+              <div class="user-info">
+                <div class="user-pass">
+
+                  <form id="fm1" action="https://passport.csdn.net/account/verify;jsessionid=0701A032C853F178927FBFB49B944F0D.tomcat2" method="post">
+                     <input type="hidden" id="gps" name="gps" value="" />
+                    <input id="username" name="username" tabindex="1" placeholder="输入用户名/邮箱/手机号" class="user-name" type="text" value=""/>
+                    <div class="mobile-auth" style="display:none"><span>该手机已绑定账号，可使用  </span><a href="" id="mloginurl" class="mobile-btn" >手机验证码登录</a></div>
+                    <input id="password" name="password" tabindex="2" placeholder="输入密码" class="pass-word" type="password" value="" autocomplete="off"/>
+                   
+                    
+                        
+                        
+                            <div class="error-mess" style="display:none;">
+                                <span class="error-icon"></span><span id="error-message"></span>
+                            </div>
+                        
+                    
+
+                    <div class="row forget-password">
+                        <span class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <input type="checkbox" name="rememberMe" id="rememberMe" value="true" checked="checked" class="auto-login" tabindex="4"/>
+                            <label for="rememberMe">下次自动登录</label>
+                        </span>
+                        <span class="col-xs-6 col-sm-6 col-md-6 col-lg-6 forget tracking-ad" data-mod="popu_26">
+                            
+                            <a href="https://passport.csdn.net/passport_fe/forget.html" tabindex="5">忘记密码</a>
+                        </span>
+                    </div>
+                    <!-- 该参数可以理解成每个需要登录的用户都有一个流水号。只有有了webflow发放的有效的流水号，用户才可以说明是已经进入了webflow流程。否则，没有流水号的情况下，webflow会认为用户还没有进入webflow流程，从而会重新进入一次webflow流程，从而会重新出现登录界面。 -->
+                    <input type="hidden" name="lt" value="LT-435405-x5MriJyBfYhr2yZfIeMdeWDsXXLBnV" />
+                    <input type="hidden" name="execution" value="e1s1" />
+                    <input type="hidden" name="fkid" id="fkid" value="" />
+                    <input type="hidden" name="_eventId" value="submit" />
+                    <input class="logging" accesskey="l" value="登 录" tabindex="6" type="button" />
+					<!-- data-kuick='{"act":"csdn05","desc":"直接登录"}' -->
+                  </form>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="third-part tracking-ad" data-mod="popu_27">
+                <span style="width: 257px;">第三方帐号登录</span>
+                <span><font color="red">  </font></span>
+                <a id="qqAuthorizationUrl" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=100270989&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DQQProvider&state=test" class="qq"></a>
+                <a id="sinaAuthorizationUrl" href="https://api.weibo.com/oauth2/authorize?client_id=2601122390&response_type=code&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DSinaWeiboProvider" class="sina"></a>
+                <a id="baiduAuthorizationUrl" href="https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=cePqkUpKCBrcnQtARTNPxxQG&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DBaiduProvider" class="baidu"></a>
+                <a id="osChinaAuthorizationUrl" href="https://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=cIh1UuWvSyrYlbe93rM6&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DOsChinaProvider&state=test" class="cc"></a>
+                <a id="githubAuthorizationUrl" href="https://github.com/login/oauth/authorize?client_id=4bceac0b4d39cf045157&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DGitHubProvider" class="github"></a>
+
+                <div class="register-now"><span>还没有CSDN帐号？</span>
+                    <span class="register tracking-ad" data-mod="popu_28">
+                    
+				        
+				        
+				            <a href="" class="js_login_trigger js_status_register">立即注册</a>
+				        
+				    
+                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"></div>
+    <script data-main="https://csdnimg.cn/release/passport/history/js/login-config.js?v=1.4.2" src="https://csdnimg.cn/release/passport/history/js/libs/require.js?v=1.4.2" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.2.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/release/passport/history/js/apps/weixinqr.js?v=1.4.2" type="text/javascript"></script>
+    <script>
+        $(function(){
+            setTimeout(function(){
+                $("#fkid").val(SMSdk.getDeviceId());
+
+                var str = "fkid=" + escape(SMSdk.getDeviceId());
+                var date = new Date();
+                date.setTime(date.getTime() + 30 * 60 * 1000); //设置date为当前时间加一年
+
+                str += ";expires=" + date.toGMTString();
+                document.cookie = str;
+            },200)
+        })
+    </script>
+    <script src="https://dup.baidustatic.com/js/os.js"></script>
+    
+  </body>
+</html>

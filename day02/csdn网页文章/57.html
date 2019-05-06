@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/jxq0816/article/details/81609191"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="第一阶段，基于User-Video图游历算法，2008年[1]。
+
+在这个阶段，YouTube认为应该给用户推荐曾经观看过视频的同类视频，或者说拥有同一标签的视频。然而此时，YouTube的视频已是数千万量级，拥有标签的部分却非常小，所以如何有效的扩大视频标签，被其认为是推荐的核心问题。解决方案的核心有两块，一是基于用户共同观看记录构建的图结构（Video Co-View Graph）； 二是基于..." />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>Youtube视频推荐算法的前世今生 - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin-blackboard/skin-blackboard-1340d63bd5.min.css">
+
+    <script type="text/javascript">
+        var username = "jxq0816";
+        var blog_address = "https://blog.csdn.net/jxq0816";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = false;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/jxq0816/article/details/81609191"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin-blackboard";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/jxq0816">姜兴琪的博客...</a></span>
+			<i>></i>
+			<span>Youtube视频推荐算法的前世今生</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">Youtube视频推荐算法的前世今生</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年08月12日 18:54:21</span>
+						<span class="read-count">阅读数：10602</span>
+												
+																															</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+					版权声明：本文为博主-姜兴琪原创文章，未经博主允许不得转载。					https://blog.csdn.net/jxq0816/article/details/81609191				</div>
+								            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/ck_htmledit_views-e2445db1a8.css" />
+						<div class="htmledit_views">
+                <p><strong>第一阶段，基于User-Video图游历算法，2008年[1]。</strong></p>
+
+<p>在这个阶段，<span style="color:#ff4635;"><strong>YouTube认为应该给用户推荐曾经观看过视频的同类视频，或者说拥有同一标签的视频</strong></span>。然而此时，YouTube的视频已是数千万量级，拥有标签的部分却非常小，<strong>所以如何有效的扩大视频标签，被其认为是推荐的核心问题</strong>。解决方案的核心有两块，一是基于用户共同观看记录构建的图结构（Video Co-View Graph）； 二是基于此数据结构的算法，被称为吸附算法（Adsorption Algorithm）。</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p>图1.User-Video Graph</p>
+
+<p>视频的共同观看关系构建的图，可以从两个角度观察，一是视频构成的图，一是视频-用户构成的图，“视频”图可以看成由“视频用户”图（图1）抽取出。而视频之间的边，可以是同时观看过两个视频的用户个数，或者是在同一个Session中被同时观看的次数，甚至可以将顺序也考虑于其中。</p>
+
+<p> </p>
+
+<p>那么到底如何给视频扩大标签呢？标签可以看成是一个分类，所谓“近朱者赤，近墨者黑”，在图结构中，一个节点的信息与属性可以通过其周围的节点得到。“标签”也不例外。Adsorption</p>
+
+<p>Algorithm的核心思想是，<strong>部分节点将拥有一些标签，每一次迭代，可以将标签传递给相邻的节点，如此不停迭代，直到标签稳定分布在节点中</strong>。伪代码如下：</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300294?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p> </p>
+
+<p>其中V为节点集合，E为边集合，W为节点与边之间的权重，L为标签集合，VL为V中拥有标签的节点，每一个视频都对应一个标签的分布概率Lv。<strong>每一轮迭代，将重新为所有节点计算标签分布。节点对应的标签分布由其连接的相邻节点关系强度，以及标签在相邻节点的分布概率乘积后累加得到。</strong></p>
+
+<p>本算法与PageRank接近，也类似马尔可夫链的游走过程，由于每个节点中Label权重来自于周围节点对应权重的线性组合，也与线性系统近似。另外，论文并未花篇幅陈述如何利用本算法进行推荐备选生成，只说可以将经过迭代稳定后的图结构中用户的标签作为备选（生成的依据），或者说是连接备选视频的纽带。同样的，也并没有花篇幅论文如何进行最终排序，以及如何归并多种备选结果，虽然在这个阶段的YouTube的推荐体系已经具备了这个模块。</p>
+
+<p> </p>
+
+<p>笔者认为，本算法可以划为“用户画像”推荐方法类别。<strong>以标签为视频以及用户的描述，通过某种方式挖掘用户与视频的标签信息，作为相互连接的纽带</strong>。YouTube对比了本方法与热门结果以及简单的协同，均取得了完胜。其试验方法也较为初步：采用完全离线的方式进行效果评价，无法对新用户进行评测，也无法对新产生内容的价值进行衡量；另外对于视频来讲，以点击作为衡量标准也是不够的，播放时长是必须要考量的因素。</p>
+
+<p><strong>第二阶段，基于Video-Video图游历算法，2010年[2]。</strong></p>
+
+<p>在这个阶段，<span style="color:#ff4635;"><strong>YouTube认为需要将用户观看过的视频的相似视频推荐给用户</strong></span>。而什么是相似视频？主要以用户行为对其进行界定，可以是：</p>
+
+<p>1. 被一定量用户共同观看的视频；</p>
+
+<p>2. 在同一个Session中经常被同时观看的视频；</p>
+
+<p>3. 考虑顺序信息的，在同一个Session中经常被同时观看的视频。</p>
+
+<p>如上这几种选择，信息的有效性逐渐更好，但数据则逐渐稀疏，YouTube更加偏好第二种方式。相似视频的形式化定义如下：</p>
+
+<p><img alt="" class="has" src="https://pic2.zhimg.com/80/v2-2b326b693227a23d3ad354fe2f2d02b9_hd.png" /><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300292?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p><img alt="" class="has" src="https://pic2.zhimg.com/v2-2b326b693227a23d3ad354fe2f2d02b9_b.png" /><img alt="" class="has" src="https://pic2.zhimg.com/80/v2-2b326b693227a23d3ad354fe2f2d02b9_hd.png" /><img alt="" class="has" src="https://pic2.zhimg.com/80/v2-2b326b693227a23d3ad354fe2f2d02b9_hd.png" /></p>
+
+<p>其中Cij为所有被共同观看的次数，而F(vi,vj)是一个规整化函数，试图消歧视频的流行度，因为Vi跟Vj中一旦存在比较Popular的结果Cij往往会偏大，一种简单的方案是将两个视频被观看的次数相乘。</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300295?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /><img alt="" class="has" src="https://pic3.zhimg.com/v2-73d7a4e81062b0ad8605d520cc93601e_b.png" /><img alt="" class="has" src="https://pic3.zhimg.com/80/v2-73d7a4e81062b0ad8605d520cc93601e_hd.png" /></p>
+
+<p>初步的推荐备选结果即是用户消费过视频的相似视频。如上公式，S是用户消费的视频集合，Vi为S中的某一个视频，Ri则是Vi对应的相似视频集。<strong>最终的备选集合C，则是所有Ri的并集</strong>。一般而言这种方式生成的结果作为备选的量充足的，但往往内容聚焦难以为用户找到新视频，也有备选结果不充足的情况。在这种情况下，相似视频集合可以继续扩展，从“相似视频”扩展到“相似视频的相似视频”，以此类推迭代一定的次数，得到最终的备选集合。</p>
+
+<p> </p>
+
+<p>备选生成后是排序阶段，主要考量两类因素。<strong>一是视频的质量，包含视频的播放数量，评分等；二是用户的需求信息，包含用户观看历史中的一些信息，例如视频观看数量，以及观看时间等</strong>；用一个线性公式可以对这两类因素进行综合考量（此处并未提及线性公式如何而来，应该不会是拍脑袋吧—_—#）。最终只能呈现比较小数量的备选结果，所以只能从中挑选部分数据，而这个过程，则需要处理多样性问题：将标签类似的数据进行去除，或者将属于同一个频道的数据去掉，进一步的基于聚类与内容分析的方法也可以采用。</p>
+
+<p>文章也陈述了具体系统实现方案。因为每个用户的备选结果在一定时间内可以完全保持不变，所以选用了离线计算的方式。但这样做将导致实效性不佳，所以YouTube优化了数据生成的环节，做到了每天数次数据更新。<strong>其系统架构主要分为数据收集，备选生成，推荐服务三个部分</strong>。用户日志被抽取后，存储入BigTable中，然后基于MapReduce生成备选，最终得到的生成结果存储入提供线上服务的BigTable</p>
+
+<p>服务器。推荐服务不涉及太多实时计算，延迟时间更多的是网络传输。</p>
+
+<p>为了确认本方法的有效性，YouTube选择了在线A/B测试的方法，主要指标包括CTR，Long</p>
+
+<p>CTR（观看超过一定时长的有效点击），Session的平均观看时间，第一次观看时间，以及推荐的覆盖率。</p>
+
+<p> </p>
+
+<p><strong>第三阶段，基于搜索以及协同过滤，2014年[3]。</strong></p>
+
+<p>本文陈述了“相关视频”的优化方法，即用户在观看某一个视频时推荐的视频。但实质上是定义了一种相似或者相关视频的计算方式。而“相似对象”的定义是推荐的核心问题，有了不同的计算方法，也意味着有了新的推荐方法。</p>
+
+<p>为什么要有一个新的“相关视频”计算方法呢？协同过滤是当时最好的方法，但其适用于有了一定用户观看记录的视频，但对于新视频以及长尾视频，并不能良好应用。</p>
+
+<p><img alt="" class="has" src="https://pic4.zhimg.com/80/v2-332f60b3aea7904aebc1153da3fe62c3_hd.png" /></p>
+
+<p><span style="color:#1a1a1a;">图2.视频主题描述示意图</span></p>
+
+<p> </p>
+
+<p><span style="color:#1a1a1a;">我们来看看YouTube是怎么做的。</span></p>
+
+<p><span style="color:#1a1a1a;">首先，</span><span style="color:#1a1a1a;"><strong>视频通过&lt;主题，权重&gt;集合进行描述</strong></span><span style="color:#1a1a1a;">。如上图，《World War Z》电影包含了四个主题以及对应权重。主题名从视频的描述信息，上传者定义的关键词，被搜索后的观看记录对应的检索词，播单名字等等抽取而来。</span></p>
+
+<p><span style="color:#1a1a1a;">第二步，</span><span style="color:#1a1a1a;"><strong>计算视频与视频之间的相似度</strong></span><span style="color:#1a1a1a;">。主要通过两个主题集合进行计算得到。文章主要提出了两个方法，第一个方法</span><span style="color:#1a1a1a;"><strong>借鉴传统信息检索排序理论</strong></span><span style="color:#1a1a1a;">，将视频VW与VR 的相似度定义为：</span></p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300321?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /><img alt="" class="has" src="https://pic1.zhimg.com/v2-98e524e7294fe27ce01fcad5672efed4_b.png" /><img alt="" class="has" src="https://pic1.zhimg.com/80/v2-98e524e7294fe27ce01fcad5672efed4_hd.png" /></p>
+
+<p><span style="color:#1a1a1a;">其中，c(t, V) 表示视频V与包含主题t的视频集合被“共同观看”的次数，也就意味着t与V之间的接近程度。而df(t)则是t出现的文档频率，</span><span style="color:#1a1a1a;"><strong>l</strong></span><span style="color:#1a1a1a;"><strong>og(1 + df(t))用来对流行度太高的主题进行惩罚</strong></span><span style="color:#1a1a1a;">，与著名的IDF类似。Ts(t)是一个阀门，如果t出现在文档中的次数超过阀值，则本值为0，也就是不考虑此t的影响，反之为1，将其纳入考虑。q(VR) 则代表视频VR的质量，通过上传时间，上传者，点赞与差评的数量进行构建。</span></p>
+
+<p><span style="color:#1a1a1a;">第二种方法，</span><span style="color:#1a1a1a;"><strong>主要思想是试图借助用户行为优化主题词的权重。</strong></span><span style="color:#1a1a1a;">文中以《World War Z》电影为例，其中“World War Z”Topic的权重最高，高于Topic“惊悚片”。但是，基于“World War Z”主题出来的结果，可能将过度的拟合本电影，导致出的结果更多的是本电影相关的内容。但实际上同一类电影可能更好。也就是说“惊悚片”在这个场景下比“World War Z”主题更有用。</span></p>
+
+<p><span style="color:#1a1a1a;">主题权重训练算法借鉴PairWise排序方法。基本思想如下，</span><span style="color:#1a1a1a;"><strong>被推荐的视频分为两类，一类被用户点击与观看，一类并未被点击与观看</strong></span><span style="color:#1a1a1a;">。在排序时，将后者放在了前者的前面，则生成了一个错误的排序对，对应着一条训练数据X。而X的长度为主题个数，当某一个主题出现在这个Pair对应的两条视频上，则对应的值为0，如果只出现在被消费过的视频上，则为1，如果只出现在没有被消费的视频上，则为-1。被优化的参数W，则是X的对应系数，即主题的权重，优化的目标是在训练集合上错误最小，并加入正则化： <img alt="" class="has" src="https://pic4.zhimg.com/80/v2-f0673d561e5d7999c256413fd9f5439f_hd.png" /></span></p>
+
+<p> </p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300320?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300541?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p>实验阶段，YouTube主要采用在线实验的方式验证效果优劣。<strong>指标包括观看时长，观看完成率（度量有多少视频被从头到位看完），以及丢弃率，即没有任何相关视频被观看的比例（在这种情况下，用户行为终止）</strong>。从这三个指标来看，本文的方法与协同过滤联合后，效果有明显提升，并且，基于主题权重重新训练的方法要好于借鉴搜索理论的人工拟合排序公式方法。</p>
+
+<p>值得一提的是，<strong>本文提出的相似度的计算方式与基于用户行为的方式（例如协同过滤）有着根本不同，对用户行为的依赖更小，适用于新数据以及长尾数据，可以极大的克制马太效应。</strong>同时，本文也提供了成熟的实现方案：基于搜索底层进行备选生成。通过正在被观看的视频主题信息构建检索句，到倒排索引中进行查询。再者，也提到通过再排序模块，与协同过滤方法的备选集合进行融合，将更进一步提升效果：</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300703?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p><span style="color:#1a1a1a;">图3.相关视频系统架构图</span></p>
+
+<p><strong>第四阶段，基于深度神经网络，2016年[4]。</strong></p>
+
+<p>YouTube转用深度学习做推荐系统，也许有跟风的意味，希望跟随谷歌“using deep learning as a general-purpose solution for nearly all learning problems”也就是将深度学习作为几乎所有机器学习问题通用解决方案。所幸这样的方法是成功的，带来了推荐系统的“Dramatic Improvement”。</p>
+
+<p>本文陈述了YouTube推荐系统的三大难点：一是规模太大，简单的推荐算法在如此大规模数据量上可能是失效的；二是实效性，即新数据不断产生，需要将其良好的呈现给用户，以平衡旧有的好内容以及新内容；三是噪音问题，用户行为与视频描述均有噪音，并且只能获得充满噪音的用户隐含反馈，而不能直接获取用户满意度。</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300733?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p><span style="color:#1a1a1a;">图4.YouTube基于深度学习推荐系统架构图</span></p>
+
+<p>本文呈现的推荐系统解决方案分为两个部分，<strong>一个是备选生成（Candidate Generation），其目标是初选结果，从海量数据中选择出符合其个人需求偏好的百级别数据。一个则是排序（Ranking），通过更加丰富的用户，视频乃至场景信息，对结果进行精细化排序，得到呈现给用户的备选。</strong></p>
+
+<p>在本文中，推荐系统的建模方式有了实质性不同，即将推荐系统定义为一个多分类器，其职责是确定某个用户，在某个场景与时间下，将从系统的视频中选择消费哪一个视频。具体的方法是，将用户与视频全部转化为Embedding描述，即一个向量，最终用户消费某个视频的概率通过如下方式计算得到</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300716?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p>首先获取视频的Embedding描述，将视频的文本放入Embedding工具即可（例如Word2Vec，但TensorFlow自带）即可。构建用户的Embedding，则是通过训练而来。以SoftMax分类为最终优化对象，将用户观看视频的Embedding整合值，搜索记录，其它信息如年龄性别等作为特征。中间为数层ReLU。能利用除了用户行为外的其它信息，也是神经网络相对于普通MF类算法的优势。</p>
+
+<p> </p>
+
+<p> </p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300739?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p><span style="color:#1a1a1a;">图4.YouTube基于深度学习推荐系统架构图</span></p>
+
+<p> </p>
+
+<p>对于YouTube产品层来讲，鼓励内容产生毫无疑问是至关重要的，所以推荐系统也希望对用户上传的新内容的有所偏好。然而幸运的是，即使损失一部分相关性，视频的消费者也偏好新内容。也就是说，新内容的价值可以良好的通过其带来的吸引力呈现出来，并不需要平台刻意而为之。本文讲到了机器学习系统对于处理这实效性特征所犯的惯常的错误，由于训练行为往往发生在行为之后，但视频信息在这个阶段中并非保持不变，尤其是实效性信息，所以应该将数据的上传时间在动作发生时候的瞬时值作为训练特征。这样的处理方式偏好了新内容，并明显的提升了效果。</p>
+
+<p>YouTube选择用户观看记录作为训练数据的初始来源，即完成观看视频记录为正样本。主要原因是用户观看记录相对于用户的显性行为例如点赞收藏要多得多。还有一些非常有参考价值的推荐系统实现方案，例如需要对于推荐系统保留一些信息输入，以防止过渡拟合“代理问题”（即推荐系统所优化的具体指标，例如点击率），例如用户往往会顺着一个检索结果页或者用户发布者浏览页进行顺序观看，然而将检索结果页面或者用户发布视频界面直接作为推荐结果呈现给用户是非常不好的。所以此处，YouTube做了一些处理规避这个问题，例如选择放弃检索句的序列信息，并其打散成词袋。另外，YouTube发现，用户进行视频阅读往往是有序的，例如用户会按照剧集的顺序进行观看，而用户进行信息发现的过程往往也由流行到自己的喜好。于是，去预估用户的下一个观看记录，比预估用户的观看记录中中间的某一个更好，这一点也有别于传统的协同过滤。</p>
+
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180812185300794?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4cTA4MTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" /></p>
+
+<p><span style="color:#1a1a1a;">图5.YouTube推荐备选生成阶段架构</span></p>
+
+<p> </p>
+
+<p>备选生成的下一个阶段是排序，排序模块更多的是面向“场景”的，说的简单一点，就是界面。用户可能在某一地方愿意点击某一条数据，但是在别的地方则不会愿意，可能在某一时间愿意点击某一条数据，但在另一个时间不会。用户观看了一个推荐界面，但是并未在这个界面上进行操作，那么随之应该进行对应内容的降级，所以对上一个推荐界面的浏览信息也可以进入到本模型中。排序的另一个职能是将各种备选联合起来。此处，需要纳入到模型中的信息更多，例如，用户最近的一次搜索词，用户最近观看的同一个主题下的视频数量，用户上一次观看同主题视频的时间，用户所使用的语言等。其架构跟备选生成阶段类似，将所有排序模型中的信息输入后，进入多层ReLU，最终进行优化的是一个加权逻辑回归层，阳性样本的权重是其观看时间。在这一层，也可以看到其推荐“代理问题”的转化，由点击行为转为了点击与观看行为结合。</p>
+
+<p> </p>
+
+<p><strong>总结</strong></p>
+
+<p>总体上讲，YouTube的推荐系统在采用深度学习之前，多数基于用户画像（说的高大上一丢丢其实就是标签）与协同过滤。第一篇本质是基于图的画像挖掘算法，第二篇则是对协同数据的深度利用，即不仅仅将“相似视频”作为备选，也将“相似视频的相似视频”同样纳入备选集合。第三篇，则对用户画像法进一步深化，提出了用户画像法经典的基于搜索架构的实现方式，以及如何通过用户行为进一步克服文本画像所带来的相关性计算偏差。这三篇在不同的地方也提到过，给用户进行结果呈现之前，还需要做最终排序，但是这并未被深入论述。最终，采用深度网络方法，在之前扎实工作基础上，进一步升华。</p>
+
+<p>我的博客即将搬运同步至腾讯云+社区，邀请大家一同入驻：<a href="https://cloud.tencent.com/developer/support-plan?invite_code=3v3kz2sz48qow" rel="nofollow">https://cloud.tencent.com/developer/support-plan?invite_code=3v3kz2sz48qow</a></p>
+
+<p> </p>
+
+<p> </p>            </div>
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/jxq0816/article/details/81609191,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/jxq0816/article/details/81609191,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/jxq0816/article/details/81609191,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/jxq0816/article/details/81609191,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+                <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/jxq0816/article/details/81609191#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/xuewufeifang/article/details/50611397,BlogCommendFromQuerySearch_0"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/xuewufeifang/article/details/50611397,BlogCommendFromQuerySearch_0"}'>
+		<a href="https://blog.csdn.net/xuewufeifang/article/details/50611397" target="_blank" title="HTML5的<em>前世</em><em>今生</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						HTML5的<em>前世</em><em>今生</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/3/B/3_xuewufeifang.jpg" alt="xuewufeifang" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">xuewufeifang</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">01-30</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1566</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							2007年W3C(万维网联盟)立项HTML5，直至2014年10月底，这个长达八年的规范终于正式封稿。
+
+过去这些年，HTML5颠覆了PC互联网的格局，优化了移动互联网的体验，接下来，HTML5将...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_24084925/article/details/53341414,BlogCommendFromQuerySearch_1"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_24084925/article/details/53341414,BlogCommendFromQuerySearch_1"}'>
+		<a href="https://blog.csdn.net/qq_24084925/article/details/53341414" target="_blank" title="SpringBoot 的今世前生">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						SpringBoot 的今世前生				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/5/3/3_qq_24084925.jpg" alt="qq_24084925" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_24084925</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">11-25</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1084</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							序
+
+本文主要讲述spring boot的由来，即其它诞生的背景，初衷，现状，及对未来的展望。
+
+背景
+
+在很早的年代，J2EE还是java企业级应用的王者规范，EJB风行其道。后来有一个叫Rod J...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/smartcat2010/article/details/77854493,BlogCommendFromQuerySearch_2"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/smartcat2010/article/details/77854493,BlogCommendFromQuerySearch_2"}'>
+		<a href="https://blog.csdn.net/smartcat2010/article/details/77854493" target="_blank" title="为什么<em>YouTube</em>懂你想要看什么？从算法论文反推其推荐机制">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						为什么<em>YouTube</em>懂你想要看什么？从算法论文反推其推荐机制				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/7/5/C/3_smartcat2010.jpg" alt="smartcat2010" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">smartcat2010</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">09-05</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1517</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							为什么YouTube平台上会源源不断产生优质视频和优质广告，真的只是偶然吗？为什么用户一上youTube就黏住了，这背后到底下了多大的功夫研究人性的细节？如此海量的数据，如何精准地推送给每一个恰当的人...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/cyh24/article/details/50359055,BlogCommendFromQuerySearch_3"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/cyh24/article/details/50359055,BlogCommendFromQuerySearch_3"}'>
+		<a href="https://blog.csdn.net/cyh24/article/details/50359055" target="_blank" title="【机器学习】Logistic Regression 的<em>前世</em><em>今生</em>（理论篇）">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						【机器学习】Logistic Regression 的<em>前世</em><em>今生</em>（理论篇）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/3/8/3_cyh24.jpg" alt="cyh24" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">cyh24</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-19</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2.4万</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							Logistic Regression可以说是机器学习的入门算法。不过，你真的有把握能够把LR从头到脚讲一遍吗？你会现场建模，数学推导？你知道它的正则化的作用？你能讲清楚它跟MaxEnt最大熵模型的关...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yongjun310/article/details/79419398,BlogCommendFromQuerySearch_4"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yongjun310/article/details/79419398,BlogCommendFromQuerySearch_4"}'>
+		<a href="https://blog.csdn.net/yongjun310/article/details/79419398" target="_blank" title="<em>YouTube</em> 的<em>视频</em><em>推荐算法</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>YouTube</em> 的<em>视频</em><em>推荐算法</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/E/8/4/3_yongjun310.jpg" alt="yongjun310" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">yongjun310</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">03-02</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							793</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							转载：https://www.zhihu.com/question/20829671/answer/205421638第一阶段，基于User-Video图游历算法，2008年[1]。在这个阶段，You...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/P5dEyT322JACS/article/details/78871942,BlogCommendFromQuerySearch_5"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/P5dEyT322JACS/article/details/78871942,BlogCommendFromQuerySearch_5"}'>
+		<a href="https://blog.csdn.net/P5dEyT322JACS/article/details/78871942" target="_blank" title="Google Brain <em>推荐算法</em>，给了 <em>Youtube</em> 新生">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						Google Brain <em>推荐算法</em>，给了 <em>Youtube</em> 新生				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/E/4/9/3_p5deyt322jacs.jpg" alt="P5dEyT322JACS" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">P5dEyT322JACS</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-21</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							527</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							（点击上方公众号，可快速关注）翻译：伯乐在线 - 精算狗 ，英文：Casey NewtonYouTube 整合 Google Brain 推荐算法，视频播放量提升 20 倍。去年晚些时候，我在玩《羞辱...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/elwingao/article/details/52412403,BlogCommendFromQuerySearch_6"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/elwingao/article/details/52412403,BlogCommendFromQuerySearch_6"}'>
+		<a href="https://blog.csdn.net/elwingao/article/details/52412403" target="_blank" title="前端开发的<em>前世</em><em>今生</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						前端开发的<em>前世</em><em>今生</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/6/B/9/3_elwingao.jpg" alt="elwingao" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">elwingao</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">09-02</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2319</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							从静态页面，到从前端到后端再到移动应用，给前端开发者创造了巨大挑战和无数可能...					</p>
+			</div>
+					</a>
+	</div>
+							<div class="recommend-item-box recommend-box-ident recommend-download-box clearfix" data-track-view='{"mod":"popu_614","con":",https://download.csdn.net/download/sinat_27580423/10314500,BlogCommendFromQuerySearch_7"}' data-track-click='{"mod":"popu_614","con":",https://download.csdn.net/download/sinat_27580423/10314500,BlogCommendFromQuerySearch_7"}'>
+			<a href="https://download.csdn.net/download/sinat_27580423/10314500" target="_blank">
+				<div class="content">
+					<div class="">
+						<span class="type">下载</span>
+						<h4 class="text-truncate oneline clearfix">
+							<em>youtube</em><em>视频</em><em>推荐算法</em>实现						</h4>
+						<span class="data float-right">03-28</span>
+					</div>
+					<div class="desc oneline">
+							youtube视频推荐算法实现
+youtube视频推荐算法实现
+youtube视频推荐算法实现
+youtube视频推荐算法实现					</div>
+				</div>
+			</a>
+		</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_30240677/article/details/51746388,BlogCommendFromQuerySearch_8"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_30240677/article/details/51746388,BlogCommendFromQuerySearch_8"}'>
+		<a href="https://blog.csdn.net/qq_30240677/article/details/51746388" target="_blank" title="java《<em>前世</em><em>今生</em>》">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						java《<em>前世</em><em>今生</em>》				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/C/B/5/3_qq_30240677.jpg" alt="qq_30240677" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_30240677</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">06-23</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1084</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							什么是java？
+
+早期oak就是java的前世，
+         &quot;今生提着刀，还你前世笑。来世未必能遇到。&quot;
+oak前期不算是编程语言，是传统的解释性，中间经过更新换代，期间也改过名，直...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/BtB5e6Nsu1g511Eg5XEg/article/details/80490950,BlogCommendFromQuerySearch_9"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/BtB5e6Nsu1g511Eg5XEg/article/details/80490950,BlogCommendFromQuerySearch_9"}'>
+		<a href="https://blog.csdn.net/BtB5e6Nsu1g511Eg5XEg/article/details/80490950" target="_blank" title="[图解] 芯片的<em>前世</em><em>今生</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						[图解] 芯片的<em>前世</em><em>今生</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/0/6/E/3_btb5e6nsu1g511eg5xeg.jpg" alt="BtB5e6Nsu1g511Eg5XEg" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">BtB5e6Nsu1g511Eg5XEg</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">05-29</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							207</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+  
+    
+                    
+
+                    
+
+                    
+                    
+     ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box type_hot_word">
+									<div class="content clearfix oneline">
+				<h5 class="float-left">相关热词</h5>
+				<div class="float-left">
+									<span>
+						<a href="https://blog.csdn.net/iiseeyou/article/details/80757715" target="_blank">
+						youtube</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/zuokanni/article/details/78727448" target="_blank">
+						youtube下</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/shenzhongkang/article/details/80316258" target="_blank">
+						看youtube</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/godloveluck/article/details/61926598" target="_blank">
+						爬youtube</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/zuokanni/article/details/78266319" target="_blank">
+						youtube上</a>
+					</span>
+								</div>
+			</div>
+					</div>
+	
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/jxq0816">
+                <img src="https://avatar.csdn.net/2/B/1/3_jxq0816.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/jxq0816" target="_blank" class="text-truncate" id="uid">姜兴琪</a>
+            </p>
+                        <p class="flag">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-blogexpert"></use>
+                </svg>
+                博客专家
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/jxq0816/article/details/81609191" target="_self">关注</a>
+                            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="515">
+                        <dt><a href="https://blog.csdn.net/jxq0816?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/jxq0816?t=1"><span class="count">515</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="186">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">186</span></dd>
+        </dl>
+        <dl class="text-center" title="557">
+            <dt>喜欢</dt>
+            <dd><span class="count">557</span></dd>
+        </dl>
+        <dl class="text-center" title="180">
+            <dt>评论</dt>
+            <dd><span class="count">180</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="7级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-7"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="911275">
+                91万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="12802">
+                1万+            </dd>
+        </dl>
+        <dl title="1577">
+            <dt>排名：</dt>
+            <dd>1577</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                <a class="icon-badge" title="专栏达人">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-columns"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item1">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-columns"></use>
+                        </svg>
+                        <p>专栏达人</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    </div>
+                </div>
+            </div> 
+        </a>  
+                        <a class="icon-badge" title="持之以恒">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-lasting"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item2">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-lasting"></use>
+                        </svg>
+                        <p>持之以恒</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予每个自然月内发布4篇或4篇以上原创或翻译IT博文的用户。不积跬步无以至千里，不积小流无以成江海，程序人生的精彩需要坚持不懈地积累！
+                    </div>
+                </div>
+            </div>
+        </a>
+                            </div>
+    </div>		    		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/jxq0816/article/details/82427017" target="_blank">K-Means聚类</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/jxq0816/article/details/82426626" target="_blank">机器学习算法</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/jxq0816/article/details/82321554" target="_blank">腾讯[编程题] 纸牌游戏</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/jxq0816/article/details/82317439" target="_blank">腾讯 [编程题] 翻转数列</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/jxq0816/article/details/82182210" target="_blank">Linux grep查找文件中的关键字</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <!--自定义模块-->
+<div id="asideCustom62455082" class="aside-box custom-box">
+    <h3 class="aside-title">欢迎关注</h3>
+    <div class="aside-content clearfix">
+        <a href="https://my.csdn.net/my/favorite">我的收藏</a>
+<img src="http://img.blog.csdn.net/20180213164802712" alt="微信公众号">
+<img src="https://img-blog.csdn.net/20180513160243701" alt="头条号">
+    </div>
+</div>
+		    <div id="asideColumn" class="aside-box">
+    <h3 class="aside-title">博主专栏</h3>
+    <div class="aside-content">
+        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/19599.html">
+                            <img src="//img-blog.csdn.net/20180816163223399?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/19599.html">机器学习</a></p>
+                        <div class="data">阅读量：<span>4779</span><span class="count">6 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/19669.html">
+                            <img src="//img-blog.csdn.net/20180829094324809?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/19669.html">THINKING IN JAVA</a></p>
+                        <div class="data">阅读量：<span>14105</span><span class="count">17 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/22156.html">
+                            <img src="//img-blog.csdn.net/column?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/22156.html">linux</a></p>
+                        <div class="data">阅读量：<span>22282</span><span class="count">22 篇</span></div>
+                    </div>
+                </li>
+                    </ul>
+    </div>
+    </div>
+		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7322654">
+                    Python                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1864943">
+                    Linux                    <span class="count float-right">23篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7310419">
+                    AI                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7960851">
+                    区块链                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1780253">
+                    Java                    <span class="count float-right">58篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/6368100">
+                    Java基础                    <span class="count float-right">22篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7565165">
+                    程序人生                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7294261">
+                    Hadoop                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7083344">
+                    Mac                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/5674515">
+                    Tools                    <span class="count float-right">35篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/6927237">
+                    MongoDB                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1923067">
+                    Mysql                    <span class="count float-right">21篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1855143">
+                    Sql server                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7213549">
+                    PHP                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7167679">
+                    Matlab                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/2016669">
+                    Android                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7288460">
+                    C#                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/2196231">
+                    C/C++                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7288504">
+                    IOS                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/5808587">
+                    Shiro                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1814089">
+                    Ajax                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1828479">
+                    Html/CSS                    <span class="count float-right">25篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7289082">
+                    JS/jQuery                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7289074">
+                    Angular                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/6261083">
+                    H5                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7299097">
+                    Dubbo                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7320044">
+                    Elasticsearch                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1804755">
+                    JavaEE                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7297708">
+                    Forecasting                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/7292852">
+                    正则表达式                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/2200099">
+                    软件测试                    <span class="count float-right">18篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/2904059">
+                    数据结构                    <span class="count float-right">44篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1840355">
+                    计算机组成原理                    <span class="count float-right">32篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/1840149">
+                    计算机网络                    <span class="count float-right">60篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/jxq0816/article/category/2855435">
+                    操作系统                    <span class="count float-right">43篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/jxq0816/article/details/81609191#comments">Youtube视频推荐算法的前世今生</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/sinat_42538764" class="user-name" target="_blank">sinat_42538764</a>：漫；                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/jxq0816/article/details/77248462#comments">MAC office2016 安装...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/abzxkill" class="user-name" target="_blank">abzxkill</a>：Office不需要破解的，破解容易出现闪退、崩溃现象，我们用苹果电脑的同事都在用，分享一下激活的地...                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/jxq0816/article/details/77248462#comments">MAC office2016 安装...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_43045476" class="user-name" target="_blank">qq_43045476</a>：谢谢大佬！！！！太感谢了！！！！                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/jxq0816/article/details/77248462#comments">MAC office2016 安装...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/u010752343" class="user-name" target="_blank">u010752343</a>：你6.18的留言说用一个网友分享的网站说弄成功了  怎么7.12又来这里说没破解？ 真不知道你是正...                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/jxq0816/article/details/50699420#comments">java 遍历某月的所有日期</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_39677441" class="user-name" target="_blank">qq_39677441</a>：你好，我实际跑了一遍，按照您写的代码，最后获取的 df 是上个月的，需要在获取的m后+1，或者在g...                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/09">
+                    2018年9月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/08">
+                    2018年8月                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/07">
+                    2018年7月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/06">
+                    2018年6月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/05">
+                    2018年5月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/04">
+                    2018年4月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/03">
+                    2018年3月                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/02">
+                    2018年2月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2018/01">
+                    2018年1月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/12">
+                    2017年12月                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/11">
+                    2017年11月                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/10">
+                    2017年10月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/09">
+                    2017年9月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/07">
+                    2017年7月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/06">
+                    2017年6月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/05">
+                    2017年5月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/04">
+                    2017年4月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/03">
+                    2017年3月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/02">
+                    2017年2月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2017/01">
+                    2017年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/10">
+                    2016年10月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/09">
+                    2016年9月                    <span class="count float-right">49篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/08">
+                    2016年8月                    <span class="count float-right">26篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/07">
+                    2016年7月                    <span class="count float-right">40篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/06">
+                    2016年6月                    <span class="count float-right">34篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/05">
+                    2016年5月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/04">
+                    2016年4月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/03">
+                    2016年3月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/02">
+                    2016年2月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2016/01">
+                    2016年1月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/12">
+                    2015年12月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/11">
+                    2015年11月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/10">
+                    2015年10月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/09">
+                    2015年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/08">
+                    2015年8月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/07">
+                    2015年7月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/06">
+                    2015年6月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/05">
+                    2015年5月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/03">
+                    2015年3月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/02">
+                    2015年2月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2015/01">
+                    2015年1月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2014/06">
+                    2014年6月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2014/05">
+                    2014年5月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2014/04">
+                    2014年4月                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2014/03">
+                    2014年3月                    <span class="count float-right">25篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2014/02">
+                    2014年2月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2014/01">
+                    2014年1月                    <span class="count float-right">53篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2013/12">
+                    2013年12月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/jxq0816/article/month/2013/11">
+                    2013年11月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/jxq0816/article/details/77248462">MAC office2016 安装及激活</a>
+					<p class="read">阅读量：<span>105226</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/jxq0816/article/details/20560253">Failed to start component [StandardEngine[Catalina].StandardHost[localhost].StandardContext</a>
+					<p class="read">阅读量：<span>47350</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/jxq0816/article/details/47720529">jQuery 实现 bootstrap 模态框 删除确认</a>
+					<p class="read">阅读量：<span>29864</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/jxq0816/article/details/23912517">软件测试之 控制流图 圈复杂度 独立路径 测试用例</a>
+					<p class="read">阅读量：<span>23784</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/jxq0816/article/details/43410747">js 验证用户名和密码是否为空</a>
+					<p class="read">阅读量：<span>17908</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		<div id="asideFooter">
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>8</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments long-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+						1				</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/jxq0816/article/details/81607994" title="逻辑回归">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+								<li class="">
+			<a class="btn-comments hover-box low-height" href="https://blog.csdn.net/jxq0816/article/details/81635996" title="Facebook 推荐算法">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-xiayiye"></use>
+				</svg>
+				<span class="hover-show text">下一篇</span>
+			</a>
+		</li>
+					</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "Youtube视频推荐算法的前世今生";
+    var ChannelId = 28;
+    var articleId = "81609191";
+    var commentscount = 1;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/jxq0816/article/details/81609191";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "";
+    var needInsertBaidu = true;
+    // 代码段样式
+    var codeStyle = 'atom-one-dark';
+    var highlight = ["youtube","\u89c6\u9891","\u63a8\u8350\u7b97\u6cd5","\u524d\u4e16","\u4eca\u751f"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"Youtube视频推荐算法的前世今生");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-9376486353.min.js"></script>
+</body>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+	<link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.3.1/ckeditor/plugins/chart/chart.css" />
+	<script type="text/javascript" src="https://csdnimg.cn/release/blog_editor_html/release1.3.1/ckeditor/plugins/chart/lib/chart.min.js"></script>
+	<script type="text/javascript" src="https://csdnimg.cn/release/blog_editor_html/release1.3.1/ckeditor/plugins/chart/widget2chart.js"></script>
+	<link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.3.1/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">
+	<script type="text/javascript" src="https://csdnimg.cn/release/phoenix/production/pc_wap_common-93244aa03c.js" /></script>
+
+	<script type="text/javascript">
+	$(function(){
+		var allEscRegex = /&(lt|gt|amp|quot|nbsp|shy|#\d{1,5});/g,
+		    namedEntities = {
+					lt: '<',
+					gt: '>',
+					amp: '&',
+					quot: '"',
+					nbsp: '\u00a0',
+					shy: '\u00ad'
+				}
+		var allEscDecode = function( match, code ) {
+				return namedEntities[ code ];
+		};
+		htmlDecodeAttr = function( text ) {
+				return text.replace( allEscRegex, allEscDecode );
+		}
+	  hljs.initHighlightingOnLoad();
+	  hljs.initCopyButtonOnLoad();
+	  hljs.initLineNumbersOnLoad();
+		if($('pre .language-plain').length>0){
+			$('pre .language-plain').each(function(i,e){
+				var highlightRe = hljs.highlightAuto(htmlDecodeAttr(e.innerHTML))
+				e.innerHTML = highlightRe.value;
+				e.className = 'language-'+highlightRe.language;
+			});
+		}
+	})
+	</script>
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>

@@ -1,0 +1,87 @@
+'''
+http://video.coral.qq.com/filmreviewr/c/upcomment/0dfpyvfa7tp0ewe?reqnum=2&
+callback=jQuery1124000008815636180292685_1536670749710&_=1536670749711
+
+http://video.coral.qq.com/filmreviewr/c/upcomment/0dfpyvfa7tp0ewe?
+commentid=6165885358242861936&reqnum=3&callback=jQuery112400000881563618
+0292685_1536670749710&_=1536670749765
+'''
+
+
+'''
+data=u'\u300a\u9752\u4e91\u5fd7\u300b\u4e2d\u5f20\u5c0f\u51e1\u7684\u611f\u60c5\u548c\u6027\u683c","abstract":"\u770b\u4e86\u8bdb\u4ed9\u7684\u4e66\u597d\u591a\u5e74\u4e86\uff0c\u56e0\u4e3a\u9752\u4e91\u5fd7\u8981\u64ad\uff0c\u524d\u6bb5\u65f6\u95f4\u628a\u4e66\u53c8\u770b\u4e86\u4e00\u904d\u3002\u4e00\u76f4\u8bb0\u5f97\u4e66\u4e2d\u90a3\u4e2a\u6ca1\u6709\u591a\u5c11\u8bdd\uff0c\u4f46\u662f\u7ed9\u4eba\u5b89\u5168\u611f\u7684\u7537\u4eba\u8270\u96be\u7684\u6210\u957f\u7ecf\u5386\u3002\u5bf9\u4e8e\u5c0f\u5c0f\u51e1\u548c\u5927\u5c0f\u51e1\u6211\u90fd\u5f88\u6ee1\u610f\uff0c\u8bf4\u8bf4\u5230\u73b0\u5728\u4e3a\u6b62\u611f\u53d7\u5230\u7684\u5c0f\u51e1\u7684\u611f\u60c5\u548c\u6027\u683c\u5427\uff01\u611f\u60c5\u65b9\u9762\u5bf9\u5e08\u7236\u5e08\u5a18\uff0c\u662f\u656c\u754f\u7684\u3002\u5c31\u60f3\u4ed6\u5e08\u7236\u5f62\u5bb9\u7684\uff0c\u4e00\u89c1\u4e86\u4ed6\u5c31\u50cf\u8001\u9f20\u89c1\u4e86\u732b\u3002\u5c31\u597d\u50cf\u5b66\u4e60\u4e0d\u597d\u7684\u5b66\u751f\u89c1\u4e86\u8001\u5e08\uff0c\u63a5\u53d7\u8001\u5e08\u6279\u8bc4\u7684\u65f6\u5019\u4f1a\u6127\u759a\u81ea\u8d23\uff0c\u8001\u5b9e\u70b9\u7684\u4e00\u822c\u4e0d\u4f1a\u8fd8\u5634\uff0c\u53ea\u4f1a\u9ed8\u9ed8\u7684\u542c\u7740\u3002\u65f6\u95f4\u4e45\u4e86\u5c31\u66f4\u4e0d\u6562\u548c\u8001\u5e08\u4ea4\u6d41\u4e86\uff0c\u6210\u4e86\u95f7\u846b\u82a6\u3002\u770b\u5230\u5e08\u7236\u8bad\u5c0f\u51e1...'
+# print(data)
+
+data1=u'<p>\u770b\u4e86\u8bdb\u4ed9\u7684\u4e66\u597d\u591a\u5e74\u4e86\uff0c\u56e0\u4e3a\u9752\u4e91\u5fd7\u8981\u64ad\uff0c\u524d\u6bb5\u65f6\u95f4\u628a\u4e66\u53c8\u770b\u4e86\u4e00\u904d\u3002\u4e00\u76f4\u8bb0\u5f97\u4e66\u4e2d\u90a3\u4e2a\u6ca1\u6709\u591a\u5c11\u8bdd\uff0c\u4f46\u662f\u7ed9\u4eba\u5b89\u5168\u611f\u7684\u7537\u4eba\u8270\u96be\u7684\u6210\u957f\u7ecf\u5386\u3002'
+print(data1)
+'''
+
+import re,os
+import urllib.request
+
+
+headers=("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36")
+opener=urllib.request.build_opener()
+opener.add_handle=[headers]
+for i in range(1, 2):
+    url=r'http://video.coral.qq.com/filmreviewr/c/upcomment/0dfpyvfa7tp0ewe?reqnum='+str(i)+'&callback=jQuery1124000008815636180292685_1536670749710&_=1536670749711'
+    data=urllib.request.urlopen(url).read().decode("utf-8")
+    pat=r'<p>(.*?)<'
+    review1=re.compile(pat).findall(data)
+    # print(len(review1))
+    for review in review1:
+        print(eval('u"'+review+""))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

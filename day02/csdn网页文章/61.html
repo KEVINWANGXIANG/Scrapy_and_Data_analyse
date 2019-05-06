@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/dog250/article/details/81256550"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="昨天下午跟同事讨论TCP挥手断开的细节，越发感到TCP协议真的是非常令人讨厌，这个协议已经成了人们装逼的谈资，就是因为它非常复杂，且毫无确定性可言！如果你能说出它的任何细节方面的前因后果，那你一定就是牛人了，但这其实毫无意义。
+
+如果你阅读TCP的诸多RFC，然后对比着4.4 BSD，Linux，Windows的实现，手边再放一本那被捧为圣经的《TCP/IP详解(卷1)》，你会发现太多类似下面的措..." />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>一个TCP FIN_WAIT2状态细节引发的感慨 - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-2eefd34acf.min.css">
+
+    <script type="text/javascript">
+        var username = "dog250";
+        var blog_address = "https://blog.csdn.net/dog250";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = false;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/dog250/article/details/81256550"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin-yellow";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/dog250">Netfilter,iptab...</a></span>
+			<i>></i>
+			<span>一个TCP FIN_WAIT2状态细节引发的感慨</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">一个TCP FIN_WAIT2状态细节引发的感慨</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年07月28日 08:14:15</span>
+						<span class="read-count">阅读数：12110</span>
+												
+																															</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+					版权声明：本文为博主原创，无版权，未经博主允许可以随意转载，无需注明出处，随意修改或保持可作为原创！					https://blog.csdn.net/dog250/article/details/81256550				</div>
+								            <div class="markdown_views">
+                <p>昨天下午跟同事讨论TCP挥手断开的细节，越发感到TCP协议真的是非常令人讨厌，这个协议已经成了人们装逼的谈资，就是因为它非常复杂，且毫无确定性可言！如果你能说出它的任何细节方面的前因后果，那你一定就是牛人了，但这其实毫无意义。</p>
+
+<p>如果你阅读TCP的诸多RFC，然后对比着4.4 BSD，Linux，Windows的实现，手边再放一本那被捧为圣经的《TCP/IP详解(卷1)》，你会发现太多类似下面的措辞： <br>
+XXX并没有严格规定YYY，但是ZZZ为了AAA是…并不明确SDJWFMCQ。。。 <br>
+OH！shit！</p>
+
+<hr>
+
+<p>我截一张TCP状态机的局部，来自RFC793[page 22]：<a href="https://tools.ietf.org/html/rfc793" rel="nofollow">https://tools.ietf.org/html/rfc793</a></p>
+
+<p><img src="https://img-blog.csdn.net/20180728060144279?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述" title=""></p>
+
+<p>这个图非常权威。我们注意到FINWAIT-2这个状态，它的转移条件只有一个，即收到对端的FIN，然后进入TIMEWAIT。</p>
+
+<p><strong><em>那么问题来了，如果对端死活不发送FIN，本端会一直待在FINWAIT-2状态吗？</em></strong></p>
+
+<p>按照TCP全双工的概念推论，答案显然是：</p>
+
+<ul>
+<li><font size="4"><strong>收到对端的FIN之前，本端会一直保持FINWAIT-2状态</strong></font></li>
+</ul>
+
+<p>这是合理的，也是符合TCP规范的，因为TCP是一个双向全双工的传输协议，本端发送FIN仅仅意味着本端到对端这个方向上的传输结束了，而对端到本端的传输依然可以继续，直到对端也发送一个FIN过来。所以说我们看到断开连接的挥手动作是4次，其实就是两个来回，每一个来回关闭一个方向的数据传输。</p>
+
+<p>非常完美的解释！非常完美的规范！</p>
+
+<p>但是，….TCP总是伴随着这么些烦人的<strong><em>但是</em></strong></p>
+
+<p>如果对端故意不发送FIN，且也不传输数据，那么意味着本端始终处在FINWAIT-2状态而资源无法释放，这不正是一个DDoS的典型场景吗？但是如果不这么做，也不符合TCP双向全双工独立控制的规范啊！</p>
+
+<p>是规范重要还是现实中的问题重要？</p>
+
+<p>我们仔细想想迄今为止有多少TCP连接时<strong><em>关闭一半</em></strong>的，即<strong><em>客户端始发方向关闭连接，而服务端依然在传输大量数据</em></strong>这种情形，似乎几乎是没有的。相反，几乎很多的C/S模式的TCP连接都是<strong><em>单向</em></strong>的，比如文件下载，至始至终，数据几乎都是从服务器往客户端发送，在最初的客户端请求文件结束后，事实上就相当于客户端始发方向的连接已经被关闭了！</p>
+
+<p>因此，为了实现双向全双工的语义，完全可以在应用层做，完全没有必要在挥手关闭连接的逻辑上照本宣科而较真儿，事实上，我认为，TCP当初这么设计就是错误的，至少是不合理的，除了增加了复杂性之外，毫无意义。也许吧，当初设计协议的都是学院派，始终保持着一种对<strong><em>完备性</em></strong>的笃信和追求，所以既然TCP取自<strong><em>传输控制</em></strong>之名，那么就必须完成<strong><em>传输与控制</em></strong>之完备性的逻辑，也许换个名字会好些吧。</p>
+
+<hr>
+
+<p>从Telnet，FTP，到Apache，Nginx，几乎所有的TCP服务的实现均遵循了<strong><em>收到客户端的FIN之后立即发送FIN</em></strong>这么一个不成文的事实，也就是说，对于主动关闭的一方，当它发送完FIN进入FINWAIT-2状态后，可以<strong><em>在预期的时间内收到对端的FIN从而进入TIMEWAIT状态</em></strong>，而且这个所谓的<strong><em>“预期的时间”</em></strong>不会太长，以秒计算吧，因此给定一个超时时间是明智的。</p>
+
+<p>因此，针对上面问题“如果对端死活不发送FIN，本端会一直待在FINWAIT-2状态吗？”的回答我把可能的答案罗列：</p>
+
+<ul>
+<li><font size="4"><strong>收到对端的FIN之前，本端会一直保持FINWAIT-2状态</strong></font>(<u>标准的要求</u>)</li>
+<li><font size="4"><strong>收到对端的FIN之前，本端会保持FINWAIT-2状态一段足够的时间，超过此时间，连接即释放</strong></font>(<u>现实的要求</u>)</li>
+</ul>
+
+<p>我们看到，历史选择了现实而摒弃了理想。Linux任意使用2.2内核以上的发行版，看tcp的manual，其中的：</p>
+
+<blockquote>
+  <p>tcp_fin_timeout (integer; default: 60; since Linux 2.2) <br>
+                This  specifies  how  many  seconds  to wait for a final FIN packet before the socket is forcibly closed.  <b><u>This is <br>
+                strictly a violation of the TCP specification</u></b>, but required to prevent denial-of-service attacks.  In  Linux  2.2, <br>
+                the default value was 180.</p>
+</blockquote>
+
+<hr>
+
+<p>现在FINWAIT-2为什么会有个超时时间的问题已经解释清楚了，接下来的问题是，<strong><em><font size="4">如果FINWAIT-2的timer超时了，这个TCP连接将何去何从？</font></em></strong></p>
+
+<hr>
+
+<p>我事先还真没有了解过实现的细节，但是按照我对这个问题理解的逻辑来讲，我认为timer到期后连接应该被销毁，顺便给对端发送一个reset。我之所以这么认为，我是这么想的。</p>
+
+<p>既然在预期的时间内对端没有发送FIN(<u>是的，FIN会丢失，但是TCP也会重传，另外，网线也可能被剪断</u>)，那么<strong><em>说明对端是“违约”的，至少是不符合常理的</em></strong>，对待不遵守游戏规则的，当然也不需要规则内的措施，直接释放连接是本端的原则，而发送reset则是针对对端“违约”的告知，就是想告诉对端“你违约了，明白吗？”…</p>
+
+<p>我和两位同事楼下抽根烟讨论了这个问题，一位同事持有不同意见，认为不会发送reset，事实证明他是对的，确实不会发送reset，我犯了<strong><em>与垃圾对话</em></strong>的错误。我一向秉承的就是<strong><em>针对我不感兴趣或者不想卷入的事情，我会保持沉默</em></strong>这个理念，如果TCP对端违约，按照这个理念，超时后把连接资源默默释放即可，不必再与之对话！我一直在家“教育”我的老婆和女儿，<strong><em>不与之交互，保持沉默</em></strong>是最好的策略….然而，我自己在一个系统设计问题上却犯了错误，不该！</p>
+
+<p>从社会工程学的角度来看，如果你只是为了说一句“你错了”，而发送一个reset，搞不好就会被绕进去，所以不理它就是了。我们都知道婴幼儿是社会工程学领域内的高手，因为他只要一哭闹，你总是会与之交互，然后你们一来二去的，婴幼儿的目的就达到了….不多说。</p>
+
+<hr>
+
+<p>好了，最后一个问题，<font size="4"><strong><em>在FINWAIT-2超时之后，连接还会进入TIMEWAIT状态吗？</em></strong></font></p>
+
+<hr>
+
+<p>我认为是不会的，连接会直接消失。但是一位同事通过代码确认了一个不同的意见，他认为在经历了FINWAIT-2之后，即FINWAIT-2的timer到期后，连接依然会进入到TIMEWAIT状态，其通过tcp_time_wait函数的调用路径可以确认，调用参数为：</p>
+
+<pre class="prettyprint"><code class="language-c hljs ">tcp_time_wait(sk, TCP_FIN_WAIT2, tmo);</code></pre>
+
+<p>我始终是持怀疑态度的，而且我也不善于撸代码，而且特别恶心的就是TCP的代码，代码总是有不确定的因此，一堆堆的if分支，不去实际run的话，也许你能讲清楚的那个分支反而是99%进不去的分支。</p>
+
+<p>所以我依然选择设计实验来验证。</p>
+
+<p>两台机器，一台作为Client，IP地址为192.168.44.138，另一个为侦听了22端口的Server，IP地址为192.168.44.111，好了，我在Client上配置以下的iptables规则，以阻止Server发送的FIN到达Client的TCP处理逻辑，以模拟对端永远不回复FIN导致FINWAIT-2到期的情形：</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">iptables -A INPUT <span class="hljs-operator">-s</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span> -p tcp --tcp-flags SYN,FIN,RST FIN -j DROP</code></pre>
+
+<p>接下来我把Client的fin_timeout设置短一些：</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">sysctl -w net.ipv4.tcp_fin_timeout=<span class="hljs-number">5</span>    </code></pre>
+
+<p>最后我在Client上发起一个连接并随即Ctrl-]+q关闭，以使一个TCP连接进入FINWAIT-2状态(<u>iptables规则会阻止对端的FIN，因此本端将进入FINWAIT-2而不是TIMEWAIT</u>)：</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">root@debian:/home/zhaoya<span class="hljs-comment"># telnet 192.168.44.111 22</span>
+Trying <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>...
+Connected to <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>.
+Escape character is <span class="hljs-string">'^]'</span>.
+SSH-<span class="hljs-number">2.0</span>-OpenSSH_7.<span class="hljs-number">4</span>
+^]
+telnet&gt; q
+Connection closed.
+root@debian:/home/zhaoya<span class="hljs-comment"># </span></code></pre>
+
+<p>迅速观察netstat：</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       ESTABLISHED <span class="hljs-number">96417</span>/telnet        
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       FIN_WAIT2   -                   
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       FIN_WAIT2   -                   
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       FIN_WAIT2   -                   
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       FIN_WAIT2   -                   
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       FIN_WAIT2   -                   
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">44.138</span>:<span class="hljs-number">53068</span>    <span class="hljs-number">192.168</span>.<span class="hljs-number">44.111</span>:<span class="hljs-number">22</span>       FIN_WAIT2   -                   
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span>
+root@debian:/home/zhaoya<span class="hljs-comment"># netstat -anpt|grep 111</span></code></pre>
+
+<p>大概5秒钟，连接灰飞烟灭，什么也没有剩下，连接并没有进入到TIMEWAIT，与此同时tcpdump抓包，也没有看到任何reset。实验很low，但是却说明了问题。</p>
+
+<hr>
+
+<p><font size="4"><strong><em>连接在FINWAIT-2超时后并不会进入TIMEWAIT状态，也不会发送reset，而是直接默默消失。</em></strong></font></p>
+
+<hr>
+
+<p>关于tcp_time_wait这个函数的代码，我就不撸了，TCP的代码非常恼人的。只说几个细节： <br>
+1. <u>只要调用tcp_time_wait，TCP连接状态就会变成TCP_TIME_WAIT；</u> <br>
+2. <u>如果以TCP_FIN_WAIT2参数调用tcp_time_wait，则TCP_FIN_WAIT2作为substate处理对端的FIN；</u> <br>
+3. <u>不管是TCP_FIN_WAIT2还是TCP_TIME_WAIT，均是将TCP连接从Establish哈希链表摘除，重新分配TW item链接进入哈希表。</u></p>
+
+<hr>
+
+<p>只要写关于TCP的任何东西，代码，文档，文章，测试case脚本，我都是感慨的，我想唱着歌爆粗，我想大笑，我又想摔电脑，不一而足。TCP是令人气愤的，TCP是过时的。</p>
+
+<ul>
+<li>TIMEWAIT太多的问题</li>
+<li>PAWS问题</li>
+<li>PAWS与NAT的问题</li>
+<li>Nagle问题</li>
+<li>Nagle与CORK问题</li>
+<li>同时打开，同时关闭问题</li>
+<li>Reno，CUBIC的问题</li>
+<li>慢启动，慢慢慢</li>
+<li>BBR the fXXking</li>
+<li>keepalive问题</li>
+<li>tcp repair问题</li>
+<li>滑动窗口问题</li>
+<li>….</li>
+<li>shit问题</li>
+</ul>
+
+<p>你知道TIMEWAIT持续多久吗？你真的知道吗？</p>
+
+<p>很多人会回答120秒，很多人会回答2MSL，很多人不知道什么是MSL，2MSL为什么是120秒而不是360秒，我要是说这是根据光速以及地球的周长算出来的你信吗？事实上确实是和地球周长有关的。如果是在火星上，TCP的TIMEWAIT超时值一定至少半小时。</p>
+
+<p>可是，对于Linux系统，上面的说法全是谎言，在Linux上，TIMEWAIT的定义是：</p>
+
+<pre class="prettyprint"><code class="language-c hljs "><span class="hljs-preprocessor">#define TCP_TIMEWAIT_LEN (60*HZ) /* how long to wait to destroy TIME-WAIT</span>
+                  * state, about <span class="hljs-number">60</span> seconds */</code></pre>
+
+<p>你不信吗？试试看呗，还是刚才那个Low逼实验，这次把iptables规则去掉，Ctrl-]+q之后，观察TIMEWAIT的时间，观察期间把你的Windows系统右下角的钟表打开，看看是不是60秒后TIMEWAIT连接就消失了。</p>
+
+<p>Why？为什么TCP的实现一而再地违反所谓的规范？到底有没有规范？到底什么是MUST的，什么是MAY的。</p>
+
+<hr>
+
+<p>我同样不喜欢HTTP，确切的说，是HTTP 1.x，同样的原因，它太松散了。请问HTTP的头部最长有多长？标准并没有明确的规定，读到\r\n\r\n为结束，但是Web服务器的实现却规定了。不然呢？不然一个恶意的客户端可以产生100T的头部，瞬间耗尽服务器的所有资源。</p>
+
+<p>所以我就很看好HTTP 2.0，它解决了这个问题。</p>
+
+<hr>
+
+<p>最后说说企业招聘和面试。</p>
+
+<p>懂TCP有什么了不起吗？并没有！可是TCP几乎是各家必考的内容，令人不解的是，其实很多面试官也不懂，一群不懂TCP的人招了另一群不懂TCP的人，这并不耽误所有的人持续跪舔TCP！</p>
+
+<p>诚然，如今互联网大行其道，一个送外卖的公司都能上万人的规模，个个拿着高薪，过着小康生活，有车有房有烧烤，有啤酒有脂肪肝，这其中有TCP的功劳，毕竟我们如今的服务器几乎90%+都是基于TCP的，这意味着90%+以上的人必须和TCP打交道，当你去应聘互联网公司的技术岗时，你可以不懂快排，你可以不懂数据库，但你不能不知道TCP。这就是现实！</p>
+
+<p>精不精通不重要，懂就行，TCP是行话，大家一说TCP就知道都在一个坑里找食的，这就像喝威士忌，你再能喝也没用，你得会说“纯饮”，“水割”，你得能扯橡木桶，这就像血色浪漫里关于高尔夫的言论，对于上流社会的人，你可以不喜欢高尔夫，但你不能不会…</p>
+
+<p>我从2004年第一次知道3次握手，一直到昨天跟Google的人聊TCP BBR 2.0一个细节的数学推导，06年底参加工作到现在从业十几年了，面试过太多的公司，对TCP三次握手倒背如流，以至于从2010年开始当有人让我笔试TCP相关的题目时，我要么借口有事走人，要么就直接写下两个字“口述”，这种事我能扯一整夜，只要你买单烧烤和酒，咱就找个大排档单练。对了，我不喝啤酒，白酒，伏特加，咖啡，奶茶和果汁，我只喝烧酒，清酒，黄酒，威士忌，白兰地，特浓柠檬汁，或者纯净水。</p>
+
+<p>很多次，若不是我急于用钱有求于人，我可能也会像徐晓冬那般跟面试官来个关于TCP的现场PK，然后爆料这些都是假的。唉…</p>
+
+<p>IP层的东西难道不重要吗？</p>
+
+<p>上个月轮到我值班，有人碰到一个问题，说是在一台机器上确认TCP的init cwnd就是10，然而一个进程发包的时候只能发出去1个包，问我这是怎么回事。我犯了一个错误，我把这个问题搁置了，我觉得这不是一个<strong><em>有难度，且好玩</em></strong>的问题，再说当时还有更加紧急的问题，所以我三言两语敷衍提问者，说什么你这是在虚拟机环境，而虚拟机涉及到不可控的调度….说的我自己都信了。</p>
+
+<p>过了好几天，那人的问题还没解决，并且已经严重影响了业务，再次问我，态度已经不是很好了，如果不给一个明确地说法，感觉像要投诉我的样子。闲来无事就帮他看看吧，其实我宁可去排查100个Bridge，bonding的问题，也不想沾染TCP…你们知道我是怎么在1秒内解决问题的吗？</p>
+
+<p>因为我精通IP层的逻辑啊，因为我精通iproute2的使用啊，我让他赶紧ip route ls tab all，结果发现了一条路由：</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">..... initcwnd <span class="hljs-number">1</span></code></pre>
+
+<p>这不就是问题的根源吗？很多人不知道initcwnd还能针对路由来指定。不知道吧，哈哈，你也许你知道，但你知道这是为什么吗？</p>
+
+<p>什么是路由？TCP是不管路由的。但是TCP的拥塞控制却完全离不开路由。我们都知道，一条路和另一条路的拥塞程度是完全不同的，IP层的路由正是基于这个拥塞程度的不同，想办法用参数告诉你，哪条路更好走一些，仅此而已。悲哀的是，端到端的TCP并没有<strong><em>“路”</em></strong>的概念！</p>
+
+<p>关于select，poll，epoll我就不多说了。</p>
+
+<hr>
+
+<p>TCP没有意思，真的没有意思，也许，真的是时候关注一下QUIC了，顺便说一句，BBR在TCP上的实现是一个半吊子实现，在QUIC上的实现才是完整的，虽然QUIC还不甚完美，但也不要先入为主地去捧TCP而唱衰QUIC。QUIC99次行1次不行就会被你们记录在案，而对于TCP，你们只是自然主观的屏蔽掉了你们不想看到的结果，而已。</p>
+
+<p>不多说。</p>            </div>
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/dog250/article/details/81256550,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/dog250/article/details/81256550,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/dog250/article/details/81256550,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/dog250/article/details/81256550,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+                <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/dog250/article/details/81256550#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/moshenglv/article/details/52085067,BlogCommendFromBaidu_0"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/moshenglv/article/details/52085067,BlogCommendFromBaidu_0"}'>
+		<a href="https://blog.csdn.net/moshenglv/article/details/52085067" target="_blank" title="【<em>TCP</em>】<em>TCP</em>的<em>状态</em> (SYN, FIN, ACK, PSH, RST, URG)-与三次握手">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						【<em>TCP</em>】<em>TCP</em>的<em>状态</em> (SYN, FIN, ACK, PSH, RST, URG)-与三次握手				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/1/1/6/3_moshenglv.jpg" alt="moshenglv" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">moshenglv</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-01</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							3690</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							在TCP层，有个FLAGS字段，这个字段有以下几个标识：SYN, FIN, ACK, PSH, RST, URG.
+
+其中，对于我们日常的分析有用的就是前面的五个字段。
+
+ 它们的含义是：
+...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/kkgbn/article/details/77859881,BlogCommendFromBaidu_1"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/kkgbn/article/details/77859881,BlogCommendFromBaidu_1"}'>
+		<a href="https://blog.csdn.net/kkgbn/article/details/77859881" target="_blank" title="深入理解<em>TCP</em>(2)<em>TCP</em>的断开一定是四次挥手吗?FIN_WAIT_2和CLOSE_WAIT，TIME_WAIT以及LAST_ACK的<em>细节</em>">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						深入理解<em>TCP</em>(2)<em>TCP</em>的断开一定是四次挥手吗?FIN_WAIT_2和CLOSE_WAIT，TIME_WAIT以及LAST_ACK的<em>细节</em>				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/E/4/E/3_kkgbn.jpg" alt="kkgbn" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">kkgbn</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">09-05</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2403</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							答案是否定的 
+我们回顾下使用wireshark的抓包1. 服务器未开 客户端尝试连接2. 建立连接然后关闭，三次握手3/4次挥手, 
+3. 建立连接，交互一次然后断开，三次握手3次挥手根据wires...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/sinat_36629696/article/details/80740678,BlogCommendFromBaidu_2"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/sinat_36629696/article/details/80740678,BlogCommendFromBaidu_2"}'>
+		<a href="https://blog.csdn.net/sinat_36629696/article/details/80740678" target="_blank" title="<em>TCP</em> 详解">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>TCP</em> 详解				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/B/6/6/3_sinat_36629696.jpg" alt="sinat_36629696" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">sinat_36629696</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">06-20</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2328</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							上回说到 UDP 协议, 与之对应的便是 TCP 协议
+
+TCP协议
+
+TCP协议全称: 传输控制协议, 顾名思义, 就是要对数据的传输进行一定的控制. 
+先来看看它的报头 
+
+
+我们来分析分析每部分...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/xxx9001/article/details/52344201,BlogCommendFromBaidu_3"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/xxx9001/article/details/52344201,BlogCommendFromBaidu_3"}'>
+		<a href="https://blog.csdn.net/xxx9001/article/details/52344201" target="_blank" title="<em>tcp</em>参数详解之<em>tcp</em>_fin_timeout">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>tcp</em>参数详解之<em>tcp</em>_fin_timeout				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/8/8/E/3_xxx9001.jpg" alt="xxx9001" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">xxx9001</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-28</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1133</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							tcp_fin_timeout ：INTEGER
+默认值是 60
+对于本端断开的socket连接，TCP保持在FIN_WAIT_2状态的时间。对方可能会断开连接或一直不结束连接或不可预料的进程死亡。默...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/zhangxinrun/article/details/51123458,BlogCommendFromBaidu_4"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/zhangxinrun/article/details/51123458,BlogCommendFromBaidu_4"}'>
+		<a href="https://blog.csdn.net/zhangxinrun/article/details/51123458" target="_blank" title="<em>TCP</em>连接关闭时不发FIN包的奇怪行为分析">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>TCP</em>连接关闭时不发FIN包的奇怪行为分析				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/2/5/2/3_zhangxinrun.jpg" alt="zhangxinrun" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">zhangxinrun</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-11</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2211</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							转载：http://blog.chinaunix.net/uid-10106787-id-3172066.html
+
+
+
+
+一般情况下，当TCP连接主动关闭时，会向对端发送一个FIN，对端会...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/dyzhen/article/details/45065319,BlogCommendFromBaidu_5"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/dyzhen/article/details/45065319,BlogCommendFromBaidu_5"}'>
+		<a href="https://blog.csdn.net/dyzhen/article/details/45065319" target="_blank" title="<em>TCP</em>——SYN、ACK、FIN、RST、PSH、URG详解">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>TCP</em>——SYN、ACK、FIN、RST、PSH、URG详解				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/3/6/A/3_dyzhen.jpg" alt="dyzhen" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">dyzhen</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-15</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							4350</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							三次握手Three-way Handshake  
+ 
+一个虚拟连接的建立是通过三次握手来实现的  
+ 
+1. (B) --&gt; [SYN] --&gt; (A)  
+ 
+假如服务器A和客户机B通讯. 当A要...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yangguosb/article/details/79224872,BlogCommendFromBaidu_6"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yangguosb/article/details/79224872,BlogCommendFromBaidu_6"}'>
+		<a href="https://blog.csdn.net/yangguosb/article/details/79224872" target="_blank" title="<em>TCP</em>协议之RST与FIN">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>TCP</em>协议之RST与FIN				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/5/3/D/3_yangguosb.jpg" alt="yangguosb" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">yangguosb</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">02-01</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							298</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							FIN　　如下图所示，FIN表示正常关闭连接，没有数据丢失，缓冲区所有数据包都发送完成才会发送FIN包，这与RST不同。 
+RST　　RST表示复位，用来异常的关闭连接，在TCP的设计中它是不可或缺的...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/wxl1986622/article/details/69449742,BlogCommendFromBaidu_7"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/wxl1986622/article/details/69449742,BlogCommendFromBaidu_7"}'>
+		<a href="https://blog.csdn.net/wxl1986622/article/details/69449742" target="_blank" title="<em>TCP</em>_FIN_WAIT1可以等多久">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>TCP</em>_FIN_WAIT1可以等多久				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/C/2/A/3_wxl1986622.jpg" alt="wxl1986622" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">wxl1986622</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-06</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							889</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							TCP_FIN_WAIT1可以等多久  
+
+2016-01-26 20:34:28|  分类： 计算机网络|举报|字号 订阅
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yishui8181/article/details/7969416,searchFromBaidu_8"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yishui8181/article/details/7969416,searchFromBaidu_8"}'>
+		<a href="https://blog.csdn.net/yishui8181/article/details/7969416" target="_blank" title="<em>TCP</em>链接主动关闭不发fin包奇怪行为分析">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>TCP</em>链接主动关闭不发fin包奇怪行为分析				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/D/7/7/3_yishui8181.jpg" alt="yishui8181" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">yishui8181</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">09-12</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							765</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							TCP链接主动关闭不发fin包奇怪行为分析
+
+问题描述：
+多隆同学在做网络框架的时候，发现一条tcp链接在close的时候，对端会收到econnrest,而不是正常的fin包.  通过抓包发现c...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/tuantuanlin/article/details/17422705,searchFromBaidu_9"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/tuantuanlin/article/details/17422705,searchFromBaidu_9"}'>
+		<a href="https://blog.csdn.net/tuantuanlin/article/details/17422705" target="_blank" title="linux下端口扫描的实现(<em>TCP</em> connect、<em>TCP</em> SYN、<em>TCP</em> FIN、UDP四种方式)1 原理篇">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						linux下端口扫描的实现(<em>TCP</em> connect、<em>TCP</em> SYN、<em>TCP</em> FIN、UDP四种方式)1 原理篇				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/A/1/4/3_tuantuanlin.jpg" alt="tuantuanlin" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">tuantuanlin</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-19</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							6765</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							常用的端口扫描方式有以下三种：
+1.connect扫描
+我们知道，常见的TCP的socket实现过程为
+更本质的连接和结束的过程是如下这个样子的：
+
+
+从上面两个图我们可以看出来目标主机的一个端口如果...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box type_hot_word">
+									<div class="content clearfix oneline">
+				<h5 class="float-left">相关热词</h5>
+				<div class="float-left">
+									<span>
+						<a href="https://blog.csdn.net/hj960511/article/details/51279542" target="_blank">
+						一个页面一个表单</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/tc_xingdechen/article/details/61937358" target="_blank">
+						一个线程一个并发</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/XIANG__jiangsu/article/details/71516646" target="_blank">
+						一个消息一个协程</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/xinshishenchao/article/details/54425057" target="_blank">
+						一个汉字一个字节</a>
+					</span>
+									<span>
+						<a href="https://blog.csdn.net/xiao_huocai/article/details/75571138" target="_blank">
+						一个月前一个月后</a>
+					</span>
+								</div>
+			</div>
+					</div>
+	
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/dog250">
+                <img src="https://avatar.csdn.net/B/A/B/3_dog250.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/dog250" target="_blank" class="text-truncate" id="uid">dog250</a>
+            </p>
+                        <p class="flag">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-blogexpert"></use>
+                </svg>
+                博客专家
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/dog250/article/details/81256550" target="_self">关注</a>
+                            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="1505">
+                        <dt><a href="https://blog.csdn.net/dog250?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/dog250?t=1"><span class="count">1505</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="6853">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">6853</span></dd>
+        </dl>
+        <dl class="text-center" title="1857">
+            <dt>喜欢</dt>
+            <dd><span class="count">1857</span></dd>
+        </dl>
+        <dl class="text-center" title="3464">
+            <dt>评论</dt>
+            <dd><span class="count">3464</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="10级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-10"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="8890710">
+                889万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="100994">
+                10万+            </dd>
+        </dl>
+        <dl title="13">
+            <dt>排名：</dt>
+            <dd>13</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                        <a class="icon-badge" title="持之以恒">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-lasting"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item2">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-lasting"></use>
+                        </svg>
+                        <p>持之以恒</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予每个自然月内发布4篇或4篇以上原创或翻译IT博文的用户。不积跬步无以至千里，不积小流无以成江海，程序人生的精彩需要坚持不懈地积累！
+                    </div>
+                </div>
+            </div>
+        </a>
+                            </div>
+    </div>		    		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/dog250/article/details/82177299" target="_blank">当我们说&quot;TCP是可靠协议&quot;时，我们真正表达的是什么</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/dog250/article/details/81973915" target="_blank">现代互联网的TCP拥塞控制(CC)算法评谈</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/dog250/article/details/81834863" target="_blank">TCP FIN_WAIT1状态的实验和验收</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/dog250/article/details/81834855" target="_blank">总结一幅TCP/QUIC拥塞控制(CC)算法的图示</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/dog250/article/details/81697403" target="_blank">TCP在FIN_WAIT1状态到底能持续多久以及TCP假连接问题</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/495855">
+                    linux内核                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/495857">
+                    linux系统                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/510671">
+                    帖子收藏                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/510669">
+                    帖子收藏                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/473098">
+                    思想者                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/495862">
+                    数学和算法                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/476477">
+                    杂感                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/495863">
+                    系统设计                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/dog250/article/category/6217757">
+                    linux tcp                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/09">
+                    2018年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/08">
+                    2018年8月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/07">
+                    2018年7月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/06">
+                    2018年6月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/05">
+                    2018年5月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/04">
+                    2018年4月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/03">
+                    2018年3月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/02">
+                    2018年2月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2018/01">
+                    2018年1月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/12">
+                    2017年12月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/11">
+                    2017年11月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/10">
+                    2017年10月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/09">
+                    2017年9月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/07">
+                    2017年7月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/06">
+                    2017年6月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/05">
+                    2017年5月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/04">
+                    2017年4月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/03">
+                    2017年3月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/02">
+                    2017年2月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2017/01">
+                    2017年1月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/12">
+                    2016年12月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/11">
+                    2016年11月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/10">
+                    2016年10月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/09">
+                    2016年9月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/08">
+                    2016年8月                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/07">
+                    2016年7月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/06">
+                    2016年6月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/05">
+                    2016年5月                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/04">
+                    2016年4月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/03">
+                    2016年3月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/02">
+                    2016年2月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2016/01">
+                    2016年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/11">
+                    2015年11月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/09">
+                    2015年9月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/08">
+                    2015年8月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/07">
+                    2015年7月                    <span class="count float-right">22篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/06">
+                    2015年6月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/05">
+                    2015年5月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/04">
+                    2015年4月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/03">
+                    2015年3月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/02">
+                    2015年2月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2015/01">
+                    2015年1月                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/12">
+                    2014年12月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/11">
+                    2014年11月                    <span class="count float-right">21篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/10">
+                    2014年10月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/09">
+                    2014年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/08">
+                    2014年8月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/07">
+                    2014年7月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/06">
+                    2014年6月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/05">
+                    2014年5月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/04">
+                    2014年4月                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/03">
+                    2014年3月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/02">
+                    2014年2月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2014/01">
+                    2014年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/12">
+                    2013年12月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/11">
+                    2013年11月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/10">
+                    2013年10月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/09">
+                    2013年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/08">
+                    2013年8月                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/07">
+                    2013年7月                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/06">
+                    2013年6月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/05">
+                    2013年5月                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/04">
+                    2013年4月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/03">
+                    2013年3月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/02">
+                    2013年2月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2013/01">
+                    2013年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/12">
+                    2012年12月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/11">
+                    2012年11月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/10">
+                    2012年10月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/09">
+                    2012年9月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/08">
+                    2012年8月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/07">
+                    2012年7月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/06">
+                    2012年6月                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/05">
+                    2012年5月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/04">
+                    2012年4月                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/03">
+                    2012年3月                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/02">
+                    2012年2月                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2012/01">
+                    2012年1月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/12">
+                    2011年12月                    <span class="count float-right">22篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/11">
+                    2011年11月                    <span class="count float-right">25篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/10">
+                    2011年10月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/09">
+                    2011年9月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/08">
+                    2011年8月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/07">
+                    2011年7月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/06">
+                    2011年6月                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/05">
+                    2011年5月                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/04">
+                    2011年4月                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/03">
+                    2011年3月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/02">
+                    2011年2月                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2011/01">
+                    2011年1月                    <span class="count float-right">29篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/12">
+                    2010年12月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/11">
+                    2010年11月                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/10">
+                    2010年10月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/09">
+                    2010年9月                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/08">
+                    2010年8月                    <span class="count float-right">28篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/07">
+                    2010年7月                    <span class="count float-right">26篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/06">
+                    2010年6月                    <span class="count float-right">28篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/05">
+                    2010年5月                    <span class="count float-right">27篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/04">
+                    2010年4月                    <span class="count float-right">39篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/03">
+                    2010年3月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2010/02">
+                    2010年2月                    <span class="count float-right">414篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2009/11">
+                    2009年11月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/dog250/article/month/2009/02">
+                    2009年2月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/dog250/article/details/24552307">令人作呕的OpenSSL</a>
+					<p class="read">阅读量：<span>114172</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/dog250/article/details/6612496">TCP协议疑难杂症全景解析</a>
+					<p class="read">阅读量：<span>72756</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/dog250/article/details/9529927">OpenVPN莫名其妙断线的问题及其解决</a>
+					<p class="read">阅读量：<span>66767</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/dog250/article/details/52830576">来自Google的TCP BBR拥塞控制算法解析</a>
+					<p class="read">阅读量：<span>62769</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/dog250/article/details/5303542">从ip addr add和ifconfig的区别看linux网卡ip地址的结构</a>
+					<p class="read">阅读量：<span>55539</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/dog250/article/details/81834855#comments">总结一幅TCP/QUIC拥塞控制(...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/jinjia_xy" class="user-name" target="_blank">jinjia_xy</a>：近几年学术届出了不少将AI引入传输控制的文章，不知博主是否关注？                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/dog250/article/details/82177299#comments">当我们说&quot;TCP是可靠协...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/stpeace" class="user-name" target="_blank">stpeace</a>：[reply]sunrainchy[/reply]
+温州皮鞋不写博客                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/dog250/article/details/80935534#comments">QUIC协议是如何做到0RTT加密...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/x356982611" class="user-name" target="_blank">x356982611</a>：说半天tcp不好，但现在还没出现压倒性优势取代tcp的协议。                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/dog250/article/details/82177299#comments">当我们说&quot;TCP是可靠协...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/wllenyj" class="user-name" target="_blank">wllenyj</a>：[reply]stpeace[/reply]
+又来了一位大神                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/dog250/article/details/82177299#comments">当我们说&quot;TCP是可靠协...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/jaydonLuo" class="user-name" target="_blank">jaydonLuo</a>：虽然看不懂，但是觉得很厉害                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		<div id="asideFooter">
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>8</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments long-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+						5				</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/dog250/article/details/81151687" title="从2-3树到红黑树，B/B+/B*树，唉！">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+								<li class="">
+			<a class="btn-comments hover-box low-height" href="https://blog.csdn.net/dog250/article/details/81257271" title="知乎上的一个问题，TCP in TCP隧道为什么不好">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-xiayiye"></use>
+				</svg>
+				<span class="hover-show text">下一篇</span>
+			</a>
+		</li>
+					</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "一个TCP FIN_WAIT2状态细节引发的感慨";
+    var ChannelId = 12;
+    var articleId = "81256550";
+    var commentscount = 5;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/dog250/article/details/81256550";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "server+%E7%AB%AF%E4%B8%8D%E5%9B%9E%E5%A4%8Dfin";
+    var needInsertBaidu = false;
+    // 代码段样式
+    var codeStyle = '';
+    var highlight = ["\u4e00\u4e2a","tcp","fin_wait2","\u72b6\u6001","\u7ec6\u8282","\u5f15\u53d1","\u611f\u6168"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"一个TCP FIN_WAIT2状态细节引发的感慨");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-9376486353.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=server+%E7%AB%AF%E4%B8%8D%E5%9B%9E%E5%A4%8Dfin"  type="text/javascript"></script>
+</body>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>

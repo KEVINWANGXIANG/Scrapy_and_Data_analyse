@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/googdev/article/details/81386137"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="最近大家的朋友圈相信已经被产品经理和程序员打架的视频刷屏了，据传，事情是这样的：一个产品经理给研发提出一个产品需求，要求 app 的主题颜色可以随着用户手机壳颜色改变而变化。
+
+然后就干起来了，于是，大家就看到了打架的视频。
+
+最后俩人双双被开除。离职的时候，一人越想越气，又干了一架。。。
+
+有人甚至脑补了当时的对话场景：
+
+
+
+很明显，打架是真，但是原因不是据传的这样，只不过被编成段子疯传了，但..." />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <script src="https://csdnimg.cn/release/phoenix/vendor/tingyun/tingyun-rum-blog.js"></script>
+
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>其实，我是靠怼产品上位的。。。 - CSDN博客</title>
+
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-1285c05898.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9b39979775.min.css">
+
+    <script type="text/javascript">
+        var username = "googdev";
+        var blog_address = "https://blog.csdn.net/googdev";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = "";
+        var isShowAds = false;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/googdev/article/details/81386137"
+        var blogUrl = "https://blog.csdn.net/";
+        //页面皮肤样式
+        var curSkin = "skin3-template";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
+    <!-- 新版上报 -->
+    <script src="//g.csdnimg.cn/track/1.1.1/track.js" type="text/javascript"></script>
+    <!-- 新版上报end -->
+            <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/chart-3456820cac.css" />
+
+
+
+<script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix" id="mainBox">
+		<!-- <div id="breadcrumbs">
+			<span><a href="https://blog.csdn.net/">博客首页</a></span>
+			<i>></i>
+			<span><a href="https://blog.csdn.net/googdev">stormzhang的专栏...</a></span>
+			<i>></i>
+			<span>其实，我是靠怼产品上位的。。。</span>
+		</div> -->
+    <main>
+        <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">其实，我是靠怼产品上位的。。。</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																				<span class="time">2018年08月03日 13:42:34</span>
+						<span class="read-count">阅读数：12758</span>
+												
+																															</div>
+				<div class="operating">
+														</div>
+			</div>
+			
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+					版权声明：本文原创发布于公众号 stormzhang，转载请务必注明出处！					https://blog.csdn.net/googdev/article/details/81386137				</div>
+								            <div class="markdown_views">
+                <p>最近大家的朋友圈相信已经被产品经理和程序员打架的视频刷屏了，据传，事情是这样的：一个产品经理给研发提出一个产品需求，要求 app 的主题颜色可以随着用户手机壳颜色改变而变化。</p>
+
+<p>然后就干起来了，于是，大家就看到了打架的视频。</p>
+
+<p>最后俩人双双被开除。离职的时候，一人越想越气，又干了一架。。。</p>
+
+<p>有人甚至脑补了当时的对话场景：</p>
+
+<p><img src="https://img-blog.csdn.net/20180803134115849?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dvb2dkZXY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述" title=""></p>
+
+<p>很明显，打架是真，但是原因不是据传的这样，只不过被编成段子疯传了，但足以反应产品经理和程序员的矛盾之深。</p>
+
+<p>我的身份比较特殊，我是程序员转型产品的，所以对产品经理和程序员之间的矛盾深有感触，即使是最厉害的程序员和最厉害的产品经理一起共事，也难免会有冲突。</p>
+
+<p>其实本质上是产品经理和程序员思考问题的方式完全不同，产品经理更多的是从用户出发，从战略出发，而且绝大部分产品经理对技术一无所知，所以有时候会提出一些天方夜谭的想法，这在技术人眼里就被认为想法飘飘然，俗称傻逼。</p>
+
+<p>而技术人呢，思考问题从来都是习惯于单纯的从技术角度考虑问题，尤其技术人大多有些对代码的偏执，这在产品经理眼里，可能就被认为说不懂用户，不懂商业，只懂闷头写代码，所以彼此之间互相看不上太正常了。</p>
+
+<p>所以，解决彼此之间的矛盾最好的方法是，产品经理能懂点技术，技术人呢也能稍微有点产品思维，这样会极大的避免双方出现矛盾的可能，也都能很容易的理解对方的心理。</p>
+
+<p>有意思的是，前几天我刚发了一条朋友圈，没想到这两天产品经理和程序员的事就被刷屏了，有点太巧了也。</p>
+
+<p><img src="https://img-blog.csdn.net/20180803134127654?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dvb2dkZXY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述" title=""></p>
+
+<p>其实，之前有人问过我说，我是怎么从一个程序员转型产品的？说实话，我转型产品的经历着实有点特殊，说靠怼产品上位的真心不过分。</p>
+
+<p>我所在团队以前的产品经理，特别喜欢提一些稀奇古怪的想法，而且经常变来变去，需求的变化特别频繁，最夸张的时候一天一变，其他程序员虽然默默忍受，但私下里都骂他傻逼。我就不一样，我不默默忍受，当然，咱是文化人，不能说一言不合就动手，我想着能跟产品沟通，想说服他。</p>
+
+<p>可是后来发现，我想多了，因为每次你跟他沟通的时候，他都能讲出一大堆理由，而且故意跟你谈一堆高大上的概念与词汇，比如反问你，你懂用户么？你了解用户心理么？你做过用户行为分析么？你懂商业模式么？你做过用户调研么？你懂公司大的战略么？你懂痛点、爽点、同理心么。。。</p>
+
+<p>真的，每次试图想说服他，都被一堆高大上的概念怼回来了，但是我不放弃，每次他提到的一些点，我回去就特么偷偷补习，长此以往，下次继续跟他沟通，终于有一次他被我搞的有点不耐烦了，来了一句：你是产品经理我是产品经理？你行，你上！</p>
+
+<p>当然，我们这位产品经理人品是没问题的，不过是当时被怼烦了，来了一句气话。但是我当时当真了，让我上，我特么还真的准备上。</p>
+
+<p>自此，在做技术的同时，不断的学习产品相关的知识，公司里有讨论产品的时候，都第一时间表达自己的想法，积极参与产品。终于有一天，我真的上位了。</p>
+
+<p>现在，我是整个公司核心产品的第一负责人，说句实话，真得感谢当初怼产品经理的那段时光，不过我所谓的怼并不是无理取闹，我都是讲道理、摆事实的。</p>
+
+<p>因为我做过技术与产品，所以我们在做产品规划的时候，都第一时间跟所有工程师们一起沟通，希望每个工程师不只是单纯的写代码的机器，希望我们的每个工程师都可以参与产品，都可以具备一定的产品思维，这样我们每次沟通需求非常顺畅。</p>
+
+<p>所以，我一直在公号说过，技术人，有点产品思维很重要，甚至人人都该具备一点产品思维，不见得你一定要从事产品经理的岗位，但是具备产品思维会打开你的思维，你看待问题的方式都会变化。从我接触过的技术人中，绝大部分技术人都缺乏产品思维。</p>
+
+<p>假设，真有产品经理提出「要求 app 的主题颜色可以随着用户手机壳颜色改变而变化」的需求，你该怎么办？</p>
+
+<p>绝大部分技术人第一时间想的是，什么？傻逼吧你？怎么可能？老子不干了。。。</p>
+
+<p>其实，你稍微换个思路，稍微懂点产品思维，你就会知道，用户是小白，做产品的尽量少让用户做选择是对的，但是用户不是傻子，他们有选择的能力，你去电商 app 上买个衣服还知道选颜色、尺码呢。</p>
+
+<p>所以，想实现这个需求很简单，第一步 App 支持内置的各种主题色，第二步很简单，直接让用户选择主题色就是了。别说用户做不到，只要不是傻子，真对 App 主题色感兴趣的，让他们做这一步完全没任何负担。</p>
+
+<p>有人说了，产品需求要求的是「自动」？</p>
+
+<p>这时候再仔细回去看下上面的需求，根本没提到「自动」俩字，只不过技术人默认就想到了自动而已。</p>
+
+<p>退一步，如果产品真要自动怎么办？如果你懂产品思维只需要用产品思维去解释问题。比如，用户换手机壳，以及根据手机壳来适配主题色都属于低频行为，对于这类低频行为，让用户自主选择丝毫不会对用户体验有什么影响，而且是用最少开发资源，实现最简单的方式。</p>
+
+<p>如果你第一时间想着，什么脑电波啊，什么根据瞳孔反光，图像识别之类的，这是典型的技术思维，很多时候我们需要跳出这种知识的诅咒。</p>
+
+<p>如果产品经理最终依然执意要实现自动的，怎么办？</p>
+
+<p>很简单，对于这种傻逼产品经理，直接打，记得叫上程序员队友一起打，打完之后记得在桌子上放把菜刀。。。。</p>
+
+<p><strong>本文原创发布于微信公众号「stormzhang」，欢迎关注获取更多好文，关注并回复关键字「1024」免费获取 15 本程序员经典电子书大礼包</strong></p>            </div>
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                </div>
+				<div class="hide-article-box text-center">
+			<a class="btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/googdev/article/details/81386137,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/googdev/article/details/81386137,"}'>阅读更多</a>
+			<a class="btn" href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_more_login" target="_self" id="btn-lobinreadmore" data-track-view='{"mod":"popu_557","con":",https://blog.csdn.net/googdev/article/details/81386137,"}' data-track-click='{"mod":"popu_557","con":",https://blog.csdn.net/googdev/article/details/81386137,"}'>登录后自动展开</a>
+		</div>
+        	</article>
+	
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+
+<!-- 博客详情页PC增加广告系统刷量代码 -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+<script id="adJs52b5334"></script>
+<script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>
+                <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/googdev/article/details/81386137#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/androidstarjack/article/details/81381046,searchFromBaidu_0"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/androidstarjack/article/details/81381046,searchFromBaidu_0"}'>
+		<a href="https://blog.csdn.net/androidstarjack/article/details/81381046" target="_blank" title="需求背后程序员的辛酸—(由APP主题颜色随手机壳颜色变化需求带来的思考)">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						需求背后程序员的辛酸—(由APP主题颜色随手机壳颜色变化需求带来的思考)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/E/C/6/3_androidstarjack.jpg" alt="androidstarjack" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">androidstarjack</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-03</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							1017</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							说说最近发生的一些事情
+
+
+
+近日 某互联网公司就因为 ‘主题颜色随手机壳颜色变化’而发生了一次吵架事件，后来都被开除了！
+
+作为一名程序员，大家都知道，产品经理是需要经常与研发人员打交道的一个职业，...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/chengxuyuan997/article/details/81380618,searchFromBaidu_2"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/chengxuyuan997/article/details/81380618,searchFromBaidu_2"}'>
+		<a href="https://blog.csdn.net/chengxuyuan997/article/details/81380618" target="_blank" title="想要更换和手机壳一样的颜色主题？教你用几行Python代码轻松搞定">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						想要更换和手机壳一样的颜色主题？教你用几行Python代码轻松搞定				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/8/9/2/3_chengxuyuan997.jpg" alt="chengxuyuan997" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">chengxuyuan997</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-03</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							513</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+
+小编给大家推荐一个学习氛围超好的地方，python交流企鹅裙：【611+530+101】适合在校大学生，小白，想转行，想通过这个找工作的加入。裙里有大量学习资料，有大神解答交流问题，每晚都有免费的...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/Y0Q2T57s/article/details/81369805,searchFromBaidu_1"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/Y0Q2T57s/article/details/81369805,searchFromBaidu_1"}'>
+		<a href="https://blog.csdn.net/Y0Q2T57s/article/details/81369805" target="_blank" title="<em>产品</em>经理：来做个APP根据用户手机壳颜色来改变主题颜色">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>产品</em>经理：来做个APP根据用户手机壳颜色来改变主题颜色				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/4/2/E/3_y0q2t57s.jpg" alt="Y0Q2T57s" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">Y0Q2T57s</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-02</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							2927</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+  
+    
+                    
+
+                    
+
+                    
+                    
+     ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/qq_40433465/article/details/81358943,searchFromBaidu_4"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/qq_40433465/article/details/81358943,searchFromBaidu_4"}'>
+		<a href="https://blog.csdn.net/qq_40433465/article/details/81358943" target="_blank" title="<em>产品</em>经理要求APP颜色根据用户手机壳颜色改变，被程序员暴打">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>产品</em>经理要求APP颜色根据用户手机壳颜色改变，被程序员暴打				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/8/8/E/3_qq_40433465.jpg" alt="qq_40433465" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_40433465</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-02</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							4250</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+
+ 
+
+前两天某互联网公司发生了一起打架事件，起因是产品经理向程序员提出了一个需求，程序员一听怒了，就打起来了。众所周知，产品跟程序员一直是水火不相容的，这次究竟是提了什么无理需求，导致程序员这么激...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/M7720EIoSi6oA9/article/details/80504463,BlogCommendFromQuerySearch_5"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/M7720EIoSi6oA9/article/details/80504463,BlogCommendFromQuerySearch_5"}'>
+		<a href="https://blog.csdn.net/M7720EIoSi6oA9/article/details/80504463" target="_blank" title="小米华为强势互怼！一场由“非常吓人的技术”而引发的“血案”……">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						小米华为强势互怼！一场由“非常吓人的技术”而引发的“血案”……				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/7/F/5/3_m7720eiosi6oa9.jpg" alt="M7720EIoSi6oA9" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">M7720EIoSi6oA9</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">05-29</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							319</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							
+  
+    
+                    
+
+                    
+
+                    
+                    
+     ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u012662731/article/details/53501606,BlogCommendFromQuerySearch_6"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u012662731/article/details/53501606,BlogCommendFromQuerySearch_6"}'>
+		<a href="https://blog.csdn.net/u012662731/article/details/53501606" target="_blank" title="这才是程序员想弄死<em>产品</em>经理的真正原因！！">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						这才是程序员想弄死<em>产品</em>经理的真正原因！！				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/1/4/B/3_u012662731.jpg" alt="u012662731" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u012662731</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">12-07</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							7785</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							你=用户
+
+服务员=产品经理
+
+大厨=程序员
+ 
+ 
+你去饭店，坐下来。 
+ 
+
+
+你：给我来份宫保鸡丁！
+
+服务员：好嘞！
+
+ 
+
+
+☝这叫原始需求
+
+ 
+
+
+ 
+
+
+大厨做到一半
+
+ 
+
+
+你：菜...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/qq_41807409/article/details/80609706,BlogCommendFromQuerySearch_7"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/qq_41807409/article/details/80609706,BlogCommendFromQuerySearch_7"}'>
+		<a href="https://blog.csdn.net/qq_41807409/article/details/80609706" target="_blank" title="为什么总有程序员想“弄死”<em>产品</em>经理？">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						为什么总有程序员想“弄死”<em>产品</em>经理？				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/8/9/E/3_qq_41807409.jpg" alt="qq_41807409" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">qq_41807409</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">06-07</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							458</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							我在强调谦逊和赢得团队信任的重要性的同时，我也会强调产品经理与 CEO 之间的很多相似点，强调产品经理就是“产品的 CEO ”。为什么总有程序员想“弄死”产品经理？因为，很多产品经理虽然具备 CEO ...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/u011886490/article/details/10602169,BlogCommendFromQuerySearch_8"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/u011886490/article/details/10602169,BlogCommendFromQuerySearch_8"}'>
+		<a href="https://blog.csdn.net/u011886490/article/details/10602169" target="_blank" title="<em>其实</em>我很笨，只是我一直在努力">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>其实</em>我很笨，只是我一直在努力				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/D/C/4/3_u011886490.jpg" alt="u011886490" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">u011886490</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">08-30</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							553</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							其实我很笨，只是我一直在努力
+
+    被别人说：唱歌五音不全，被老师说：写作文只会抄作文书，被同学说：长得又黑又胖，被老爸说：一个女孩子脾气那么臭！
+    这就是以前的我，十八岁之前的我，我...					</p>
+			</div>
+					</a>
+	</div>
+						<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_387","con":",https://blog.csdn.net/hacker_c/article/details/2253698,BlogCommendFromQuerySearch_9"}' data-track-click='{"mod":"popu_387","con":",https://blog.csdn.net/hacker_c/article/details/2253698,BlogCommendFromQuerySearch_9"}'>
+		<a href="https://blog.csdn.net/hacker_c/article/details/2253698" target="_blank" title="<em>其实</em>我是新人">
+			<div class="content">
+				<h4 class="text-truncate oneline">
+						<em>其实</em>我是新人				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="avatar">
+							<img src="https://avatar.csdn.net/B/2/1/3_hacker_c.jpg" alt="hacker_c" class="avatar-pic">
+							<span class="namebox">
+								<span class="name">hacker_c</span>
+								<span class="triangle"></span>
+							</span>
+					</p>
+					<p class="date-and-readNum">
+						<span class="date hover-show">04-05</span>
+						<span class="read-num hover-hide">
+							<svg class="icon csdnc-yuedushu" aria-hidden="true">
+								<use xlink:href="#csdnc-yuedushu"></use>
+							</svg>
+							122</span>
+						</p>
+					</div>
+					<p class="content oneline">
+							说实话一直很喜欢编程，但从来没有为他付出过努力过认真过，似乎对程序的爱只停留在嘴边上。从未深深的融入到我的内心。现在为了吃饭，在7-11做了店员。心情当然无法言喻了。我会努力的，努力的学，努力的思考，...					</p>
+			</div>
+					</a>
+	</div>
+				
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/googdev">
+                <img src="https://avatar.csdn.net/6/0/E/3_googdev.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/googdev" target="_blank" class="text-truncate" id="uid">stormzhangV</a>
+            </p>
+                        <p class="flag">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-blogexpert"></use>
+                </svg>
+                博客专家
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/googdev/article/details/81386137" target="_self">关注</a>
+                            </span>
+                    </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+                <dl class="text-center" title="106">
+                        <dt><a href="https://blog.csdn.net/googdev?t=1">原创</a></dt>
+            <dd><a href="https://blog.csdn.net/googdev?t=1"><span class="count">106</span></a></dd>
+                    </dl>
+        <dl class="text-center" title="5225">
+            <dt>粉丝</dt>
+            <dd><span class="count" id="fan">5225</span></dd>
+        </dl>
+        <dl class="text-center" title="2499">
+            <dt>喜欢</dt>
+            <dd><span class="count">2499</span></dd>
+        </dl>
+        <dl class="text-center" title="1613">
+            <dt>评论</dt>
+            <dd><span class="count">1613</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="6级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-6"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="721637">
+                72万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="9982">
+                9982            </dd>
+        </dl>
+        <dl title="2443">
+            <dt>排名：</dt>
+            <dd>2443</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                <a class="icon-badge" title="专栏达人">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-columns"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item1">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-columns"></use>
+                        </svg>
+                        <p>专栏达人</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    </div>
+                </div>
+            </div> 
+        </a>  
+                        <a class="icon-badge" title="持之以恒">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-lasting"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item2">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-lasting"></use>
+                        </svg>
+                        <p>持之以恒</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予每个自然月内发布4篇或4篇以上原创或翻译IT博文的用户。不积跬步无以至千里，不积小流无以成江海，程序人生的精彩需要坚持不懈地积累！
+                    </div>
+                </div>
+            </div>
+        </a>
+                            </div>
+    </div>		    		    <!--自定义模块-->
+<div id="asideCustom42471517" class="aside-box custom-box">
+    <h3 class="aside-title">我的微信公众号</h3>
+    <div class="aside-content clearfix">
+        关注微信公众号「stormzhang」，并回复关键字「GitHub」、「Android」、「Python」、「Java」、「AI」等获取免费学习资料。
+<img src="http://img.blog.csdn.net/20161017175938156">    </div>
+</div>
+		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/googdev/article/details/81701837" target="_blank">小公司有个毛的管理！</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/googdev/article/details/80765745" target="_blank">别被别人抢走了你的时间！</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/googdev/article/details/80730900" target="_blank">Google 投资了京东</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/googdev/article/details/80666183" target="_blank">欠薪的公司，不要做任何犹豫！</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/googdev/article/details/80614492" target="_blank">时代变了</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <div id="asideColumn" class="aside-box">
+    <h3 class="aside-title">博主专栏</h3>
+    <div class="aside-content">
+        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/13170.html">
+                            <img src="https://img-blog.csdn.net/20161011144400955?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/13170.html">从0开始学习GitHub系列</a></p>
+                        <div class="data">阅读量：<span>53780</span><span class="count">8 篇</span></div>
+                    </div>
+                </li>
+                    </ul>
+    </div>
+    </div>
+		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/googdev/article/category/2347515">
+                    Android                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/googdev/article/category/6299226">
+                    杂谈                    <span class="count float-right">49篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/googdev/article/category/6306065">
+                    GitHub                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/googdev/article/category/6319653">
+                    Weekly                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/googdev/article/category/6426349">
+                    AS                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/googdev/article/category/6972835">
+                    Google                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2018/08">
+                    2018年8月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2018/06">
+                    2018年6月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2018/03">
+                    2018年3月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2018/01">
+                    2018年1月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/12">
+                    2017年12月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/11">
+                    2017年11月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/10">
+                    2017年10月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/09">
+                    2017年9月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/07">
+                    2017年7月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/06">
+                    2017年6月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/05">
+                    2017年5月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/04">
+                    2017年4月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/03">
+                    2017年3月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/02">
+                    2017年2月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2017/01">
+                    2017年1月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/12">
+                    2016年12月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/11">
+                    2016年11月                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/10">
+                    2016年10月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/09">
+                    2016年9月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/08">
+                    2016年8月                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/07">
+                    2016年7月                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/06">
+                    2016年6月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/05">
+                    2016年5月                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/03">
+                    2016年3月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/googdev/article/month/2016/02">
+                    2016年2月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/googdev/article/details/52575079">2016 年最受欢迎的编程语言是什么？</a>
+					<p class="read">阅读量：<span>96105</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/googdev/article/details/72514716">解读今年的 Google IO 2017</a>
+					<p class="read">阅读量：<span>31024</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/googdev/article/details/52598892">Android Studio 2.2 来啦</a>
+					<p class="read">阅读量：<span>29665</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/googdev/article/details/52634194">「微信小程序」有哪些冲击与机会？</a>
+					<p class="read">阅读量：<span>23705</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/googdev/article/details/80765745">别被别人抢走了你的时间！</a>
+					<p class="read">阅读量：<span>15837</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/googdev/article/details/81386137#comments">其实，我是靠怼产品上位的。。。</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/weixin_42772275" class="user-name" target="_blank">weixin_42772275</a>：看看评论&amp;lt;img src=&amp;quot;https://forum.csdn....                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/googdev/article/details/81386137#comments">其实，我是靠怼产品上位的。。。</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/ke7in1314" class="user-name" target="_blank">ke7in1314</a>：君子动手不动口，不要怂，就是干                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/googdev/article/details/52787516#comments">从0开始学习 GitHub 系列之...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/naozhuo0615" class="user-name" target="_blank">naozhuo0615</a>：博主幽默的表达，的确让这篇文章读下来轻松愉快，对于一个小白，在学GitHub之前看到这篇文章才会有...                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/googdev/article/details/78547399#comments">程序员如何赚「睡后」收入？</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/Wuli_SmBug" class="user-name" target="_blank">Wuli_SmBug</a>：程序员即使在拼搏，努力也只能像普通人一样生活，所以要迈过一个坎，不要拘泥于技术！                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/googdev/article/details/78852251#comments">自学编程需要注意什么？</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/Wuli_SmBug" class="user-name" target="_blank">Wuli_SmBug</a>：感谢博主，我会再接再厉的                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		<div id="asideFooter">
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+</div>
+<div class="mask-dark"></div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">
+			<!-- 广告位：PC-博客内页底通 文字链位置 -->
+			<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="baidufooter_0001"></div>');
+				(window.slotbydup=window.slotbydup || []).push({
+					id: '5851901',
+					container: 'baidufooter_0001',
+					size: '520,40',
+					display: 'inlay-fix'
+				});
+			})();
+			</script>
+			<script src="https://dup.baidustatic.com/js/os.js"></script>
+			<style>
+				#baidufooter_0001{
+					display: none !important;
+				}
+			</style>
+		</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                <a href="https://passport.csdn.net/account/login?utm_source=csdn_blog_pc_login" target="_self">登录</a>
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="long-height hover-box btn-like " title="点赞">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<span class="hover-show text-box text">
+					<span class="no-active">点赞</span>
+					<span class="active">取消点赞</span>
+				</span>
+				<p>9</p>
+			</button>
+		</li>
+		<li>
+						
+			<a class="btn-comments long-height hover-box" title="写评论" href="#commentBox">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg>
+				<span class="hover-show text">评论</span>
+				<p class="">
+						11				</p>
+			</a>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc low-height hover-box" title="目录">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg>
+				<span class="hover-show text">目录</span>
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark low-height hover-box" title="收藏">
+				<svg class="icon active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg>
+				<svg class="icon no-active hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg>
+					<span class="hover-show text">收藏</span>
+				<!-- <span class="hover-show text-box text">
+					<span class="no-active">收藏</span>
+					<span class="active">取消收藏</span>
+				</span> -->
+			</button>
+		</li>
+				<li class="bdsharebuttonbox">
+			<button class="btn-comments low-height hover-box" >
+				<a href="#" class="bds_weixin clear-share-style" data-cmd="weixin" title="手机看"></a>
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg>
+				<span class="hover-show text">
+					手机看
+				</span>
+			</button>
+		</li>
+							<li class="">
+				<a class="btn-comments low-height hover-box" href="https://blog.csdn.net/googdev/article/details/80765745" title="别被别人抢走了你的时间！">
+					<svg class="icon hover-hide" aria-hidden="true">
+						<use xlink:href="#csdnc-shangyiye"></use>
+					</svg>
+					<span class="hover-show text">上一篇</span>
+				</a>
+			</li>
+								<li class="">
+			<a class="btn-comments hover-box low-height" href="https://blog.csdn.net/googdev/article/details/81701837" title="小公司有个毛的管理！">
+				<svg class="icon hover-hide" aria-hidden="true">
+					<use xlink:href="#csdnc-xiayiye"></use>
+				</svg>
+				<span class="hover-show text">下一篇</span>
+			</a>
+		</li>
+					</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script>
+    var recommendCount = 9;
+    recommendCount = recommendCount > 1 ? (recommendCount + (recommendCount>6 ? 2 : 1)) : recommendCount;
+    var articleTit = "其实，我是靠怼产品上位的。。。";
+    var ChannelId = 33;
+    var articleId = "81386137";
+    var commentscount = 11;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/googdev/article/details/81386137";
+    var myUrl = "https://my.csdn.net/";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%EF%BC%9A%E6%9D%A5%E5%81%9A%E4%B8%AAapp%E6%A0%B9%E6%8D%AE%E7%94%A8%E6%88%B7%E6%89%8B%E6%9C%BA%E5%A3%B3%E9%A2%9C%E8%89%B2%E6%9D%A5%E6%94%B9%E5%8F%98%E4%B8%BB%E9%A2%98%E9%A2%9C%E8%89%B2+-+csdn%E5%8D%9A%E5%AE%A2";
+    var needInsertBaidu = false;
+    // 代码段样式
+    var codeStyle = '';
+    var highlight = ["\u5176\u5b9e","\u4ea7\u54c1","\u4e0a\u4f4d"];//高亮数组
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.3/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,"其实，我是靠怼产品上位的。。。");
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-4d72a3f9df.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-a659ec5fba.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-9376486353.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%EF%BC%9A%E6%9D%A5%E5%81%9A%E4%B8%AAapp%E6%A0%B9%E6%8D%AE%E7%94%A8%E6%88%B7%E6%89%8B%E6%9C%BA%E5%A3%B3%E9%A2%9C%E8%89%B2%E6%9D%A5%E6%94%B9%E5%8F%98%E4%B8%BB%E9%A2%98%E9%A2%9C%E8%89%B2+-+csdn%E5%8D%9A%E5%AE%A2"  type="text/javascript"></script>
+</body>
+<!-- 第四范式SDK -->
+
+<!-- 高亮未与 markdown兼容  -->
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+</html>
